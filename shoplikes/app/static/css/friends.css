@@ -1,0 +1,17 @@
+.friends_gridview {
+	background-color:red;
+	width:100%;
+	position: relative;
+	padding: 10px;
+}
+
+.friend_cell {
+	background-color:magenta;
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.gridview_container {
+	margin-top : 25px;
+}

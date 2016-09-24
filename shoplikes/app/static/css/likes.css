@@ -1,0 +1,52 @@
+/* Likes html*/
+
+.likes_list {
+	padding: 10px;
+}
+
+.likes_listcell {
+	width: 100%
+	height: 180px;
+	margin-bottom: 20px;
+	background-color:white;
+	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+	border-radius:2px;
+}
+
+.likes_grid {
+	overflow-x: scroll;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+
+.like_cell {
+	width: 140px;
+	height: 150px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.like_pic {
+    width: 110px;
+	height: 110px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	position: relative;
+}
+
+.like_pic img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product_cnt {
+	text-align:center;
+}
+
+.like_name {
+	text-align:center;
+	bottom: 0px;
+}

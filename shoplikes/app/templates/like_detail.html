@@ -1,0 +1,8 @@
+{% extends "recommendations.html" %}
+{% block scripts %}
+	<script src="/static/js/like_detail.js"></script>
+	<script>
+		loadLikeDetailView('{{obj_id}}');
+	</script>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+	<div class="userinfo_container">
+		<div class="userinfo">
+			<div class="cover_photo"></div>
+			<div class="profile_pic">
+				<img src="http://graph.facebook.com/{{ obj_id }}/picture?width=120&height=120"/>
+			</div>
+			<div class="username">
+				{{username}}
+			</div>
+		</div>
+		<div class="links">
+		</div>
+	</div>
+	<div class="gridview_container">
+		{% block grid_content %}{% endblock %}
+	</div>
+</div>
+{% endblock %}

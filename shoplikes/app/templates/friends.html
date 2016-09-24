@@ -1,0 +1,91 @@
+{% extends "profile_base.html" %}
+{% block stylesheets %}
+    <link href="/static/css/friends.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block grid_content %}
+	<div class="friends_gridview">
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name">Parag</div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name">Dulam</div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+				<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+		<div class="friend_cell">
+			<div class="friend_pic"></div>
+			<div class="friend_name"></div>
+			<div class="reco_cnt">8 Products</div>
+		</div>
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script src="/static/js/friends.js"></script>
+	<script>
+		httpGetAsync( '{{ friends_url }}' , function(responseText) {
+			
+    	});
+	</script>
+{% endblock %}
+
+
+
+<!-- 
+			<div class="like_cell">
+				<div class="like_pic"><img src="http://graph.facebook.com/{{ friend.id }}/picture??width=110&height=110"/></div>
+				<div class="like_name"><a href="/{{friend.id}}/profile">{{friend.name}}</a></div>
+				<div class="product_cnt">8 Products</div>
+			</div>
+ -->

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block stylesheets %}
+    <link href="/static/css/likes.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block content %}
+	<div class="likes_list">
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script src="/static/js/likes.js">
+	</script>
+	<script>
+		httpGetAsync( '{{ likes_url }}' , function(responseText) {
+			
+    	});
+	</script>
+{% endblock %}

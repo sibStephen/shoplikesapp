@@ -1,0 +1,11 @@
+{% extends "profile_base.html" %}
+{% block grid_content %}
+	<div class="grid-timeline">
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script src="/static/js/explore.js"></script>
+	<script>
+		fetchProducts('{{username}}');
+	</script>
+{% endblock %}

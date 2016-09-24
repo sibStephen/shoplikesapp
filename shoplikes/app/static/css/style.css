@@ -1,0 +1,315 @@
+body {
+	background-color:#F2F2F2;
+}
+
+a {
+	color:#4144BC
+}
+
+.app_title {
+	width: 100px;
+    height: 100px;
+    background-color: red;
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+
+#wrapper {
+	width: 100%;
+	max-width: 1100px;
+	min-width: 800px;
+}
+
+#columns {
+	-webkit-column-count: 4;
+	-webkit-column-gap: 10px;
+	-webkit-column-fill: auto;
+	
+	-moz-column-count: 4;
+	-moz-column-gap: 10px;
+	-moz-column-fill: auto;
+	
+	column-count: 4;
+	column-gap: 15px;
+	column-fill: auto;
+}
+
+.pin {
+	display: inline-block;
+	background: #FEFEFE;
+	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+	margin-bottom:10px;
+	
+	-webkit-column-break-inside: avoid;
+	-moz-column-break-inside: avoid;
+	column-break-inside: avoid;
+	
+	background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+	opacity: 1;
+	
+	-webkit-transition: all .2s ease;
+	-moz-transition: all .2s ease;
+	-o-transition: all .2s ease;
+	transition: all .2s ease;
+	border-radius: 2px;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+.pin img {
+	width: 100%;
+	height: 100%;
+}
+
+
+/* 
+@media (min-width: 960px) {
+	#columns {
+		-webkit-column-count: 4;
+		-moz-column-count: 4;
+		column-count: 4;
+	}
+}
+
+@media (min-width: 1100px) {
+	#columns {
+		-webkit-column-count: 5;
+		-moz-column-count: 5;
+		column-count: 5;
+	}
+}
+ */
+
+/* 
+#columns:hover .pin:not(:hover) {
+	opacity: 0.4;
+}
+ */
+
+
+
+
+
+/* Profile html*/
+
+.cover_photo {
+	overflow:hidden;
+}
+
+.cover_photo img {
+	position:absolute;
+	height:150px;
+	width:1100px;
+}
+
+.gridview_container {
+}
+
+.likes_gridview {
+	width:100%;
+/* 
+	background-color:cyan;
+ */
+	margin-top:20px;
+}
+
+.userinfo {
+	height:150px;
+	width:100%;
+	background-color:#4144BC;
+	border-radius: 2px;
+}
+
+.userinfo_container {
+	height:200px;
+	width:100%;
+	background-color:white;
+    border-radius: 2px;
+}
+
+.profile_pic {
+	width:120px;
+	height:120px;
+	background-color:magenta;
+	border: 5px solid;
+    border-radius: 60px;
+    border-color: white;
+    margin-left: 30px;
+    position: relative;
+    top: 60px;
+    overflow: hidden;
+}
+
+
+.category_name {
+	padding-top:15px;
+	padding-left:15px;
+}
+
+.profile_pic img {
+  	max-width: 100%;
+  	max-height: 100%;
+    border-radius: 60px;
+}
+
+.username {
+	margin-left: 170px;
+	bottom: 50px;
+    position: relative;
+    font-size: 35px;
+    color: white;
+}
+
+ 
+.location {
+	margin-left: 170px;
+	bottom: 60px;
+    position: relative;
+}
+
+.like_gridcell {
+	width:10%;
+	background-color:green;
+	float: left;
+	padding:10px;
+}
+
+
+.search {
+	margin-left: 20px;
+	width:40%;
+	position: relative;
+	top: 10px;
+}
+
+.links {
+	line-height: 50px;
+	position: relative;
+	height:50px;
+}
+
+#friends_link {
+	position: relative;
+	margin-left: 150px;
+	margin-bottom: 0px;
+}
+
+/* 
+.links a:link a:hover a:visited {
+	color: lightgray;
+}
+ */
+
+#reco_link {
+	margin-left: 30px;
+	margin-right: 30px;
+	height: 50px;
+}
+
+#explore_link {
+	margin-left: auto;
+	margin-right: 30px;
+	height: 50px;
+}
+
+/* Timeline */
+
+#from_user_pic {
+	width:30px;
+	height:30px;
+	position: relative;
+	border-radius: 5px;
+	float: left;
+	margin-right: 5px;
+}
+
+#from_user_info {
+    margin: 5px;
+    height: 30px;
+}
+#from_user_name {
+	padding-top:5px;
+	padding-left: 5px;
+}
+
+#reco_info {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#reco_text {
+	margin-left: 5px;
+	margin-right: 5px;
+}	
+
+#reco_timestamp {
+	margin-left: 5px;
+	margin-right: 5px;
+}	
+
+
+
+#product_info {
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+#product_name {
+	margin-top: 5px;
+}
+
+#product_price {
+	position: absolute;
+	left: 0px;
+	top: 50%;
+	width: 80px;
+	height: 30px;
+	background-color: #4144BC;
+	text-align: center;
+}
+
+
+#timeline_product_img {
+	background-color:magenta;
+	width: 100%;
+	height: 100%;
+}
+
+/* Nav bar */
+
+.navbar-default {
+    background-color: #4144BC;
+}
+
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #fff;
+}
+
+
+/* Timeline */
+
+.grid-timeline {
+/* 	background-color:blue; */
+	position:relative;
+}
+
+.grid-recommendation {
+	position: absolute;
+	padding:0px 10px 10px 10px;
+	float:left;
+/* 	background-color:red; */
+	width: 25%;
+}
+
