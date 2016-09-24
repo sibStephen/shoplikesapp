@@ -1,41 +1,44 @@
-var columns = 4;
+var columns = 5;
 
 
 function arrangePins() {
-	var grid = document.getElementsByClassName('grid-timeline')[0];
+	var grid = document.getElementsByClassName('explore-grid-timeline')[0];
 	grid.style.marginTop = '20px';
     if (grid) {
-		var children = grid.childNodes;
-		var gridHeight = 500;
+		var children = grid.children;
+		var gridHeight = 0;
 		if (children.length) {
-			console.log(children);
 			for (var i = 0; i < children.length; i++) {
 				var child = children[i];
-				if (child.className == "grid-recommendation") {
+				if (child.className == "explore-grid-recommendation") {
 					console.log('child.clientHeight =' + child.clientHeight);
+					console.log('child.clientWidth =' + child.clientWidth);
 					console.log('i = ' + i);
-					var quotient = Math.floor(i / (2 * columns));
-					var mod = Math.floor(i % columns);
-					console.log('mod = ' + mod);
-					console.log('quotient = ' + quotient);
 			
-					//calculating top
-					if (quotient == 0) {
-						child.style.top = '0px';				
+					var quotient = Math.floor(i / columns);
+					var remainder = i % columns;
+					var pinWidth = child.clientWidth;
+
+					var left,top;
+				
+					//calculate left here
+					if (remainder == 0) {
+						left = '0px';	
 					} else {
-						var top = 0;
-						for (j = 0; j < quotient; j ++) {
-							var childIndex = i - (2 * columns * (j + 1));
-							console.log('i - (j * columns) = ' + childIndex);
-							var aboveChild = children[childIndex]; 
-							top += aboveChild.clientHeight;
-						}					
-						child.style.top = top + 'px';				
+						left = (remainder * pinWidth) + 'px';
 					}
-			
-					//calculating left
-					console.log('child.clientWidth = ' + child.clientWidth);
-					child.style.left = (child.clientWidth * mod) + 'px';
+					child.style.left = left;
+
+					//calculate top here
+					if (quotient == 0) {
+						top = '0px';	
+					} else {
+						var aboveChild = children[i - columns];
+						debugger;
+						top = (aboveChild.offsetTop + aboveChild.clientHeight) + 'px';
+					}
+					child.style.top = top;
+					
 					if (gridHeight < child.clientHeight + child.offsetTop) {
 						gridHeight = child.clientHeight + child.offsetTop;
 					}
@@ -110,8 +113,8 @@ function arrangePins() {
 
 
 function pin_clicked() {
-	alert("clicked");
-	
+	console.log(event.currentTarget.id);	
+	$("#pinModal").modal('show');
 }
 
 
@@ -132,23 +135,24 @@ function getProducts(url,headers,callback) {
 
 
 function fetchProducts(keyword) {
-	var ebay_url = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=4&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge";
+	var ebay_url = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=10&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge";
 	getProducts(ebay_url, null ,function(json) {
-		    var ebay_products = json['findItemsByKeywordsResponse'][0]["searchResult"][0];
-        	var grid = document.getElementsByClassName('grid-timeline')[0];
-        	var products = ebay_products["item"];
-        	for (var i = 0; i < products.length; i++) {
-        		var product = products[i];
-        		var node = document.createElement("div");
-        		node.className = "grid-recommendation";
-        		var category = product['primaryCategory'][0]['categoryName'][0];
-        		var name = product['title'][0];
-        		var image_url = product['galleryURL'][0];
-        		var price = product['sellingStatus'][0]['currentPrice'][0]['__value__'];
-        		node.innerHTML = "<div class=\"pin\" onclick=\"pin_clicked()\"><div id=\"product_info\"><div id=\"product_category\">" + category + "</div><div id=\"product_name\">" + name + "</div></div><img src=\"" + image_url + "\" /><div id=\"product_price\"><font color=\"white\">" + price + "</font></div></div>";
-        		grid.appendChild(node);
-	        }
-	        arrangePins();
+		var ebay_products = json['findItemsByKeywordsResponse'][0]["searchResult"][0];
+		var grid = document.getElementsByClassName('explore-grid-timeline')[0];
+		var products = ebay_products["item"];
+		for (var i = 0; i < products.length; i++) {
+			var product = products[i];
+			var node = document.createElement("div");
+			node.className = "explore-grid-recommendation";
+			var category = product['primaryCategory'][0]['categoryName'][0];
+			var name = product['title'][0];
+			var image_url = product['galleryURL'][0];
+			var price = product['sellingStatus'][0]['currentPrice'][0]['__value__'];
+			var product_id = product['itemId'][0];
+			node.innerHTML = "<div class=\"explore-pin\" onclick=\"pin_clicked()\" id=" + product_id +"><div id=\"product_info\"><div id=\"product_category\">" + category + "</div><div id=\"product_name\">" + name + "</div></div><img src=\"" + image_url + "\" /><div id=\"product_price\"><font color=\"white\">" + price + "</font></div></div>";
+			grid.appendChild(node);
+		}
+		arrangePins();
 	});
 // 	var flipkart_url = "https://affiliate-api.flipkart.net/affiliate/search/json?query=" + keyword + "&resultCount=4";
 // 	getProducts(flipkart_url, {"Fk-Affiliate-Id":"paragdula","Fk-Affiliate-Token":"3f8a5b4876084bc5836265cdd26f0966"} ,function(json) {

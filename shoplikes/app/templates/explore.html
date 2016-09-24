@@ -1,11 +1,36 @@
 {% extends "profile_base.html" %}
+{% block stylesheets %}
+    <link href="/static/css/explore.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
 {% block grid_content %}
-	<div class="grid-timeline">
+	<div class="explore-grid-timeline">
 	</div>
+	<div id="pinModal" class="modal fade" role="dialog">
+  	<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 {% endblock %}
 {% block scripts %}
 	<script src="/static/js/explore.js"></script>
 	<script>
-		fetchProducts('{{username}}');
+		var body = document.getElementsByTagName("body")[0];
+		body.onload = function() {
+			fetchProducts('{{username}}');
+		};
 	</script>
 {% endblock %}
