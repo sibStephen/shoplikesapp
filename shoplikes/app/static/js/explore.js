@@ -34,7 +34,6 @@ function arrangePins() {
 						top = '0px';	
 					} else {
 						var aboveChild = children[i - columns];
-						debugger;
 						top = (aboveChild.offsetTop + aboveChild.clientHeight) + 'px';
 					}
 					child.style.top = top;
