@@ -217,6 +217,13 @@ a {
 	height: 50px;
 }
 
+#invite_link {
+	margin-left: auto;
+	margin-right: 30px;
+	height: 50px;
+}
+
+
 /* Timeline */
 
 #from_user_pic {

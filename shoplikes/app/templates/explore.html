@@ -4,24 +4,36 @@
 {% endblock %}
 {% block grid_content %}
 	<div class="explore-grid-timeline">
+		<div class="spinner"></div>
+<!-- 
+		<div class="pin">
+			<div id="product_info">
+				<div id="product_category">Loading Category Name..</div>
+				<div id="product_name">Loading Product Name...</div>
+				<img src="http://cdn1.marathistars.com/wp-content/uploads/2016/04/YZ-Marathi-Movie-First-Look-Poster.jpg"/>
+				<div id="product_price"><font color=\"white\">Loading Price...</font></div>
+			</div>
+		</div>
+ -->
 	</div>
 	<div id="pinModal" class="modal fade" role="dialog">
   	<div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
-    	<div class="explore-category-name"><font size=2>SPORTS</font></div>
-    	<div class="explore-product-name"><font size=5>Nike Shoes</font></div>
-    	<div class="explore-price">$50</div>
+    	<div class="explore-category-name"><font size=2>Loading...</font></div>
+    	<div class="explore-product-name"><font size=5>Loading...</font></div>
+    	<div class="explore-price">Loading...</div>
 		<div class="explore-lhs">
 			<div class="explore-image"></div>
-	    	<div class="explore-image-carousel"></div>
+			<div class="explore-image-carousel">
+			</div>
 		</div>
 		<div class="explore-rhs">
 			<div class="explore-product-details"></div>
-			<div class="explore-buttons">		
-				<div class="explore-buy-online"></div>
-				<div class="explore-recommend"></div>
+			<div class="explore-buttons">
+				<div class="explore-recommend-link"><a href="#">RECOMMEND</a></div>
+				<div class="explore-buy-link"><a target="_blank">BUY ON EBAY</a></div>
 			</div>
 		</div>
     </div>
@@ -32,8 +44,7 @@
 {% block scripts %}
 	<script src="/static/js/explore.js"></script>
 	<script>
-		var body = document.getElementsByTagName("body")[0];
-		body.onload = function() {
+		window.onload = function() {
 			fetchProducts('{{username}}');
 		};
 	</script>

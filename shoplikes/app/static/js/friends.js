@@ -5,8 +5,16 @@ function httpGetAsync(theUrl, callback)
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
         	var respJson = JSON.parse(xmlHttp.responseText);
         	var friends = respJson.data;
-        	
         	//manipulate HTML DOM here
+        	
+			var gridview = document.getElementsByClassName("friends_gridview")[0];
+        	for (i in friends) {
+        		var friend = friends[i];
+        		var node = document.createElement("div");
+        		node.className = "friend_cell";
+        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\">"+friend.name+"</div><div class=\"reco_cnt\">8 Products</div>";
+        		gridview.appendChild(node);
+        	}
         	
 			callback(xmlHttp.responseText);
         	if (respJson.paging.next) {
@@ -17,6 +25,14 @@ function httpGetAsync(theUrl, callback)
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
+
+
+// 		<div class="friend_cell">
+// 			<div class="friend_pic"><img></img></div>
+// 			<div class="friend_name">Parag</div>
+// 			<div class="reco_cnt">8 Products</div>
+// 		</div>
+
 
 
 var columns = 10;
@@ -55,6 +71,13 @@ function loadFriendsGridView() {
 	reco_link.innerHTML= "Recommendations";
 	reco_link.setAttribute('href', "/recommendations");
 	links.appendChild(reco_link);
+	
+	var invite_link = document.createElement("a");
+	invite_link.id = "invite_link";
+	invite_link.innerHTML= "Invite";
+	invite_link.setAttribute('href', "/invite");
+	links.appendChild(invite_link);
+
 
 }
 

@@ -1,16 +1,39 @@
 .friends_gridview {
-	background-color:red;
 	width:100%;
 	position: relative;
 	padding: 10px;
+	float:left;
+	background-color:white;
 }
 
 .friend_cell {
-	background-color:magenta;
 	float: left;
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
+
+.friend_pic img {
+    display: block;
+    margin: auto;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+}
+
+.friend_name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align:center;
+}
+
+.reco_cnt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align:center;
+}
+
 
 .gridview_container {
 	margin-top : 25px;

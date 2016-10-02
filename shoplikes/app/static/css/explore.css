@@ -1,14 +1,41 @@
 
 
 .explore-grid-timeline {
-	position:relative;
+    position: relative;
+    min-height: 80px;
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 2px;
+    padding-top: 10px;
 }
+
+
+.spinner {
+    box-sizing: border-box;
+    height: 60px;
+    width: 60px;
+    display: block;
+    margin: auto;
+    border: 0px solid #4144bc;
+    border-radius: 50%;
+    box-shadow: 0 -20px 0 24px #4144bc inset;
+    animation: rotate 1s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
 
 .explore-grid-recommendation {
 	position: absolute;
 	padding:0px 10px 10px 10px;
 	float:left;
-	width: 20%;
+	width: 25%;
 }
 
 
@@ -35,7 +62,7 @@
 	height: 100%;
 }
 
-.explore-pin img {
+#pin_image {
 	width: 100%;
 	height: 100%;
 }
@@ -43,92 +70,135 @@
 
 .modal-content {
 	width: 800px;
-	height: 500px;
-	padding: 10px;
-	position: relative;
+	float:left;
+	overflow:hidden;
 }
 
 .explore-detail-content {
-	width:100%;
-	height:85%;
-	padding:1%;
+	width:50%;
+	height:100%;
+	padding:10px;
 	background-color:brown;
+	float: right;
+	position:relative;
 }
 
-.explore-lhs {
-    margin-right: 10px;
-    width: 49%;
-    height: 80%;
-    float: left;
-    position: relative;
-}
-
-
-.explore-rhs {
-	width: 49%;
-	height: 86%;
-	float:right;
-	margin-top:-30px;
-	position: relative;
-}
 
 .explore-category-name {
-	background-color:red;
+	padding-left: 10px;
+	padding-top: 10px;
 }
 
 .explore-product-name {
-	background-color:blue;
+	padding-left: 10px;
 }
 
 .explore-price {
-    background-color: green;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding-left: 10px;
     width: 20%;
 }
 
+
+
+.explore-lhs {
+	width:50%;
+	float:left;
+	height:350px;
+	position:relative;
+}
+
+.explore-rhs {
+	width:50%;
+	float:left;
+	height:350px;
+	position:relative;
+}
+
+
 .explore-image {
-    background-color: yellow;
     width: 100%;
-    height: 65%;
+    height: calc(100% - 120px);
+    padding-left :10px;
+    padding-right :5px;
+    padding-bottom:5px;
+}
+
+.explore-image img {
+  display: block;
+  margin:auto;
+  width: auto;
+  height: 100%;
 }
 
 .explore-image-carousel {
-    background-color: cyan;
-    position: absolute;
     width: 100%;
     height: 120px;
     bottom: 0px;
+    position:relative;
+    overflow-x : scroll;
 }
 
-#explore-like-pic {
-	width:30px;
-	height:30px;
-	position: relative;
-	border-radius: 5px;
-	margin-right: 5px;
+
+.explore-image-cell {
+	background-color:green;
+	height: 100px;
+	width: 100px;
+    margin-left: 10px;
+    margin-top: 10px;
+    float: left;
+    overflow:hidden;
 }
 
-#explore-like-info {
-    margin: 5px;
-    height: 30px;
-}
-#explore-like-name {
-	padding-top:5px;
-	padding-left: 5px;
-	float:left;
+.explore-image-cell img {
+    display: block;
+    margin: auto;
+    width: auto;
+    height: 100%;
 }
 
 .explore-product-details {
-    background-color: magenta;
     width: 100%;
-    height: 85%;
+    height: calc(100% - 60px);
+    position: relative;
+    float: left;
+    overflow-y: scroll;
+    padding-left: 5px;
+    padding-right: 10px;
+    padding-bottom: 5px;
 }
 
 .explore-buttons {
-    background-color: brown;
     width: 100%;
-    position: absolute;
-    height: 50px;
-    bottom: 0px;
+    height: 60px;
+    top: calc(100% - 60px);
+    position:relative;
 }
+
+.explore-recommend-link {
+	background-color:white;
+	height : 40px;
+	width: 40%;
+	position: absolute;
+	top: 10px;
+	right:10px;
+	border-radius: 2px;
+	border-width:2px;
+	border-color:blue;
+	padding:10px;
+	border:1px solid blue;
+}
+
+.explore-buy-link {
+	background-color:white;
+	height : 40px;
+	width: 40%;
+	position: absolute;
+	top: 10px;
+	left:10px;
+	border-radius: 2px;
+	border-color:blue;
+	border-width:2px;
+	padding:10px;
+	border:1px solid blue;
+}
+
