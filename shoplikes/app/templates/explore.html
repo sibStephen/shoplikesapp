@@ -16,30 +16,31 @@
 		</div>
  -->
 	</div>
-	<div id="pinModal" class="modal fade" role="dialog">
-  	<div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-    	<div class="explore-category-name"><font size=2>Loading...</font></div>
-    	<div class="explore-product-name"><font size=5>Loading...</font></div>
-    	<div class="explore-price">Loading...</div>
-		<div class="explore-lhs">
-			<div class="explore-image"></div>
-			<div class="explore-image-carousel">
+	
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-category">Category</div>
+			<div class="modal-name">Name</div>
+			<div class="modal-price">Price</div>
+			<div class="modal-lhs">
+				<div class="modal-image"><img></img></div>
+				<div class="modal-image-carousel">	
+					<div class="modal-image-cell"></div>	
+					<div class="modal-image-cell"></div>	
+				</div>
+			</div>
+			<div class="modal-rhs">
+				<div class="modal-detail"></div>
+				<div class="modal-buttons">
+					<div class="recommend-link"><a>RECOMMEND</a></div>
+					<div class="buy-on-ebay-link"><a target="_blank">BUY ON EBAY</a></div>					
+				</div>
 			</div>
 		</div>
-		<div class="explore-rhs">
-			<div class="explore-product-details"></div>
-			<div class="explore-buttons">
-				<div class="explore-recommend-link"><a href="#">RECOMMEND</a></div>
-				<div class="explore-buy-link"><a target="_blank">BUY ON EBAY</a></div>
-			</div>
-		</div>
-    </div>
+   </div>
 
-  </div>
 </div>
+
 {% endblock %}
 {% block scripts %}
 	<script src="/static/js/explore.js"></script>

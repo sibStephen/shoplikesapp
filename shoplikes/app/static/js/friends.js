@@ -12,7 +12,7 @@ function httpGetAsync(theUrl, callback)
         		var friend = friends[i];
         		var node = document.createElement("div");
         		node.className = "friend_cell";
-        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\">"+friend.name+"</div><div class=\"reco_cnt\">8 Products</div>";
+        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\"><a href=\""+friend.id+"/friends\">"+friend.name+"</a></div><div class=\"reco_cnt\">8 Products</div>";
         		gridview.appendChild(node);
         	}
         	
@@ -72,11 +72,11 @@ function loadFriendsGridView() {
 	reco_link.setAttribute('href', "/recommendations");
 	links.appendChild(reco_link);
 	
-	var invite_link = document.createElement("a");
-	invite_link.id = "invite_link";
-	invite_link.innerHTML= "Invite";
-	invite_link.setAttribute('href', "/invite");
-	links.appendChild(invite_link);
+// 	var invite_link = document.createElement("a");
+// 	invite_link.id = "invite_link";
+// 	invite_link.innerHTML= "Invite";
+// 	invite_link.setAttribute('href', "/invite");
+// 	links.appendChild(invite_link);
 
 
 }

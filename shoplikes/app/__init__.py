@@ -104,6 +104,7 @@ def show_likes():
 # 		final_likes.append({"category_name":like_name + " (%s)" % count,"likes":likes})
 	
 	return render_template('likes.html',likes_url=url)
+
 							
 							
 @app.route('/friends')
