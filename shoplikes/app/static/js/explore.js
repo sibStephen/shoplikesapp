@@ -73,13 +73,55 @@ function pin_clicked() {
 	showModal = true;
 }
 
+
+function recommendBtnClicked() {
+
+	var recommend_link = document.getElementsByClassName("recommend-link")[0];
+	var button = recommend_link.children[0];
+	if (button.innerHTML == "RECOMMEND") {
+		var modal_detail = document.getElementsByClassName("modal-detail")[0];
+		modal_detail.style.height = '0px';
+
+		var friends_table = document.getElementsByClassName("friends-table")[0];
+		friends_table.style.height = "calc(100% - 60px)";
+
+		button.innerHTML = 'CANCEL';
+	} else if (button.innerHTML == "CANCEL") {
+		var modal_detail = document.getElementsByClassName("modal-detail")[0];
+		modal_detail.style.height = "calc(100% - 60px)";
+
+		var friends_table = document.getElementsByClassName("friends-table")[0];
+		friends_table.style.height = "0px";
+
+		button.innerHTML = 'RECOMMEND';
+	}
+}
+
+function friendClicked(friend_id) {
+	alert(friend_id);
+	var xhr = new XMLHttpRequest();
+	var url = "http://localhost:8080/api/v1/recommendation";
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.onreadystatechange = function () { 
+    	if (xhr.readyState == 4 && xhr.status == 200) {
+    		debugger;
+        	var json = JSON.parse(xhr.responseText);
+        	console.log(json.email + ", " + json.password)
+    	}
+	}
+	var data = JSON.stringify({"email":"hey@mail.com","password":"101010"});
+	xhr.send(data);
+}
+
+
 function myfunction(response) {
 	if (showModal == true) {
 		var category_name = document.getElementsByClassName("modal-category")[0];
 		category_name.innerHTML = response["Item"]["PrimaryCategoryName"];
 
 		var product_name = document.getElementsByClassName("modal-name")[0];
-		product_name.innerHTML = "<font size=5>"+response["Item"]["Title"]+"</font>";
+		product_name.innerHTML = "<font size=5>"+response["Item"]["ItemID"]+"</font>";
 		
 		var product_price = document.getElementsByClassName("modal-price")[0];
 		var currId = response["Item"]["CurrentPrice"]["CurrencyID"];
@@ -157,6 +199,34 @@ window.onclick = function(event) {
 		var body = document.getElementsByTagName("body")[0];
 		body.style.overflow = 'scroll';
     }
+}
+
+function getFriends(friends_url, add_header) {
+	getProducts(friends_url, null, function(json) {
+		var friends = json.data;
+		debugger;
+		var friends_table = document.getElementsByClassName('friends-table')[0];
+		var tableNode;
+
+		var innerHTML = "";
+		if (add_header == true) {
+			tableNode = document.createElement("table");
+			innerHTML += "<th>Friends</th>";
+		} else {
+			tableNode = friends_table.children[0];
+		}
+
+		for (i in friends) {
+			var friend = friends[i];
+			innerHTML += "<tr onclick=\"friendClicked(" + friend.id + ")\"><td>"+friend.name+"</td></tr>"
+		}
+
+		tableNode.innerHTML = innerHTML;
+		friends_table.appendChild(tableNode);
+	    if (json.paging.next) {
+			getFriends(json['paging']['next'],false);
+		}
+	});
 }
 
 

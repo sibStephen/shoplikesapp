@@ -31,9 +31,14 @@
 			</div>
 			<div class="modal-rhs">
 				<div class="modal-detail"></div>
+				<div class="friends-table">
+				</div>
 				<div class="modal-buttons">
-					<div class="recommend-link"><a>RECOMMEND</a></div>
+					<div class="recommend-link"><button onclick="recommendBtnClicked()">RECOMMEND</button></div>
 					<div class="buy-on-ebay-link"><a target="_blank">BUY ON EBAY</a></div>					
+				</div>
+				<div class="modal-friends">
+					
 				</div>
 			</div>
 		</div>
@@ -47,6 +52,7 @@
 	<script>
 		window.onload = function() {
 			fetchProducts('{{username}}');
+			getFriends('{{friends_url}}',true);
 		};
 	</script>
 {% endblock %}

@@ -233,8 +233,10 @@ def showProductsForLike(page_id):
 # 					'price':product['sellingStatus'][0]['currentPrice'][0]['__value__']})
 	
 # 	final_products.extend(final_ebay_products)
+	friends_url = "https://graph.facebook.com/"+ current_user.user_id + "/friends?access_token=" + current_user.access_token 
 	return render_template('explore.html',
 							obj_id=page_id,
+							friends_url=friends_url,
 							username=page.page_name)
 
 
@@ -253,7 +255,9 @@ def get_recommendations_product(product_id):
 
 @app.route('/api/v1/recommendation', methods=['POST'])
 def create_recommendation():
+	print(request.data);
 	data = json.loads(request.data)
+	print(data['password'])
 	return jsonify({"result":"Create Recommendations is in Progress"})
 	
 
