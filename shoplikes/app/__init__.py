@@ -11,6 +11,7 @@ import datetime
 import facebook
 import requests
 import ipdb
+import uuid
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -21,7 +22,7 @@ app.config['SQLALCHECMY_TRACK_MODIFICATIONS'] = True
 app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': '1485658648363694','secret': 'ebf9436f2c97491f3f70a59a88d8f595'}}
 db = SQLAlchemy(app)
 
-from models import User, Page
+from models import User, Page, Product, Recommendation
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -245,6 +246,8 @@ def showProductsForLike(page_id):
 
 @app.route('/api/v1/recommendations/<user_id>', methods=['GET'])
 def get_recommendations_user(user_id):
+	recommendations = Recommendations.query.filter_by(from_user_id=user_id)
+	print(recommendations)
 	return "Recommendations for %s is in Progress" % user_id
 	
 
@@ -255,10 +258,28 @@ def get_recommendations_product(product_id):
 
 @app.route('/api/v1/recommendation', methods=['POST'])
 def create_recommendation():
-	print(request.data);
 	data = json.loads(request.data)
-	print(data['password'])
-	return jsonify({"result":"Create Recommendations is in Progress"})
+
+	product = Product.query.filter_by(product_id=data["product"]["product_id"]).first()
+	if product == None:
+		product = Product(data["product"]["product_id"])
+	product.product_name = data["product"]["product_name"]
+	product.price = data["product"]["price"]
+	product.category = data["product"]["category"]
+	product.description = data["product"]["description"]
+	product.product_url = data["product"]["product_url"]
+	product.image_url = data["product"]["image_url"]
+	db.session.add(product)
+
+	recommendation = Recommendation(uuid.uuid4())
+	recommendation.from_user_id = current_user.user_id
+	recommendation.to_user_id = data["to_user_id"]
+	recommendation.product_id = data["product"]["product_id"]
+	recommendation.page_id = data["page_id"]
+	recommendation.created_on = datetime.datetime.now()
+	db.session.add(recommendation)
+	db.session.commit()
+	return jsonify({"result":"Recommendation is saved"})
 	
 
 @app.route('/api/v1/product', methods=['POST'])

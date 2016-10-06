@@ -1,5 +1,7 @@
 var columns = 4;
 var showModal = false;
+var selected_product = null;
+var page_id = null;
 var currency_symbols = {
     'USD': '$', // US Dollar
     'EUR': '€', // Euro
@@ -98,7 +100,6 @@ function recommendBtnClicked() {
 }
 
 function friendClicked(friend_id) {
-	alert(friend_id);
 	var xhr = new XMLHttpRequest();
 	var url = "http://localhost:8080/api/v1/recommendation";
 	xhr.open("POST", url, true);
@@ -110,22 +111,31 @@ function friendClicked(friend_id) {
         	console.log(json.email + ", " + json.password)
     	}
 	}
-	var data = JSON.stringify({"email":"hey@mail.com","password":"101010"});
+	var data = JSON.stringify({"to_user_id":friend_id,"product":selected_product,"page_id":page_id});
 	xhr.send(data);
 }
 
+function storePageId(pg_id) {
+	page_id = pg_id;
+}
 
 function myfunction(response) {
 	if (showModal == true) {
+		var selProduct = {};
+		selProduct["product_id"] = response["Item"]["ItemID"];
 		var category_name = document.getElementsByClassName("modal-category")[0];
 		category_name.innerHTML = response["Item"]["PrimaryCategoryName"];
+		selProduct["category"] = response["Item"]["PrimaryCategoryName"];
 
 		var product_name = document.getElementsByClassName("modal-name")[0];
-		product_name.innerHTML = "<font size=5>"+response["Item"]["ItemID"]+"</font>";
+		product_name.innerHTML = "<font size=5>"+response["Item"]["Title"]+"</font>";
+		selProduct["product_name"] = response["Item"]["Title"];
 		
 		var product_price = document.getElementsByClassName("modal-price")[0];
 		var currId = response["Item"]["CurrentPrice"]["CurrencyID"];
 		product_price.innerHTML = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
+		selProduct["price"] = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
+
 
 		var urls = response["Item"]["PictureURL"];
 		var product_image_carousel = document.getElementsByClassName("modal-image-carousel")[0];
@@ -144,12 +154,16 @@ function myfunction(response) {
 		var product_image = document.getElementsByClassName("modal-image")[0];
 		var gallery_url = urls[0];
 		product_image.innerHTML = "<img src=" + gallery_url + "></img>";
-		
+		selProduct["image_url"] = gallery_url;
+
 		var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
 		link.href = response["Item"]["ViewItemURLForNaturalSearch"];
+		selProduct["product_url"] = response["Item"]["ViewItemURLForNaturalSearch"];
 		
 		var product_details = document.getElementsByClassName("modal-detail")[0];
 		product_details.innerHTML = "<p>" + response["Item"]["Description"] + "</p>";
+		selProduct["description"] = response["Item"]["Description"];
+		selected_product = selProduct;
 	} else {
 		var pin = document.getElementById(response["Item"]["ItemID"]);
 		var image_node = null;

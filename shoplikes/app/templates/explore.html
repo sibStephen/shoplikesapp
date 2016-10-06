@@ -51,6 +51,7 @@
 	<script src="/static/js/explore.js"></script>
 	<script>
 		window.onload = function() {
+			storePageId("{{obj_id}}")
 			fetchProducts('{{username}}');
 			getFriends('{{friends_url}}',true);
 		};

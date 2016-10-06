@@ -62,6 +62,10 @@ class Product(db.Model):
 	price = db.Column(db.String())
 	recommendations = db.relationship('Recommendation', backref='product',lazy='dynamic')
 	pages = db.relationship('Page',secondary=page_product)
+
+	def __init__(self, _id):
+		self.product_id = _id
+
 	
 
 class Page(db.Model):
@@ -86,7 +90,10 @@ class Recommendation(db.Model):
 	to_user_id = db.Column(db.String(), db.ForeignKey('fbuser.user_id'))
 	product_id = db.Column(db.String(), db.ForeignKey('product.product_id'))
 	page_id = db.Column(db.String(), db.ForeignKey('page.page_id'))
-	created_on = db.Column(db.String())
+	created_on = db.Column(db.DateTime())
+
+	def __init__(self, _id):
+		self.recommendation_id = _id
 
 
 
