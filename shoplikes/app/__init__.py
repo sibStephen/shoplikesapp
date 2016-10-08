@@ -13,16 +13,20 @@ import requests
 import ipdb
 import uuid
 
+
 app = Flask(__name__)
+db = SQLAlchemy(app)
+
+from models import User, Page, Product, Recommendation
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'index'
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHECMY_TRACK_MODIFICATIONS'] = True
 app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': '1485658648363694','secret': 'ebf9436f2c97491f3f70a59a88d8f595'}}
-db = SQLAlchemy(app)
+curr_user = None
 
-from models import User, Page, Product, Recommendation
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -31,6 +35,7 @@ def load_user(user_id):
 
 @app.route('/')
 def hello():
+	return render_template('login.html')
 	if not current_user.is_authenticated:
 		return render_template('login.html')
 	else:
@@ -38,19 +43,12 @@ def hello():
 	
 @app.route('/timeline')
 def show_timeline():
-	user_id = current_user.user_id
-	user = User.query.filter_by(user_id=user_id).first()
-	url = "https://graph.facebook.com/"+ user_id + "?fields=cover&access_token=" + user.access_token
-	r = requests.get(url)
-	user.cover_id = r.json()['cover']['id']
-	db.session.commit()
-	return render_template('timeline.html',obj_id=user_id)
+	return render_template('timeline.html',obj_id=curr_user.user_id)
 							
 @app.route('/likes')
 def show_likes():
-	user_id = current_user.user_id
-# 	user = User.query.filter_by(user_id=user_id).first()
-	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + current_user.access_token
+	user_id = curr_user.user_id
+	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + curr_user.access_token
 # 	r = requests.get(url)
 # 	print(r.json())
 # 	resp_json = r.json()
@@ -110,7 +108,7 @@ def show_likes():
 							
 @app.route('/friends')
 def show_friends():
-	user_id = current_user.user_id
+	user_id = curr_user.user_id
 	user = User.query.filter_by(user_id=user_id).first()
 	url = "https://graph.facebook.com/"+ user_id + "/friends?access_token=" + user.access_token 
 # 	return render_template('friends.html',friends_url=url)
@@ -160,7 +158,7 @@ def upsertFriend(friendDict):
 			
 @app.route('/recommendations')
 def show_recommendations():
-	user_id = current_user.user_id
+	user_id = curr_user.user_id
 	user = User.query.filter_by(user_id=user_id).first()
 	return render_template('recommendations.html',
 							obj_id=user_id,
@@ -179,7 +177,7 @@ def show_profile(user_id):
 @app.route('/<page_id>/detail')
 def show_like_profile(page_id):
 	page = Page.query.filter_by(page_id=page_id).first()
-	url = "https://graph.facebook.com/"+ page_id + "?access_token=" + current_user.access_token 
+	url = "https://graph.facebook.com/"+ page_id + "?access_token=" + curr_user.access_token 
 	return render_template('like_detail.html',
 							obj_id=page_id,
 							username=page.page_name,
@@ -234,7 +232,7 @@ def showProductsForLike(page_id):
 # 					'price':product['sellingStatus'][0]['currentPrice'][0]['__value__']})
 	
 # 	final_products.extend(final_ebay_products)
-	friends_url = "https://graph.facebook.com/"+ current_user.user_id + "/friends?access_token=" + current_user.access_token 
+	friends_url = "https://graph.facebook.com/"+ curr_user.user_id + "/friends?access_token=" + curr_user.access_token 
 	return render_template('explore.html',
 							obj_id=page_id,
 							friends_url=friends_url,
@@ -295,13 +293,20 @@ def create_liked():
 	
 
 @app.route('/api/v1/user', methods=['POST'])
-def create_user():
+def upsert_user():
+	global curr_user
 	data = json.loads(request.data)
-	print(data['email'])	
-	user = User(data['user_id'],data['first_name'],data['last_name'],data['name'],data['email'])
+	user = User.query.filter_by(user_id=data['user_id']).first()
+	if not user:
+		user = User()
+		user.user_id = data['user_id']
+		user.access_token = data['access_token']
+	is_loggedin_user = data["is_loggedin_user"]
+	if is_loggedin_user == True:
+		curr_user = user
 	db.session.add(user)
 	db.session.commit()
-	return jsonify({"result":"In Progress"})
+	return user.to_json()
 
 
 @app.route('/authorize/<provider>')

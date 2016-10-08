@@ -1,4 +1,5 @@
 from app import db
+from flask import jsonify
 from sqlalchemy.dialects.postgresql import JSON
 from flask_login import UserMixin
 
@@ -31,20 +32,8 @@ class User(UserMixin, db.Model):
     from_recommendations = db.relationship('Recommendation', backref='fbuser_from_recommendations',lazy='dynamic',foreign_keys='Recommendation.from_user_id')
     to_recommendations = db.relationship('Recommendation', backref='fbuser_to_recommendations',lazy='dynamic',foreign_keys='Recommendation.to_user_id')
     
-    def __init__(self, _id, f_name, l_name, name, email, access_token, created_on, device_type, device_token):
-    	self.user_id = _id
-    	self.first_name = f_name
-    	self.last_name = l_name
-    	self.name = name
-    	self.email = email
-    	self.access_token = access_token
-    	self.created_on = created_on
-    	self.device_type = device_type
-    	self.token = device_token
-    	
-    def __init__(self, _id):
-    	self.user_id = _id
-
+    def to_json(self):
+    	return jsonify({"user_id":self.user_id,"first_name":self.first_name,"last_name":self.last_name,"name":self.name,"email":self.email,"access_token":self.access_token,"created_on":self.created_on})
         	
     def get_id(self):
     	return self.user_id
@@ -66,6 +55,8 @@ class Product(db.Model):
 	def __init__(self, _id):
 		self.product_id = _id
 
+	def to_json(self):
+		return jsonify({})
 	
 
 class Page(db.Model):
@@ -79,7 +70,9 @@ class Page(db.Model):
 	users = db.relationship('User',secondary=liked_page)
 	products = db.relationship('Product',secondary=page_product)
 	recommendations = db.relationship('Recommendation', backref='page',lazy='dynamic')
-	
+
+	def to_json(self):
+		return jsonify({})
 	
 	
 class Recommendation(db.Model):
@@ -95,6 +88,8 @@ class Recommendation(db.Model):
 	def __init__(self, _id):
 		self.recommendation_id = _id
 
+	def to_json(self):
+		return jsonify({})	
 
 
 class Store(db.Model):

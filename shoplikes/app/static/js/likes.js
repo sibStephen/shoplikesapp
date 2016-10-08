@@ -57,9 +57,93 @@ function httpGetAsync(theUrl, callback)
 					}
 				}
 			}
+
+    		toSort = Array.prototype.slice.call(container.children, 0);
+    		toSort.sort(function(child, otherChild) {
+    			var subchildren = child.children;
+    			var otherSubchildren = otherChild.children;
+    			var a = 0;
+    			var b = 0;
+    			for (i in subchildren) {
+    				var subchild = subchildren[i];
+    				if (subchild.className == "likes_grid") {
+    					a = subchild.children.length;
+    					break;
+    				}
+    			}
+
+    			for (i in otherSubchildren) {
+    				var subchild = otherSubchildren[i];
+    				if (subchild.className == "likes_grid") {
+    					b = subchild.children.length;
+    					break;
+    				}
+    			}
+    			return b - a;
+    		});
+    		console.log(toSort);
+    		for (i in toSort) {
+    			var sortedChild = toSort[i];
+    			container.removeChild(sortedChild);
+    			container.appendChild(sortedChild);
+    		}
+
+
+			
 			callback(xmlHttp.responseText);
-        	if (respJson.paging.next) {
-        		httpGetAsync(respJson['paging']['next'],callback);
+        	// if (respJson["paging"]["next"]) {
+        	if ("paging" in respJson) {
+        		if ("next" in respJson["paging"]) {
+        			httpGetAsync(respJson['paging']['next'],callback);
+        		} else {
+        		//reorder here
+				var container = document.getElementsByClassName('likes_list')[0];
+        		console.log(container.childNodes);
+        		}
+        	} else {
+        		//reorder here
+				var container = document.getElementsByClassName('likes_list')[0];
+        		console.log(container.children);
+        		// toSort = Array.prototype.slice.call(container.children, 0);
+        		// toSort.sort(function(child, otherChild) {
+        		// 	var subchildren = child.children;
+        		// 	var otherSubchildren = otherChild.children;
+        		// 	var a = 0;
+        		// 	var b = 0;
+        		// 	for (i in subchildren) {
+        		// 		var subchild = subchildren[i];
+        		// 		if (subchild.className == "likes_grid") {
+        		// 			a = subchild.children.length;
+        		// 			break;
+        		// 		}
+        		// 	}
+
+        		// 	for (i in otherSubchildren) {
+        		// 		var subchild = otherSubchildren[i];
+        		// 		if (subchild.className == "likes_grid") {
+        		// 			b = subchild.children.length;
+        		// 			break;
+        		// 		}
+        		// 	}
+        		// 	return b - a;
+        		// });
+        		// console.log(toSort);
+        		// for (i in toSort) {
+        		// 	var sortedChild = toSort[i];
+        		// 	container.removeChild(sortedChild);
+        		// 	container.appendChild(sortedChild);
+        		// }
+        		// for (var i = 0; i < container.children.length; i++) {
+        		// 	var child = container.children[i];
+        		// 	for (var j = 0; j < container.children.length; j++) {
+        		// 		var otherChild = container.children[j];
+        		// 		if (child.children.length > otherChild.children.length) {
+        		// 			var aChild = child;
+        		// 			child = otherChild;
+        		// 			otherChild = aChild;
+        		// 		}
+        		// 	}
+        		// }
         	}
         }
     }
