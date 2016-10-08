@@ -89,7 +89,7 @@ class Recommendation(db.Model):
 		self.recommendation_id = _id
 
 	def to_json(self):
-		return jsonify({})	
+		return jsonify({"recommendation_id":self.recommendation_id})	
 
 
 class Store(db.Model):

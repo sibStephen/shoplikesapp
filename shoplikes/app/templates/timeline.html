@@ -213,5 +213,14 @@
 </div>
 {% block scripts %}
 	<script src="/static/js/timeline.js"></script>
+	<script>
+
+	var body = document.getElementsByTagName("body")[0];
+	body.onload = function() {
+		debugger;
+		getRecommendationsForUserId("{{obj_id}}");
+	};
+
+	</script>
 {% endblock %}
 {% endblock %}

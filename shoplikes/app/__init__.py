@@ -118,9 +118,12 @@ def showProductsForLike(page_id):
 
 @app.route('/api/v1/recommendations/<user_id>', methods=['GET'])
 def get_recommendations_user(user_id):
-	recommendations = Recommendations.query.filter_by(from_user_id=user_id)
+	recommendations = Recommendation.query.filter_by(from_user_id=user_id)
 	print(recommendations)
-	return "Recommendations for %s is in Progress" % user_id
+	final_recommendations = []
+	for recommendation in recommendations:
+		final_recommendations.append({"recommendation_id":recommendation.recommendation_id})
+	return jsonify({"result":final_recommendations})
 	
 
 @app.route('/api/v1/recommendations/<product_id>', methods=['GET'])
