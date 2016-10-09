@@ -26,6 +26,20 @@
 	xhr.send(data);
 }
 
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        	var respJson = JSON.parse(xmlHttp.responseText);
+			callback(respJson);
+        }
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
+
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -36,10 +50,14 @@
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
       // Make a post request to your app here.
-      var user = {"user_id":response["authResponse"]["userID"], 
-      			  "access_token":response["authResponse"]["accessToken"],
-      			  "is_loggedin_user":true};
-      postUser(user);
+      var user_id = response["authResponse"]["userID"];
+      var access_token = response["authResponse"]["accessToken"];
+      var url = "https://graph.facebook.com/"+ user_id + "?access_token=" + access_token;
+      httpGetAsync(url, function(json) {
+  	    var user = {"user_id":user_id,"email":json["email"],"first_name":json["first_name"],"last_name":json["last_name"],"name":json["name"],"access_token":access_token,"is_loggedin_user":true};
+        postUser(user);
+      });
+
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +
