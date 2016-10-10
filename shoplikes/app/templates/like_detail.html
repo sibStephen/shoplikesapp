@@ -1,8 +1,8 @@
-{% extends "recommendations.html" %}
+{% extends "profile_base.html" %}
 {% block scripts %}
 	<script src="/static/js/like_detail.js"></script>
+	<script src="/static/js/slider.js"></script>
 	<script>
-		loadLikeDetailView('{{obj_id}}');
+		slider(["Recommendations","People","Explore"]);
 	</script>
-
 {% endblock %}

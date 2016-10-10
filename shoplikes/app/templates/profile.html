@@ -1,3 +1,9 @@
 {% extends "profile_base.html" %}
 {% block grid_content %}
 {% endblock %}
+{% block scripts %}
+	<script src="/static/js/slider.js"></script>
+	<script>
+		slider(["Friends","Recommendations","Invite"]);
+	</script>
+{% endblock %}
