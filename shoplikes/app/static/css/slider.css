@@ -1,0 +1,16 @@
+.slider {
+	width: 30%;
+	height: 50px;
+	background-color: blue;
+	position: relative;
+	float: left;
+	left: 160px;
+}
+
+.segment {
+	height: 50px;
+	background-color: blue;
+	float: left;
+	position: relative;
+	text-align: center;
+}
