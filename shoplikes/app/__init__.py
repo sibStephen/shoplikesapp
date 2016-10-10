@@ -87,11 +87,11 @@ def show_recommendations():
 							username=user.name)
 
 				
-@app.route('/<user_id>/profile')
-def show_profile(user_id):
-	user = User.query.filter_by(user_id=user_id).first()
-	return render_template('recommendations.html',
-							obj_id=user_id,
+@app.route('/profile')
+def show_profile():
+	user = User.query.filter_by(user_id=curr_user.user_id).first()
+	return render_template('profile.html',
+							obj_id=curr_user.user_id,
 							username=user.name)
 
 

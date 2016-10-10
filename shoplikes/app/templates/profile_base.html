@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block stylesheets %}
+    <link href="/static/css/slider.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
 {% block content %}
 <div>
 	<div class="userinfo_container">
@@ -11,11 +14,17 @@
 				{{username}}
 			</div>
 		</div>
-		<div class="links">
+		<div class="slider">
 		</div>
 	</div>
 	<div class="gridview_container">
 		{% block grid_content %}{% endblock %}
 	</div>
 </div>
+{% endblock %}
+{% block scripts %}
+	<script src="/static/js/slider.js"></script>
+	<script>
+		slider(["a","b","c"]);
+	</script>
 {% endblock %}

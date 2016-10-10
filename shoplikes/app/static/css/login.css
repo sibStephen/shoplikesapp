@@ -1,0 +1,19 @@
+.app_info {
+	display: block;
+	margin: 0 auto; 
+	position: relative;
+	background-color: brown;
+	width: 60%;
+}
+
+.app_name {
+	text-align: center;
+}
+
+.tag_line {
+	text-align: center;
+}
+
+.login_button {
+	
+}
