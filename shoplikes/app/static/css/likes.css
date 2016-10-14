@@ -36,6 +36,10 @@
 	position: relative;
 }
 
+.like_section_header {
+	padding: 5px;
+}
+
 .like_pic img {
     display: block;
     margin-left: auto;

@@ -1,8 +1,53 @@
 {% extends "profile_base.html" %}
+{% block stylesheets %}
+    <link href="/static/css/friends.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/slider.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/explore.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block grid_content %}
+	<div class="explore-grid-timeline">
+		<div class="spinner"></div>
+	</div>
+	<div class="grid-timeline">
+		<div class="spinner"></div>
+	</div>
+	<div class="friends_gridview">
+		<div class="spinner"></div>
+	</div>
+
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-category">Category</div>
+			<div class="modal-name">Name</div>
+			<div class="modal-price">Price</div>
+			<div class="modal-lhs">
+				<div class="modal-image"><img></img></div>
+				<div class="modal-image-carousel">	
+					<div class="modal-image-cell"></div>	
+					<div class="modal-image-cell"></div>	
+				</div>
+			</div>
+			<div class="modal-rhs">
+				<div class="modal-detail"></div>
+				<div class="friends-table">
+				</div>
+				<div class="modal-buttons">
+					<div class="recommend-link"><button onclick="recommendBtnClicked()">RECOMMEND</button></div>
+					<div class="buy-on-ebay-link"><a target="_blank">BUY ON EBAY</a></div>					
+				</div>
+				<div class="modal-friends">
+					
+				</div>
+			</div>
+		</div>
+   </div>
+{% endblock%}
 {% block scripts %}
 	<script src="/static/js/like_detail.js"></script>
-	<script src="/static/js/slider.js"></script>
 	<script>
+		storePageId("{{obj_id}}");
+		setPageName("{{username}}");
 		slider(["Recommendations","People","Explore"]);
+		getFriends('{{friends_url}}',true);
 	</script>
 {% endblock %}

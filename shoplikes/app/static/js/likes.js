@@ -31,7 +31,7 @@ function httpGetAsync(theUrl, callback)
 						
 						var listInnerHTML = "<div class=\"like_pic\"><img src=\"https://graph.facebook.com/" + like.id + "/picture?width=110&height=110\"/></div>";
 						listInnerHTML += "<div class=\"like_name\"><a href=\"/"+ like.id +"/detail\">" + like.name + "</a></div>";
-						listInnerHTML += "<div class=\"product_cnt\">8 Products</div>";
+						listInnerHTML += "<div class=\"product_cnt\" id=\""+like.id+"\"></div>";
 						
 						htmlNode.innerHTML = listInnerHTML;						
 						likes_list.childNodes[1].appendChild(htmlNode);
@@ -41,12 +41,12 @@ function httpGetAsync(theUrl, callback)
 						htmlNode.className = "likes_listcell";
 						htmlNode.id = key;
 						
-						var innerHTML = "<div>" + key + "</div>";
+						var innerHTML = "<div class=\"like_section_header\">" + key + "</div>";
 						innerHTML += "<div class=\"likes_grid\">";
 						innerHTML += "<div class=\"like_cell\">";
 						innerHTML += "<div class=\"like_pic\"><img src=\"https://graph.facebook.com/" + like.id + "/picture?width=110&height=110\"/></div>";
 						innerHTML += "<div class=\"like_name\"><a href=\"/"+ like.id +"/detail\">" + like.name + "</a></div>";
-						innerHTML += "<div class=\"product_cnt\">8 Products</div>";
+						innerHTML += "<div class=\"product_cnt\" id=\""+like.id+"\"></div>";
 						innerHTML += "</div>";
 						innerHTML += "</div>";
 						
@@ -79,12 +79,12 @@ function httpGetAsync(theUrl, callback)
     			}
     			return b - a;
     		});
+
     		for (i in toSort) {
     			var sortedChild = toSort[i];
     			container.removeChild(sortedChild);
     			container.appendChild(sortedChild);
     		}
-
 
 			callback(xmlHttp.responseText);
         	if ("paging" in respJson) {
@@ -103,6 +103,66 @@ function httpGetAsync(theUrl, callback)
 }
 
 
+function arrangeGridCells() {
+	var likes_list = document.getElementsByClassName("likes_listcell"); 
+	debugger;
+	for (i in likes_list) {
+		var sortedChildChildren = likes_list[i];
+		var grid = undefined;
+		for (j in sortedChildChildren.children) {
+			var child = sortedChildChildren.children[j];
+			if (child.className == "likes_grid") {
+				grid = child;
+				break;
+			}
+		}
+
+		if (grid) {
+			var toSortCells = Array.prototype.slice.call(grid.children, 0);
+			toSortCells.sort(function(firstChild,secondChild) {
+				var firstChildren = firstChild.children;
+
+				var a = 0;
+				var b = 0;
+
+				for (first_ind in firstChildren) {
+					var ch = firstChildren[first_ind];
+					if (ch.className == "product_cnt") {
+						var innerHTML = ch.innerHTML;
+						var stripped = innerHTML.replace(" Product(s)", '');					
+						if (stripped.length != 0) {
+							a = parseInt(stripped);
+						}
+						break;
+					}
+				}
+
+				var secondChildren = secondChild.children;
+				for (second_ind in secondChildren) {
+					var ch = secondChildren[second_ind];
+					if (ch.className == "product_cnt") {
+						var innerHTML = ch.innerHTML;
+						var stripped = innerHTML.replace(" Product(s)", '');
+						if (stripped.length != 0) {
+							b = parseInt(stripped);
+						}
+						break;
+					}
+				}
+				console.log("B : " + b + ", A : " + a);
+				return b - a;
+			});
+
+			for (k in toSortCells) {
+				var grid_child = toSortCells[k];
+				grid.removeChild(grid_child);
+				grid.appendChild(grid_child);
+			}
+		};
+	}
+}
+
+
 function saveLike(like) {
 	var xhr = new XMLHttpRequest();
 	var url = "http://localhost:8080/api/v1/page";
@@ -112,7 +172,17 @@ function saveLike(like) {
     	if (xhr.readyState == 4 && xhr.status == 200) {
         	var json = JSON.parse(xhr.responseText);
         	console.log(json);
+
+        	var product_cnt = document.getElementById(json["page_id"]);
+        	if ("products" in json) {
+        		var products = json["products"];
+        		if (products) {
+	        		product_cnt.innerHTML = products.length + " Product(s)";
+		        	arrangeGridCells();
+	        	} 
+        	} 
     	}
+		
 	}
 	var data = JSON.stringify({"page_id":like.id,"page_name":like.name,"category_name":like.category});
 	xhr.send(data);

@@ -107,9 +107,9 @@ function httpGetAsync(theUrl, callback)
 
 
 function getRecommendationsForUserId(user_id) {
-	debugger;
-	var url = "http://localhost:8080/api/v1/recommendations/" + user_id;
+	var url = "http://localhost:8080/api/v1/recommendations_from_user/" + user_id;
 	httpGetAsync(url, function(json) {
+		
 	});
 }
 

@@ -90,20 +90,35 @@ def show_recommendations():
 @app.route('/profile')
 def show_profile():
 	user = User.query.filter_by(user_id=curr_user.user_id).first()
+	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
 	return render_template('profile.html',
 							obj_id=curr_user.user_id,
-							username=user.name)
+							username=user.name,
+							friends_url=url)
+
+
+@app.route('/<user_id>/profile')
+def show_user_profile(user_id):
+	user = User.query.filter_by(user_id=user_id).first()
+	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + curr_user.access_token 
+	return render_template('profile.html',
+							obj_id=user_id,
+							username=user.name,
+							friends_url=url)
 
 
 
 @app.route('/<page_id>/detail')
 def show_like_profile(page_id):
+	user = curr_user
 	page = Page.query.filter_by(page_id=page_id).first()
 	url = "https://graph.facebook.com/"+ page_id + "?access_token=" + curr_user.access_token 
+	friends_url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
 	return render_template('like_detail.html',
 							obj_id=page_id,
 							username=page.page_name,
-							like_url=url)
+							like_url=url,
+							friends_url = friends_url)
 							
 							
 @app.route('/<page_id>/explore')
@@ -116,10 +131,9 @@ def showProductsForLike(page_id):
 							username=page.page_name)
 
 
-@app.route('/api/v1/recommendations/<user_id>', methods=['GET'])
-def get_recommendations_user(user_id):
+@app.route('/api/v1/recommendations_from_user/<user_id>', methods=['GET'])
+def get_recommendations_from_user(user_id):
 	recommendations = Recommendation.query.filter_by(from_user_id=user_id)
-	print(recommendations)
 	final_recommendations = []
 	for recommendation in recommendations:	
 		recommendation_id = recommendation.recommendation_id
@@ -129,11 +143,49 @@ def get_recommendations_user(user_id):
 		page = Page.query.filter_by(page_id=recommendation.page_id).first()
 		final_recommendations.append({"recommendation_id":recommendation_id,"from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
 	return jsonify({"result":final_recommendations})
+
+
+@app.route('/api/v1/recommendations_to_user/<user_id>', methods=['GET'])
+def get_recommendations_to_user(user_id):
+	recommendations = Recommendation.query.filter_by(to_user_id=user_id)
+	final_recommendations = []
+	for recommendation in recommendations:	
+		recommendation_id = recommendation.recommendation_id
+		product = Product.query.filter_by(product_id=recommendation.product_id).first()
+		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
+		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
+		page = Page.query.filter_by(page_id=recommendation.page_id).first()
+		final_recommendations.append({"recommendation_id":recommendation_id,"from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+	return jsonify({"result":final_recommendations})
+
+
+@app.route('/api/v1/recommendations_for_page/<page_id>', methods=['GET'])
+def get_recommendations_page(page_id):
+	recommendations = Recommendation.query.filter_by(page_id=page_id)
+	final_recommendations = []
+	for recommendation in recommendations:	
+		recommendation_id = recommendation.recommendation_id
+		product = Product.query.filter_by(product_id=recommendation.product_id).first()
+		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
+		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
+		page = Page.query.filter_by(page_id=recommendation.page_id).first()
+		final_recommendations.append({"recommendation_id":recommendation_id,"from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+	return jsonify({"result":final_recommendations})
+
 	
 
-@app.route('/api/v1/recommendations/<product_id>', methods=['GET'])
+@app.route('/api/v1/recommendations_for_product/<product_id>', methods=['GET'])
 def get_recommendations_product(product_id):
-	return "Recommendations for %s is in Progress" % product_id
+	recommendations = Recommendation.query.filter_by(product_id=product_id)
+	final_recommendations = []
+	for recommendation in recommendations:	
+		recommendation_id = recommendation.recommendation_id
+		product = Product.query.filter_by(product_id=recommendation.product_id).first()
+		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
+		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
+		page = Page.query.filter_by(page_id=recommendation.page_id).first()
+		final_recommendations.append({"recommendation_id":recommendation_id,"from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+	return jsonify({"result":final_recommendations})
 	
 
 @app.route('/api/v1/recommendation', methods=['POST'])
@@ -185,7 +237,17 @@ def upsert_page():
 	db.session.add(page)
 	db.session.commit()
 
-	return jsonify({"result":"Page is saved"})
+	#fetch products against that like
+	recommendations = Recommendation.query.filter_by(page_id = page.page_id)
+	products = []
+	for recommendation in recommendations:
+		product = Product.query.filter_by(product_id=recommendation.product_id).first()
+		products.append({"product_id":product.product_id, "product_name":product.product_name})
+
+	if not products:
+		return jsonify({"page_id":page.page_id, "page_name": page.page_name})
+	else:
+		return jsonify({"page_id":page.page_id, "page_name": page.page_name, "products":products})
 
 
 @app.route('/api/v1/liked', methods=['POST'])

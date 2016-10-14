@@ -27,14 +27,6 @@ function httpGetAsync(theUrl, callback)
 }
 
 
-// 		<div class="friend_cell">
-// 			<div class="friend_pic"><img></img></div>
-// 			<div class="friend_name">Parag</div>
-// 			<div class="reco_cnt">8 Products</div>
-// 		</div>
-
-
-
 var columns = 10;
 function loadFriendsGridView() {
 	var gridview = document.getElementsByClassName("friends_gridview")[0];

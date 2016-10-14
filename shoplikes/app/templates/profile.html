@@ -1,9 +1,17 @@
 {% extends "profile_base.html" %}
+{% block stylesheets %}
+    <link href="/static/css/friends.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/slider.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
 {% block grid_content %}
+	<div class="grid-timeline"></div>
+	<div class="friends_gridview"></div>
 {% endblock %}
 {% block scripts %}
-	<script src="/static/js/slider.js"></script>
+	<script src="/static/js/profile.js"></script>
+	<script src="http://connect.facebook.net/en_US/all.js"></script>
 	<script>
+		setFriendsURL("{{friends_url}}");
 		slider(["Friends","Recommendations","Invite"]);
 	</script>
 {% endblock %}
