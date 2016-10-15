@@ -1,3 +1,5 @@
+  
+
   function login() {
   	FB.login(function(response) {
    // handle the response
@@ -12,14 +14,19 @@
     });
   }
 
+  var base_url;
+  function storeBaseURL(url) {
+    base_url = url;
+  }
+
   function postUser(user) {
 	var xhr = new XMLHttpRequest();
-	var url = "http://localhost:8080/api/v1/user";
+	var url = base_url + "/api/v1/user";
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onreadystatechange = function () { 
     	if (xhr.readyState == 4 && xhr.status == 200) {
-    		window.location = "http://localhost:8080/timeline";
+    		window.location = base_url + "/timeline";
     	}
 	}
 	var data = JSON.stringify(user);

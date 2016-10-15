@@ -11,6 +11,7 @@
 		<script src="/static/js/login.js"></script>	
 		<script>
 			window.onload = function() {
+			storeBaseURL("{{base_url}}");
 			window.fbAsyncInit = function() {
 			    FB.init({
 			      appId      : "{{ appId }}",

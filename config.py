@@ -15,13 +15,13 @@ class StagingConfig(Config):
 	DEVELOPMENT = True
 	APP_ID = "2117381198487388"
 	DEBUG = True
-	BASE_URL = "https://shoplikes-staging.herokuapp.com/"
+	BASE_URL = "https://shoplikes-staging.herokuapp.com"
 	
 class DevelopmentConfig(Config):
 	DEVELOPMENT = True
 	APP_ID = "1485658648363694"
 	DEBUG = True
-	BASE_URL = "http://localhost:8080/"
+	BASE_URL = "http://localhost:8080"
 	
 class TestingConfig(Config):
 	TESTING = True
