@@ -9,5 +9,6 @@ jinja2
 rauth
 Flask-Login
 facebook-sdk
+gunicorn
 ipdb
 flask-socketio
