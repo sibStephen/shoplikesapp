@@ -7,8 +7,8 @@ a {
 }
 
 .app_title {
-	width: 100px;
-    height: 100px;
+	width: 800px;
+    height: 500px;
     background-color: red;
 
     position: absolute;
@@ -273,7 +273,7 @@ a {
 
 #product_price {
 	position: absolute;
-	left: 0px;
+	left: 10px;
 	top: 50%;
 	width: 80px;
 	height: 30px;

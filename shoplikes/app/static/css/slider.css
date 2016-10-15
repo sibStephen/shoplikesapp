@@ -1,7 +1,6 @@
 .slider {
-	width: 30%;
+	width: 40%;
 	height: 50px;
-	background-color: blue;
 	position: relative;
 	float: left;
 	left: 160px;
@@ -9,8 +8,28 @@
 
 .segment {
 	height: 50px;
-	background-color: blue;
 	float: left;
 	position: relative;
 	text-align: center;
+}
+
+.segment div {
+	width: 100%;
+    font-size: 15px;
+    height: 100%;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: auto;
+    display: inline-block;
+}
+
+.segment div:hover {
+	cursor: pointer;
+}
+
+.selected-segment {
+	background-color: #4144BC;
+	height: 2px;
+    position: absolute;
+    bottom: 0px;
 }
