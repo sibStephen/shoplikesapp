@@ -36,9 +36,9 @@ def load_user(user_id):
 
 @app.route('/')
 def hello():
-	return render_template('login.html')
+	return render_template('login.html',appId=app.config['APP_ID'])
 	if not current_user.is_authenticated:
-		return render_template('login.html',appId=app.config.APP_ID)
+		return render_template('login.html',appId=app.config['APP_ID'])
 	else:
 		return redirect(url_for('show_timeline'))
 
