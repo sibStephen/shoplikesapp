@@ -135,8 +135,13 @@ function httpGetAsync(theUrl, callback)
 }
 
 
+var base_url;
+function storeBaseURL(url) {
+	base_url = url;
+}
+
 function getRecommendationsForUserId(user_id) {
-	var url = "http://localhost:8080/api/v1/recommendations_from_user/" + user_id;
+	var url = base_url + "/api/v1/recommendations_from_user/" + user_id;
 	httpGetAsync(url, function(json) {
 
 	});

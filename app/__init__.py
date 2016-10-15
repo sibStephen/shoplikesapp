@@ -45,14 +45,49 @@ def hello():
 	
 @app.route('/timeline')
 def show_timeline():
-	return render_template('timeline.html',obj_id=curr_user.user_id)
+	return render_template('timeline.html',obj_id=curr_user.user_id, base_url=app.config['BASE_URL'])
 
 							
 @app.route('/likes')
 def show_likes():
 	user_id = curr_user.user_id
 	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + curr_user.access_token	
-	return render_template('likes.html',likes_url=url)
+	return render_template('likes.html',likes_url=url, base_url=app.config['BASE_URL'])
+
+
+
+@app.route('/profile')
+def show_profile():
+	user = User.query.filter_by(user_id=curr_user.user_id).first()
+	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
+	return render_template('profile.html',
+							obj_id=curr_user.user_id,
+							username=user.name,
+							friends_url=url)
+
+
+@app.route('/<user_id>/profile')
+def show_user_profile(user_id):
+	user = User.query.filter_by(user_id=user_id).first()
+	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + curr_user.access_token 
+	return render_template('profile.html',
+							obj_id=user_id,
+							username=user.name,
+							friends_url=url)
+
+
+
+@app.route('/<page_id>/detail')
+def show_like_profile(page_id):
+	user = curr_user
+	page = Page.query.filter_by(page_id=page_id).first()
+	url = "https://graph.facebook.com/"+ page_id + "?access_token=" + curr_user.access_token 
+	friends_url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
+	return render_template('like_detail.html',
+							obj_id=page_id,
+							username=page.page_name,
+							like_url=url,
+							friends_url = friends_url)
 
 							
 							
@@ -87,40 +122,7 @@ def show_recommendations():
 							obj_id=user_id,
 							username=user.name)
 
-				
-@app.route('/profile')
-def show_profile():
-	user = User.query.filter_by(user_id=curr_user.user_id).first()
-	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
-	return render_template('profile.html',
-							obj_id=curr_user.user_id,
-							username=user.name,
-							friends_url=url)
-
-
-@app.route('/<user_id>/profile')
-def show_user_profile(user_id):
-	user = User.query.filter_by(user_id=user_id).first()
-	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + curr_user.access_token 
-	return render_template('profile.html',
-							obj_id=user_id,
-							username=user.name,
-							friends_url=url)
-
-
-
-@app.route('/<page_id>/detail')
-def show_like_profile(page_id):
-	user = curr_user
-	page = Page.query.filter_by(page_id=page_id).first()
-	url = "https://graph.facebook.com/"+ page_id + "?access_token=" + curr_user.access_token 
-	friends_url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
-	return render_template('like_detail.html',
-							obj_id=page_id,
-							username=page.page_name,
-							like_url=url,
-							friends_url = friends_url)
-							
+									
 							
 @app.route('/<page_id>/explore')
 def showProductsForLike(page_id):

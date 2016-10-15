@@ -163,9 +163,15 @@ function arrangeGridCells() {
 }
 
 
+var base_url;
+
+function storeBaseURL(url) {
+	base_url = url;
+}
+
 function saveLike(like) {
 	var xhr = new XMLHttpRequest();
-	var url = "http://localhost:8080/api/v1/page";
+	var url =  base_url + "/api/v1/page";
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onreadystatechange = function () { 
