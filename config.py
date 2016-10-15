@@ -13,10 +13,12 @@ class ProductionConfig(Config):
 	
 class StagingConfig(Config):
 	DEVELOPMENT = True
+	APP_ID = "2117381198487388"
 	DEBUG = True
 	
 class DevelopmentConfig(Config):
 	DEVELOPMENT = True
+	APP_ID = "1485658648363694"
 	DEBUG = True
 	
 class TestingConfig(Config):
