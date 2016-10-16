@@ -274,7 +274,6 @@ def upsert_user():
 	is_loggedin_user = data["is_loggedin_user"]
 	if is_loggedin_user == True:
 		print("@" * 80)
-		curr_user = user
 	db.session.add(user)
 	db.session.commit()
 	return user.to_json()
