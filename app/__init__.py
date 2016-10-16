@@ -273,6 +273,7 @@ def upsert_user():
 	user.last_name = data['last_name']
 	is_loggedin_user = data["is_loggedin_user"]
 	if is_loggedin_user == True:
+		curr_user = user
 		print("@" * 80)
 	db.session.add(user)
 	db.session.commit()
