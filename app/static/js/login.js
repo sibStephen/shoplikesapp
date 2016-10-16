@@ -19,7 +19,7 @@
     base_url = url;
   }
 
-  function postUser(user) {
+function postUser(user) {
 	var xhr = new XMLHttpRequest();
 	var url = base_url + "/api/v1/user";
 	xhr.open("POST", url, true);
@@ -59,7 +59,7 @@ function httpGetAsync(theUrl, callback)
       // Make a post request to your app here.
       var user_id = response["authResponse"]["userID"];
       var access_token = response["authResponse"]["accessToken"];
-      var url = "https://graph.facebook.com/"+ user_id + "?access_token=" + access_token;
+      var url = "https://graph.facebook.com/"+ user_id + "?access_token=" + access_token + "&fields=id,email,name,first_name,last_name";
       httpGetAsync(url, function(json) {
   	    var user = {"user_id":user_id,"email":json["email"],"first_name":json["first_name"],"last_name":json["last_name"],"name":json["name"],"access_token":access_token,"is_loggedin_user":true};
         postUser(user);
