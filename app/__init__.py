@@ -1,6 +1,6 @@
 from flask import Flask,request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func, desc
+from sqlalchemy import func, desc, or_
 from flask_restful import reqparse
 from flask_login import LoginManager, UserMixin, login_user, logout_user,current_user, redirect, url_for
 from oauth import OAuthSignIn
@@ -63,7 +63,9 @@ def show_profile():
 	return render_template('profile.html',
 							obj_id=curr_user.user_id,
 							username=user.name,
-							friends_url=url)
+							friends_url=url,
+							appId=app.config['APP_ID'],
+							base_url=app.config['BASE_URL'])
 
 
 @app.route('/<user_id>/profile')
@@ -73,7 +75,8 @@ def show_user_profile(user_id):
 	return render_template('profile.html',
 							obj_id=user_id,
 							username=user.name,
-							friends_url=url)
+							friends_url=url,
+							base_url=app.config['BASE_URL'])
 
 
 
@@ -132,6 +135,22 @@ def showProductsForLike(page_id):
 							obj_id=page_id,
 							friends_url=friends_url,
 							username=page.page_name)
+
+
+@app.route('/api/v1/recommendations_timeline/<user_id>', methods=['GET'])
+def get_recommendations_timeline(user_id):
+#	recommendations = db.session.query.filter(or_(Recommendation.from_user_id=user_id, Recommendation.to_user_id=user_id))
+	recommendations = Recommendation.query.filter_by(from_user_id=user_id).order_by(desc("created_on"))
+	final_recommendations = []
+	for recommendation in recommendations:	
+		recommendation_id = recommendation.recommendation_id
+		product = Product.query.filter_by(product_id=recommendation.product_id).first()
+		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
+		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
+		page = Page.query.filter_by(page_id=recommendation.page_id).first()
+		final_recommendations.append({"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+	return jsonify({"result":final_recommendations})
+
 
 
 @app.route('/api/v1/recommendations_from_user/<user_id>', methods=['GET'])
@@ -275,6 +294,18 @@ def upsert_user():
 	if is_loggedin_user == True:
 		curr_user = user
 	db.session.add(user)
+
+	friends = data['friends']
+	for friend in friends:
+		stored_friend = User.query.filter_by(user_id=friend["id"]).first()
+		if not stored_friend:
+			stored_friend = User()
+			stored_friend.user_id = friend["id"]
+		stored_friend.name = friend['name']
+		stored_friend.first_name = friend['first_name']
+		stored_friend.last_name = friend['last_name']
+		db.session.add(stored_friend)
+
 	db.session.commit()
 	return user.to_json()
 

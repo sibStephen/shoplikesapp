@@ -141,7 +141,7 @@ function storeBaseURL(url) {
 }
 
 function getRecommendationsForUserId(user_id) {
-	var url = base_url + "/api/v1/recommendations_from_user/" + user_id;
+	var url = base_url + "/api/v1/recommendations_timeline/" + user_id;
 	httpGetAsync(url, function(json) {
 
 	});

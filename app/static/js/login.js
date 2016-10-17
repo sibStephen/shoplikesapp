@@ -39,7 +39,12 @@ function httpGetAsync(theUrl, callback)
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
         	var respJson = JSON.parse(xmlHttp.responseText);
-			callback(respJson);
+			    callback(respJson);
+          if ("paging" in respJson) {
+            if ("next" in respJson["paging"]) {
+              httpGetAsync(respJson['paging']['next'],callback);
+            }
+          }
         }
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
@@ -61,8 +66,12 @@ function httpGetAsync(theUrl, callback)
       var access_token = response["authResponse"]["accessToken"];
       var url = "https://graph.facebook.com/"+ user_id + "?access_token=" + access_token + "&fields=id,email,name,first_name,last_name";
       httpGetAsync(url, function(json) {
-  	    var user = {"user_id":user_id,"email":json["email"],"first_name":json["first_name"],"last_name":json["last_name"],"name":json["name"],"access_token":access_token,"is_loggedin_user":true};
-        postUser(user);
+        var friends_url = "https://graph.facebook.com/"+ user_id + "/friends?access_token=" + access_token + "&fields=id,email,name,first_name,last_name"
+        httpGetAsync(friends_url, function(friends_json){
+          debugger;
+          var user = {"user_id":user_id,"email":json["email"],"first_name":json["first_name"],"last_name":json["last_name"],"name":json["name"],"access_token":access_token,"is_loggedin_user":true, "friends":friends_json["data"]};
+          postUser(user);
+        });
       });
 
     } else if (response.status === 'not_authorized') {
