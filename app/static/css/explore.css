@@ -269,8 +269,10 @@
 	word-wrap: break-word;
 }
 
-.modal-price {
 
+.modal-price {
+    left: 5px;
+    position: relative;
 }
 
 

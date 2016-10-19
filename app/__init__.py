@@ -256,6 +256,13 @@ def upsert_page():
 	page.page_name = data["page_name"]
 	page.category_name = data["category_name"]
 
+	page_likers = page.users
+	if not page_likers:
+		page.users = [curr_user]
+	else:
+		page_likers.append(curr_user)
+		page.users = page_likers
+
 	db.session.add(page)
 	db.session.commit()
 

@@ -3,7 +3,7 @@ body {
 }
 
 a {
-	color:#4144BC
+	color:#4351AF
 }
 
 .app_title {
@@ -274,7 +274,7 @@ a {
 	top: 50%;
 	width: 80px;
 	height: 30px;
-	background-color: #4144BC;
+	background-color: #4351AF;
 	text-align: center;
 }
 
@@ -288,7 +288,7 @@ a {
 /* Nav bar */
 
 .navbar-default {
-    background-color: #4144BC;
+    background-color: #4351AF;
 }
 
 .navbar-default .navbar-brand {
