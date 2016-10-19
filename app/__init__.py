@@ -61,7 +61,7 @@ def show_profile():
 	user = User.query.filter_by(user_id=curr_user.user_id).first()
 	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
 	return render_template('profile.html',
-							obj_id=curr_user.user_id,
+							obj_id=user.user_id,
 							username=user.name,
 							friends_url=url,
 							appId=app.config['APP_ID'],
@@ -135,6 +135,15 @@ def showProductsForLike(page_id):
 							obj_id=page_id,
 							friends_url=friends_url,
 							username=page.page_name)
+
+
+@app.route('/api/v1/people_page/<page_id>', methods=['GET'])
+def people_for_page(page_id):
+	page = Page.query.filter_by(page_id=page_id).first()
+	final_users = []
+	for user in page.users:
+		final_users.append({"user_id":user.user_id,"name":user.name})
+	return jsonify({"result":final_users})
 
 
 @app.route('/api/v1/recommendations_timeline/<user_id>', methods=['GET'])
@@ -260,8 +269,17 @@ def upsert_page():
 	if not page_likers:
 		page.users = [curr_user]
 	else:
-		page_likers.append(curr_user)
-		page.users = page_likers
+		exists = False
+
+		for user in page.users:
+			if user.user_id == curr_user.user_id:
+				exists = True
+				break
+
+		if exists == False:
+			page_likers.append(curr_user)
+			page.users = page_likers
+
 
 	db.session.add(page)
 	db.session.commit()

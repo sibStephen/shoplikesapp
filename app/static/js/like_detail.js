@@ -62,6 +62,8 @@ function segment_clicked(index) {
 
 			var gridview = document.getElementsByClassName("friends_gridview")[0];
 			gridview.style.display = "block";
+
+			getPeopleForPage();
 		}
 			break;
 		case 2: 
@@ -283,6 +285,21 @@ function product_detail(product_id) {
 }
 
 
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        	var respJson = JSON.parse(xmlHttp.responseText);
+			callback(respJson);
+        }
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
+
+
 function getProducts(url,headers,callback) {
 	 $.ajax({
             url: url,
@@ -307,6 +324,23 @@ window.onclick = function(event) {
 		body.style.overflow = 'scroll';
     }
 }
+
+function getPeopleForPage() {
+	var url = "http://localhost:8080/api/v1/people_page/" + page_id;
+	httpGetAsync(url, function(json){
+		var gridview = document.getElementsByClassName("friends_gridview")[0];
+		var people = json["result"];
+		gridview.innerHTML = "";
+		for (i in people) {
+			var user = people[i];
+			var node = document.createElement("div");
+			node.className = "friend_cell";
+			node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+user["user_id"]+"/picture></img></div><div class=\"friend_name\"><a href=\""+user["user_id"]+"/friends\">"+user["name"]+"</a></div><div class=\"reco_cnt\">8 Products</div>";
+        	gridview.appendChild(node);
+		}
+	});
+}
+
 
 function getFriends(friends_url, add_header) {
 	getProducts(friends_url, null, function(json) {
