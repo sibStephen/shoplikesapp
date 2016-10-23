@@ -74,64 +74,57 @@ function timeSince(date) {
 }
 
 
+function showTimeline(respJson) {
+	var recommendations = respJson["result"];
+	if (recommendations) {
+		var grid = document.getElementsByClassName('grid-timeline')[0];
+		for (var i = 0; i < recommendations.length; i++) {
+			var recommendation = recommendations[i];
+			var node = document.createElement("div");
+			node.id = recommendation["recommendation_id"];
+			node.className = "grid-recommendation";
+			node.onclick = pinClicked;
+			var product = recommendation["product"];
+			var from_user = recommendation["from_user"];
+			var to_user = recommendation["to_user"];
+			var page = recommendation["page"];
+
+			var from_user_pic = "https://graph.facebook.com/"+from_user["user_id"]+"/picture"
+			var to_user_pic = "https://graph.facebook.com/"+to_user["user_id"]+"/picture"
+			var page_pic = "https://graph.facebook.com/"+page["page_id"]+"/picture"
+
+			var category = product['category']
+			var name = product['product_name'];
+			var image_url = product['image_url'];
+			var price = product['price'];
+			var product_id = product['product_id'];
+
+			var created_on = recommendation["created_on"];
+			var d = new Date(created_on);
+			var num_milliseconds = Date.parse(d);
+			node.innerHTML = "<div class=\"pin\" onclick=\"pinClicked("+ recommendation["recommendation_id"] +")\"><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+from_user_pic+"\"/><div id=\"from_user_name\">"+ from_user["user_name"] +"</div></div> <div id=\"reco_info\"><div id=\"reco_text\">Recommends <a href=\"/"+to_user["user_id"]+"/profile\">"+ to_user["user_name"] +"</a></div><div id=\"reco_timestamp\">" + timeSince(num_milliseconds) + " ago</div></div><div id=\"product_info\"><div id=\"product_category\">"+ category + "</div><div id=\"product_name\">"+ name +"</div></div><img id=\""+product_id+"\" src=\""+image_url+"\" /><div id=\"product_price\"><font color=\"white\">"+price+"</font></div><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+page_pic+"\"/><div id=\"from_user_name\">"+page["page_name"]+"</div></div></div>";
+			grid.appendChild(node);
+
+			var image_node = document.getElementById(product_id);
+			image_node.onload = function() {
+				arrangePins();
+			};
+
+			arrangePins();
+		}
+	}
+}
+
+
 function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
-	    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-	    	var respJson = JSON.parse(xmlHttp.responseText);
-	    	var recommendations = respJson["result"];
-	    	if (recommendations) {
-    			var grid = document.getElementsByClassName('grid-timeline')[0];
-				for (var i = 0; i < recommendations.length; i++) {
-					var recommendation = recommendations[i];
-					var node = document.createElement("div");
-					node.id = recommendation["recommendation_id"];
-					node.className = "grid-recommendation";
-					node.onclick = pinClicked;
-					var product = recommendation["product"];
-					var from_user = recommendation["from_user"];
-					var to_user = recommendation["to_user"];
-					var page = recommendation["page"];
-
-					var from_user_pic = "https://graph.facebook.com/"+from_user["user_id"]+"/picture"
-					var to_user_pic = "https://graph.facebook.com/"+to_user["user_id"]+"/picture"
-					var page_pic = "https://graph.facebook.com/"+page["page_id"]+"/picture"
-
-					var category = product['category']
-					var name = product['product_name'];
-					var image_url = product['image_url'];
-					var price = product['price'];
-					var product_id = product['product_id'];
-
-
-	// <div class="grid-recommendation">
-		// <div class="pin">
-		// 	<div id="from_user_info"><img id="from_user_pic" src="https://pbs.twimg.com/profile_images/2360146438/image_normal.jpg"/><div id="from_user_name">Parag Dulam</div></div>
-		// 	<div id="reco_info"><div id="reco_text">Recommends Pritam Dulam and 2 more</div><div id="reco_timestamp">30 secs ago</div></div>
-		// 	<div id="product_info"><div id="product_category">MOVIES</div><div id="product_name">Ratatouille</div></div>
-		// 	<img src="http://cssdeck.com/uploads/media/items/6/6f3nXse.png" />
-		// 	<div id="product_price"><font color="white">$50</font></div>
-		// 	<div id="from_user_info"><img id="from_user_pic" src="https://33.media.tumblr.com/avatar_a8ac011f1b54_128.png"/><div id="from_user_name">Ratatouille - The Movie</div></div>
-		// </div>
-	// </div>
-					var created_on = recommendation["created_on"];
-					var d = new Date(created_on);
-					var num_milliseconds = Date.parse(d);
-					node.innerHTML = "<div class=\"pin\" onclick=\"pinClicked("+ recommendation["recommendation_id"] +")\"><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+from_user_pic+"\"/><div id=\"from_user_name\">"+ from_user["user_name"] +"</div></div> <div id=\"reco_info\"><div id=\"reco_text\">Recommends <a href=\"/"+to_user["user_id"]+"/profile\">"+ to_user["user_name"] +"</a></div><div id=\"reco_timestamp\">" + timeSince(num_milliseconds) + " ago</div></div><div id=\"product_info\"><div id=\"product_category\">"+ category + "</div><div id=\"product_name\">"+ name +"</div></div><img id=\""+product_id+"\" src=\""+image_url+"\" /><div id=\"product_price\"><font color=\"white\">"+price+"</font></div><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+page_pic+"\"/><div id=\"from_user_name\">"+page["page_name"]+"</div></div></div>";
-					grid.appendChild(node);
-
-					var image_node = document.getElementById(product_id);
-					image_node.onload = function() {
-						arrangePins();
-					};
-
-					arrangePins();
-				}
-				callback(respJson);
-	    	}
-		}
-	}
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+    	var respJson = JSON.parse(xmlHttp.responseText);
+			callback(respJson);
+    	}
+	};
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
@@ -145,17 +138,57 @@ function storeBaseURL(url) {
 function getRecommendationsForUserId(user_id) {
 	var url = base_url + "/api/v1/recommendations_timeline/" + user_id;
 	httpGetAsync(url, function(json) {
-
+		showTimeline(json);
 	});
 }
 
-function showModal(json) {
+function showModal(response) {
+	debugger;
 	var modal = document.getElementById('myModal');
 	modal.style.display = "block";
 
 	var body = document.getElementsByTagName("body")[0];
 	body.style.overflow = 'hidden';
 
+	var category_name = document.getElementsByClassName("modal-category")[0];
+	category_name.innerHTML = response["product"]["category"];
+
+	// var product_name = document.getElementsByClassName("modal-name")[0];
+	// product_name.innerHTML = "<font size=5>"+response["Item"]["Title"]+"</font>";
+	// selProduct["product_name"] = response["Item"]["Title"];
+	
+	// var product_price = document.getElementsByClassName("modal-price")[0];
+	// var currId = response["Item"]["CurrentPrice"]["CurrencyID"];
+	// product_price.innerHTML = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
+	// selProduct["price"] = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
+
+
+	// var urls = response["Item"]["PictureURL"];
+	// var product_image_carousel = document.getElementsByClassName("modal-image-carousel")[0];
+	// product_image_carousel.innerHTML = "";
+	// for (i in urls) {
+	// 	if (i >= 4) {
+	// 		break;
+	// 	}
+	// 	var url = urls[i];
+	// 	var node = document.createElement("div");
+	// 	node.className = "modal-image-cell";
+	// 	node.innerHTML = "<img src=" + url + "></img>";
+	// 	product_image_carousel.appendChild(node);
+	// } 
+
+	// var product_image = document.getElementsByClassName("modal-image")[0];
+	// var gallery_url = urls[0];
+	// product_image.innerHTML = "<img src=" + gallery_url + "></img>";
+	// selProduct["image_url"] = gallery_url;
+
+	// var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
+	// link.href = response["Item"]["ViewItemURLForNaturalSearch"];
+	// selProduct["product_url"] = response["Item"]["ViewItemURLForNaturalSearch"];
+	
+	// var product_details = document.getElementsByClassName("modal-detail")[0];
+	// product_details.innerHTML = "<p>" + response["Item"]["Description"] + "</p>";
+	// selProduct["description"] = response["Item"]["Description"];
 }
 
 window.onclick = function(event) {
@@ -172,7 +205,8 @@ function pinClicked() {
 	var recommendation_id = event.currentTarget.id;
 	var url = base_url + "/api/v1/recommendations/" + recommendation_id;
 	httpGetAsync(url, function(json) {
-		showModal(json);
+		debugger;
+		showModal(json["result"][0]);
 	});
 }
 
