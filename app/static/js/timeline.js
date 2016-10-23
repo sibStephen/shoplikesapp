@@ -143,7 +143,6 @@ function getRecommendationsForUserId(user_id) {
 }
 
 function showModal(response) {
-	debugger;
 	var modal = document.getElementById('myModal');
 	modal.style.display = "block";
 
@@ -153,13 +152,12 @@ function showModal(response) {
 	var category_name = document.getElementsByClassName("modal-category")[0];
 	category_name.innerHTML = response["product"]["category"];
 
-	// var product_name = document.getElementsByClassName("modal-name")[0];
-	// product_name.innerHTML = "<font size=5>"+response["Item"]["Title"]+"</font>";
-	// selProduct["product_name"] = response["Item"]["Title"];
+	debugger;
+	var product_name = document.getElementsByClassName("modal-name")[0];
+	product_name.innerHTML = "<font size=5>"+response["product"]["product_name"]+"</font>";
 	
-	// var product_price = document.getElementsByClassName("modal-price")[0];
-	// var currId = response["Item"]["CurrentPrice"]["CurrencyID"];
-	// product_price.innerHTML = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
+	var product_price = document.getElementsByClassName("modal-price")[0];
+	product_price.innerHTML = response["product"]["price"];
 	// selProduct["price"] = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
 
 
@@ -177,17 +175,17 @@ function showModal(response) {
 	// 	product_image_carousel.appendChild(node);
 	// } 
 
-	// var product_image = document.getElementsByClassName("modal-image")[0];
-	// var gallery_url = urls[0];
-	// product_image.innerHTML = "<img src=" + gallery_url + "></img>";
+	var product_image = document.getElementsByClassName("modal-image")[0];
+	var gallery_url = response["product"]["image_url"];
+	product_image.innerHTML = "<img src=" + gallery_url + "></img>";
 	// selProduct["image_url"] = gallery_url;
 
-	// var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
-	// link.href = response["Item"]["ViewItemURLForNaturalSearch"];
+	var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
+	link.href = response["product"]["product_url"];
 	// selProduct["product_url"] = response["Item"]["ViewItemURLForNaturalSearch"];
 	
-	// var product_details = document.getElementsByClassName("modal-detail")[0];
-	// product_details.innerHTML = "<p>" + response["Item"]["Description"] + "</p>";
+	var product_details = document.getElementsByClassName("modal-detail")[0];
+	product_details.innerHTML = "<p>" + response["product"]["description"] + "</p>";
 	// selProduct["description"] = response["Item"]["Description"];
 }
 
