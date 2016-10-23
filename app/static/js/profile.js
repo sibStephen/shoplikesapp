@@ -160,10 +160,12 @@ function slider(seg) {
 }
 
 function storeAppId(app_Id) {
+	debugger;
 	appid = app_Id;
 }
 
  function FBInvite(){
+ 	console.log("appid : " + appid);
   FB.ui({
    app_id: appid,
    method: 'apprequests',
@@ -199,6 +201,7 @@ function segment_clicked(index) {
         	//manipulate HTML DOM here
         	
 				var gridview = document.getElementsByClassName("friends_gridview")[0];
+				gridview.innerHTML = "";
 	        	for (i in friends) {
 	        		var friend = friends[i];
 	        		var node = document.createElement("div");
@@ -231,6 +234,7 @@ function segment_clicked(index) {
 		    	var recommendations = respJson["result"];
 		    	if (recommendations) {
 	    			var grid = document.getElementsByClassName('grid-timeline')[0];
+	    			grid.innerHTML = "";
 					for (var i = 0; i < recommendations.length; i++) {
 						var recommendation = recommendations[i];
 						var node = document.createElement("div");

@@ -42,6 +42,11 @@ def hello():
 	else:
 		return redirect(url_for('show_timeline'))
 
+
+@app.route('/push')
+def push():
+	return render_template('push.html')
+
 	
 @app.route('/timeline')
 def show_timeline():
@@ -144,6 +149,21 @@ def people_for_page(page_id):
 	for user in page.users:
 		final_users.append({"user_id":user.user_id,"name":user.name})
 	return jsonify({"result":final_users})
+
+
+
+@app.route('/api/v1/recommendations/<recommendation_id>', methods=['GET'])
+def get_recommendation(recommendation_id):
+	recommendations = Recommendation.query.filter_by(recommendation_id=recommendation_id)
+	final_recommendations = []
+	for recommendation in recommendations:	
+		recommendation_id = recommendation.recommendation_id
+		product = Product.query.filter_by(product_id=recommendation.product_id).first()
+		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
+		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
+		page = Page.query.filter_by(page_id=recommendation.page_id).first()
+		final_recommendations.append({"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+	return jsonify({"result":final_recommendations})
 
 
 @app.route('/api/v1/recommendations_timeline/<user_id>', methods=['GET'])

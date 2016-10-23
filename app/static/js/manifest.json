@@ -1,0 +1,8 @@
+{  
+  "name": "Shoplikes",  
+  "short_name": "mobiForge push",  
+  "start_url": "/push",  
+  "display": "standalone",  
+  "gcm_sender_id": "199954409205",  
+  "gcm_user_visible_only": true  
+}

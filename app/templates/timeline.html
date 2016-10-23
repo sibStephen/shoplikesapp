@@ -1,9 +1,36 @@
 {% extends "base.html" %}
 {% block stylesheets %}
     <link href="/static/css/timeline.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/explore.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block content %}
-<div class=grid-timeline>
+<div class="grid-timeline">
+</div>
+<div id="myModal" class="modal">
+	<div class="modal-content">
+		<div class="modal-category">Category</div>
+		<div class="modal-name">Name</div>
+		<div class="modal-price">Price</div>
+		<div class="modal-lhs">
+			<div class="modal-image"><img></img></div>
+			<div class="modal-image-carousel">	
+				<div class="modal-image-cell"></div>	
+				<div class="modal-image-cell"></div>	
+			</div>
+		</div>
+		<div class="modal-rhs">
+			<div class="modal-detail"></div>
+			<div class="friends-table">
+			</div>
+			<div class="modal-buttons">
+				<div class="recommend-link"><button onclick="recommendBtnClicked()">RECOMMEND</button></div>
+				<div class="buy-on-ebay-link"><a target="_blank">BUY ON EBAY</a></div>					
+			</div>
+			<div class="modal-friends">
+				
+			</div>
+		</div>
+	</div>
 </div>
 {% block scripts %}
 	<script src="/static/js/timeline.js"></script>

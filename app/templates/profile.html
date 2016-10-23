@@ -10,16 +10,16 @@
 {% block scripts %}
 	<script src="/static/js/profile.js"></script>
 	<script src="http://connect.facebook.net/en_US/all.js"></script>
-
 	<script>
 		window.onload = function() {
+			debugger;
 			storeAppId("{{ appId }}");
 			window.fbAsyncInit = function() {
 			    FB.init({
 			      appId      : "{{ appId }}",
 			      xfbml      : true,
 			      version    : 'v2.8'
-			    });
+			    });8
 			    FB.AppEvents.logPageView();
 			  };
 

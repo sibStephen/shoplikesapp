@@ -86,7 +86,9 @@ function httpGetAsync(theUrl, callback)
 				for (var i = 0; i < recommendations.length; i++) {
 					var recommendation = recommendations[i];
 					var node = document.createElement("div");
+					node.id = recommendation["recommendation_id"];
 					node.className = "grid-recommendation";
+					node.onclick = pinClicked;
 					var product = recommendation["product"];
 					var from_user = recommendation["from_user"];
 					var to_user = recommendation["to_user"];
@@ -116,7 +118,7 @@ function httpGetAsync(theUrl, callback)
 					var created_on = recommendation["created_on"];
 					var d = new Date(created_on);
 					var num_milliseconds = Date.parse(d);
-					node.innerHTML = "<div class=\"pin\"><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+from_user_pic+"\"/><div id=\"from_user_name\">"+ from_user["user_name"] +"</div></div> <div id=\"reco_info\"><div id=\"reco_text\">Recommends <a href=\"/"+to_user["user_id"]+"/profile\">"+ to_user["user_name"] +"</a></div><div id=\"reco_timestamp\">" + timeSince(num_milliseconds) + " ago</div></div><div id=\"product_info\"><div id=\"product_category\">"+ category + "</div><div id=\"product_name\">"+ name +"</div></div><img id=\""+product_id+"\" src=\""+image_url+"\" /><div id=\"product_price\"><font color=\"white\">"+price+"</font></div><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+page_pic+"\"/><div id=\"from_user_name\">"+page["page_name"]+"</div></div></div>";
+					node.innerHTML = "<div class=\"pin\" onclick=\"pinClicked("+ recommendation["recommendation_id"] +")\"><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+from_user_pic+"\"/><div id=\"from_user_name\">"+ from_user["user_name"] +"</div></div> <div id=\"reco_info\"><div id=\"reco_text\">Recommends <a href=\"/"+to_user["user_id"]+"/profile\">"+ to_user["user_name"] +"</a></div><div id=\"reco_timestamp\">" + timeSince(num_milliseconds) + " ago</div></div><div id=\"product_info\"><div id=\"product_category\">"+ category + "</div><div id=\"product_name\">"+ name +"</div></div><img id=\""+product_id+"\" src=\""+image_url+"\" /><div id=\"product_price\"><font color=\"white\">"+price+"</font></div><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+page_pic+"\"/><div id=\"from_user_name\">"+page["page_name"]+"</div></div></div>";
 					grid.appendChild(node);
 
 					var image_node = document.getElementById(product_id);
@@ -144,6 +146,33 @@ function getRecommendationsForUserId(user_id) {
 	var url = base_url + "/api/v1/recommendations_timeline/" + user_id;
 	httpGetAsync(url, function(json) {
 
+	});
+}
+
+function showModal(json) {
+	var modal = document.getElementById('myModal');
+	modal.style.display = "block";
+
+	var body = document.getElementsByTagName("body")[0];
+	body.style.overflow = 'hidden';
+
+}
+
+window.onclick = function(event) {
+	var modal = document.getElementById('myModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+		var body = document.getElementsByTagName("body")[0];
+		body.style.overflow = 'scroll';
+    }
+}
+
+
+function pinClicked() {
+	var recommendation_id = event.currentTarget.id;
+	var url = base_url + "/api/v1/recommendations/" + recommendation_id;
+	httpGetAsync(url, function(json) {
+		showModal(json);
 	});
 }
 
