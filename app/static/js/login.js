@@ -4,7 +4,7 @@
   	FB.login(function(response) {
    // handle the response
     	statusChangeCallback(response);
- 	}, {scope: 'public_profile,email','user_likes','user_friends'});
+ 	}, {scope: 'public_profile,email,user_likes,user_friends'});
   }
 
 
