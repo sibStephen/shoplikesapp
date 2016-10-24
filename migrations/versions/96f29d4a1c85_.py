@@ -24,10 +24,10 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     # op.drop_table('liked')
-    op.drop_table('fbuser')
-    op.drop_table('product')
-    op.drop_table('page')
-    op.drop_table('recommendation')
+    # op.drop_table('fbuser')
+    # op.drop_table('product')
+    # op.drop_table('page')
+    # op.drop_table('recommendation')
     ### end Alembic commands ###
 
 
