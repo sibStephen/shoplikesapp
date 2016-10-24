@@ -167,7 +167,7 @@ function storeAppId(app_Id) {
  function FBInvite(){
  	console.log("appid : " + appid);
   FB.ui({
-   app_id: appid,
+   app_id: '' + appid,
    method: 'apprequests',
    message: 'Invite your Facebook Friends'
   },function(response) {

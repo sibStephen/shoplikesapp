@@ -340,16 +340,17 @@ def upsert_user():
 		curr_user = user
 	db.session.add(user)
 
-	friends = data['friends']
-	for friend in friends:
-		stored_friend = User.query.filter_by(user_id=friend["id"]).first()
-		if not stored_friend:
-			stored_friend = User()
-			stored_friend.user_id = friend["id"]
-		stored_friend.name = friend['name']
-		stored_friend.first_name = friend['first_name']
-		stored_friend.last_name = friend['last_name']
-		db.session.add(stored_friend)
+	if 'friends' in data:
+		friends = data['friends']
+		for friend in friends:
+			stored_friend = User.query.filter_by(user_id=friend["id"]).first()
+			if not stored_friend:
+				stored_friend = User()
+				stored_friend.user_id = friend["id"]
+			stored_friend.name = friend['name']
+			stored_friend.first_name = friend['first_name']
+			stored_friend.last_name = friend['last_name']
+			db.session.add(stored_friend)
 
 	db.session.commit()
 	return user.to_json()
