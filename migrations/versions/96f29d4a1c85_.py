@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('result_no_stop_words', postgresql.JSON(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.drop_table('liked')
+    # op.drop_table('liked')
     op.drop_table('fbuser')
     op.drop_table('product')
     op.drop_table('page')

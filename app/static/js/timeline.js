@@ -158,7 +158,6 @@ function showModal(response) {
 	
 	var product_price = document.getElementsByClassName("modal-price")[0];
 	product_price.innerHTML = response["product"]["price"];
-	// selProduct["price"] = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
 
 
 	// var urls = response["Item"]["PictureURL"];
@@ -178,15 +177,12 @@ function showModal(response) {
 	var product_image = document.getElementsByClassName("modal-image")[0];
 	var gallery_url = response["product"]["image_url"];
 	product_image.innerHTML = "<img src=" + gallery_url + "></img>";
-	// selProduct["image_url"] = gallery_url;
 
 	var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
 	link.href = response["product"]["product_url"];
-	// selProduct["product_url"] = response["Item"]["ViewItemURLForNaturalSearch"];
 	
 	var product_details = document.getElementsByClassName("modal-detail")[0];
 	product_details.innerHTML = "<p>" + response["product"]["description"] + "</p>";
-	// selProduct["description"] = response["Item"]["Description"];
 }
 
 window.onclick = function(event) {
