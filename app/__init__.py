@@ -12,6 +12,7 @@ import facebook
 import requests
 import ipdb
 import uuid
+import urllib
 
 
 app = Flask(__name__)
@@ -56,7 +57,7 @@ def show_timeline():
 @app.route('/likes')
 def show_likes():
 	user_id = curr_user.user_id
-	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + curr_user.access_token + "\&fields=id,name,category,created_time"
+	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + curr_user.access_token + "&amp;fields=id,name,category,created_time"
 	return render_template('likes.html',likes_url=url, base_url=app.config['BASE_URL'])
 
 
