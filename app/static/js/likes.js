@@ -98,7 +98,7 @@ function httpGetAsync(theUrl, callback)
         	}
         }
     }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.open("GET", decodeURIComponent(theUrl) , true); // true for asynchronous 
     xmlHttp.send(null);
 }
 
