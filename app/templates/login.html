@@ -6,29 +6,7 @@
 		<div class="app_info">
 			<div class="app_name">SHOPLIKES</div>
 			<div class="tag_line">Recommend what to buy!!!</div>
-			<div class="login_button"><button onclick="login()">Continue with Facebook</button></div>
+			<div><a href="/authorize/facebook">Continue with Facebook</a></div>
 		</div>
-		<script src="/static/js/login.js"></script>	
-		<script>
-			window.onload = function() {
-			storeBaseURL("{{base_url}}");
-			window.fbAsyncInit = function() {
-			    FB.init({
-			      appId      : "{{ appId }}",
-			      xfbml      : true,
-			      version    : 'v2.8'
-			    });
-			    FB.AppEvents.logPageView();
-			  };
-
-		  (function(d, s, id){
-		     var js, fjs = d.getElementsByTagName(s)[0];
-		     if (d.getElementById(id)) {return;}
-		     js = d.createElement(s); js.id = id;
-		     js.src = "//connect.facebook.net/en_US/sdk.js";
-		     fjs.parentNode.insertBefore(js, fjs);
-		   }(document, 'script', 'facebook-jssdk'));
-		  }
-		</script>
 	</body>
 </html>
