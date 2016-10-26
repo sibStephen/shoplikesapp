@@ -216,7 +216,7 @@ function storePageId(pg_id) {
 }
 
 function storeBaseURL(baseurl){
-	base_url = baseurl
+	base_url = baseurl;
 }
 
 function myfunction(response) {
