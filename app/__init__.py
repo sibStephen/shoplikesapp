@@ -26,7 +26,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'index'
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHECMY_TRACK_MODIFICATIONS'] = True
-app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': app.config['APP_ID'],'secret': 'ebf9436f2c97491f3f70a59a88d8f595'}}
+app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': app.config['APP_ID'],'secret': app.config['APP_SECRET']}}
 
 
 @login_manager.user_loader
