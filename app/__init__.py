@@ -258,7 +258,7 @@ def create_recommendation():
 	db.session.add(product)
 
 	recommendation = Recommendation(uuid.uuid4())
-	recommendation.from_user_id = curr_user.user_id
+	recommendation.from_user_id = current_user.user_id
 	recommendation.to_user_id = data["to_user_id"]
 	recommendation.product_id = data["product"]["product_id"]
 	recommendation.page_id = data["page_id"]
