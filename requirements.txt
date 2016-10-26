@@ -12,3 +12,4 @@ facebook-sdk
 gunicorn
 ipdb
 flask-socketio
+flask-cors

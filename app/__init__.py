@@ -4,6 +4,7 @@ from sqlalchemy import func, desc, or_
 from flask_restful import reqparse
 from flask_login import LoginManager, UserMixin, login_user, logout_user,current_user, redirect, url_for, login_required
 from oauth import OAuthSignIn
+from flask_cors import CORS, cross_origin
 
 import os
 import json
@@ -16,6 +17,7 @@ import urllib
 
 
 app = Flask(__name__)
+CORS(app)
 db = SQLAlchemy(app)
 
 from models import User, Page, Product, Recommendation
