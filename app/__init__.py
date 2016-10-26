@@ -27,7 +27,6 @@ login_manager.login_view = 'index'
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHECMY_TRACK_MODIFICATIONS'] = True
 app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': '1485658648363694','secret': 'ebf9436f2c97491f3f70a59a88d8f595'}}
-curr_user = None
 
 
 @login_manager.user_loader
@@ -37,7 +36,7 @@ def load_user(user_id):
 
 @app.route('/')
 def hello():
-	return render_template('login.html',appId=app.config['APP_ID'], base_url=app.config['BASE_URL'])
+	# return render_template('login.html',appId=app.config['APP_ID'], base_url=app.config['BASE_URL'])
 	if not current_user.is_authenticated:
 		return render_template('login.html',appId=app.config['APP_ID'], base_url=app.config['BASE_URL'])
 	else:
@@ -51,21 +50,21 @@ def push():
 	
 @app.route('/timeline')
 def show_timeline():
-	return render_template('timeline.html',obj_id=curr_user.user_id, base_url=app.config['BASE_URL'])
+	return render_template('timeline.html',obj_id=current_user.user_id, base_url=app.config['BASE_URL'])
 
 							
 @app.route('/likes')
 def show_likes():
-	user_id = curr_user.user_id
-	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + curr_user.access_token + "&fields=id,name,category,created_time"
+	user_id = current_user.user_id
+	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + current_user.access_token + "&fields=id,name,category,created_time"
 	return render_template('likes.html',likes_url=url, base_url=app.config['BASE_URL'])
 
 
 
 @app.route('/profile')
 def show_profile():
-	user = User.query.filter_by(user_id=curr_user.user_id).first()
-	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
+	user = User.query.filter_by(user_id=current_user.user_id).first()
+	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + current_user.access_token 
 	return render_template('profile.html',
 							obj_id=user.user_id,
 							username=user.name,
@@ -77,7 +76,7 @@ def show_profile():
 @app.route('/<user_id>/profile')
 def show_user_profile(user_id):
 	user = User.query.filter_by(user_id=user_id).first()
-	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + curr_user.access_token 
+	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + current_user.access_token 
 	return render_template('profile.html',
 							obj_id=user_id,
 							username=user.name,
@@ -88,21 +87,21 @@ def show_user_profile(user_id):
 
 @app.route('/<page_id>/detail')
 def show_like_profile(page_id):
-	user = curr_user
+	user = current_user
 	page = Page.query.filter_by(page_id=page_id).first()
-	url = "https://graph.facebook.com/"+ page_id + "?access_token=" + curr_user.access_token 
+	url = "https://graph.facebook.com/"+ page_id + "?access_token=" + current_user.access_token 
 	friends_url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + user.access_token 
 	return render_template('like_detail.html',
 							obj_id=page_id,
 							username=page.page_name,
 							like_url=url,
-							friends_url = friends_url)
+							friends_url=friends_url)
 
 							
 							
 @app.route('/friends')
 def show_friends():
-	user_id = curr_user.user_id
+	user_id = current_user.user_id
 	user = User.query.filter_by(user_id=user_id).first()
 	url = "https://graph.facebook.com/"+ user_id + "/friends?access_token=" + user.access_token 
 	return render_template('friends.html',
@@ -281,24 +280,24 @@ def upsert_page():
 		page = Page()
 		page.page_id = data["page_id"]
 		page.created_on = datetime.datetime.now()
-		page.created_by = curr_user.user_id
+		page.created_by = current_user.user_id
 
 	page.page_name = data["page_name"]
 	page.category_name = data["category_name"]
 
 	page_likers = page.users
 	if not page_likers:
-		page.users = [curr_user]
+		page.users = [current_user]
 	else:
 		exists = False
 
 		for user in page.users:
-			if user.user_id == curr_user.user_id:
+			if user.user_id == current_user.user_id:
 				exists = True
 				break
 
 		if exists == False:
-			page_likers.append(curr_user)
+			page_likers.append(current_user)
 			page.users = page_likers
 
 
@@ -326,7 +325,6 @@ def create_liked():
 
 @app.route('/api/v1/user', methods=['POST'])
 def upsert_user():
-	global curr_user
 	data = json.loads(request.data)
 	user = User.query.filter_by(user_id=data['user_id']).first()
 	if not user:
@@ -337,8 +335,7 @@ def upsert_user():
 	user.first_name = data['first_name']
 	user.last_name = data['last_name']
 	is_loggedin_user = data["is_loggedin_user"]
-	if is_loggedin_user == True:
-		curr_user = user
+
 	db.session.add(user)
 
 	if 'friends' in data:
@@ -354,6 +351,9 @@ def upsert_user():
 			db.session.add(stored_friend)
 
 	db.session.commit()
+	if is_loggedin_user == True:
+		login_user(user, True)
+
 	return user.to_json()
 
 
