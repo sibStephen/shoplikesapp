@@ -53,7 +53,9 @@ def push():
 @app.route('/timeline')
 @login_required
 def show_timeline():
-	return render_template('timeline.html',obj_id=current_user.user_id, base_url=app.config['BASE_URL'])
+	return render_template('timeline.html',obj_id=current_user.user_id,
+											username=current_user.first_name,
+											 base_url=app.config['BASE_URL'])
 
 							
 @app.route('/likes')

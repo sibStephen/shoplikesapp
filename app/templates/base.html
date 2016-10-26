@@ -27,7 +27,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		  </button>
-		  <a class="navbar-brand" href="/timeline">SHOPLIKES</a>
+		  <a style="letter-spacing: 4px;margin-top: 6px;display: block;position: relative;font-size: 22px;font-family: Montserrat-Regular;" class="navbar-brand" href="/timeline">SHOPLIKES</a>
 		</div>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
@@ -36,7 +36,7 @@
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right">
 			<li class="dropdown">
-			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notifications <span class="caret"></span></a>
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="/static/img/ic_notification_off.png"></a>
 			  <ul class="dropdown-menu">
 				<li><a href="#">Action</a></li>
 				<li><a href="#">Another action</a></li>
@@ -45,8 +45,13 @@
 				<li><a href="#">Separated link</a></li>
 			  </ul>
 			</li>
-			<li><a href="/likes">Likes</a></li>
-			<li><a href="/profile">Profile</a></li>
+			<li><a href="/likes"><img src="/static/img/ic_like_nav.png"/></a></li>
+			<li class="dropdown">
+			  <a style="font-family: Montserrat-Regular;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img style="width:30px;height:30px;border-radius:2px;" src="https://graph.facebook.com/{{obj_id}}/picture"></img> {{username}} <span class="caret"></span></a>
+			  <ul class="dropdown-menu">
+				<li><a href="#">Logout</a></li>
+			  </ul>
+			</li>
 		  </ul>
 		</div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->

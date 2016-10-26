@@ -274,7 +274,7 @@ a {
 	top: 50%;
 	width: 80px;
 	height: 30px;
-	background-color: #4351AF;
+	background-color: #3F51B5;
 	text-align: center;
 }
 
@@ -288,7 +288,7 @@ a {
 /* Nav bar */
 
 .navbar-default {
-    background-color: #4351AF;
+    background-color: #3F51B5;
 }
 
 .navbar-default .navbar-brand {
@@ -313,5 +313,18 @@ a {
 	float:left;
 /* 	background-color:red; */
 	width: 25%;
+}
+
+
+/* Fonts */
+
+@font-face {
+    font-family: "Montserrat-Bold";
+    src: url("/static/fonts/Montserrat-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat-Regular";
+    src: url("/static/fonts/Montserrat-Regular.ttf");
 }
 
