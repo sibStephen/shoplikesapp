@@ -197,7 +197,7 @@ function recommendBtnClicked() {
 
 function friendClicked(friend_id) {
 	var xhr = new XMLHttpRequest();
-	var url = baseurl + "/api/v1/recommendation";
+	var url = base_url + "/api/v1/recommendation";
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onreadystatechange = function () { 
