@@ -2,7 +2,7 @@ from flask import Flask,request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, desc, or_
 from flask_restful import reqparse
-from flask_login import LoginManager, UserMixin, login_user, logout_user,current_user, redirect, url_for
+from flask_login import LoginManager, UserMixin, login_user, logout_user,current_user, redirect, url_for, login_required
 from oauth import OAuthSignIn
 
 import os
@@ -26,7 +26,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'index'
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHECMY_TRACK_MODIFICATIONS'] = True
-app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': '1485658648363694','secret': 'ebf9436f2c97491f3f70a59a88d8f595'}}
+app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': app.config['APP_ID'],'secret': 'ebf9436f2c97491f3f70a59a88d8f595'}}
 
 
 @login_manager.user_loader
@@ -49,11 +49,13 @@ def push():
 
 	
 @app.route('/timeline')
+@login_required
 def show_timeline():
 	return render_template('timeline.html',obj_id=current_user.user_id, base_url=app.config['BASE_URL'])
 
 							
 @app.route('/likes')
+@login_required
 def show_likes():
 	user_id = current_user.user_id
 	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + current_user.access_token + "&fields=id,name,category,created_time"
@@ -62,6 +64,7 @@ def show_likes():
 
 
 @app.route('/profile')
+@login_required
 def show_profile():
 	user = User.query.filter_by(user_id=current_user.user_id).first()
 	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + current_user.access_token 
