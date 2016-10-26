@@ -46,6 +46,7 @@
 	<script src="/static/js/like_detail.js"></script>
 	<script>
 		storePageId("{{obj_id}}");
+		storeBaseURL("{{base_url}}");
 		setPageName("{{username}}");
 		slider(["Recommendations","People","Explore"]);
 		getFriends('{{friends_url}}',true);

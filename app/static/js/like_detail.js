@@ -93,6 +93,7 @@ var columns = 4;
 var showModal = false;
 var selected_product = null;
 var page_id = null;
+var base_url = null;
 var page_name = null;
 var currency_symbols = {
     'USD': '$', // US Dollar
@@ -196,7 +197,7 @@ function recommendBtnClicked() {
 
 function friendClicked(friend_id) {
 	var xhr = new XMLHttpRequest();
-	var url = "http://localhost:8080/api/v1/recommendation";
+	var url = baseurl + "/api/v1/recommendation";
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onreadystatechange = function () { 
@@ -212,6 +213,10 @@ function friendClicked(friend_id) {
 
 function storePageId(pg_id) {
 	page_id = pg_id;
+}
+
+function storeBaseURL(baseurl){
+	base_url = baseurl
 }
 
 function myfunction(response) {
@@ -326,7 +331,7 @@ window.onclick = function(event) {
 }
 
 function getPeopleForPage() {
-	var url = "http://localhost:8080/api/v1/people_page/" + page_id;
+	var url = base_url + "/api/v1/people_page/" + page_id;
 	httpGetAsync(url, function(json){
 		var gridview = document.getElementsByClassName("friends_gridview")[0];
 		var people = json["result"];
@@ -474,7 +479,7 @@ function arrangeTimelinePins() {
 }
 
 function recommendationsForLike() {
-	var url = "http://localhost:8080/api/v1/recommendations_for_page/" + page_id;
+	var url = base_url + "/api/v1/recommendations_for_page/" + page_id;
 	debugger;
 	getRecommendations(url,null, function(json) {
 		debugger;

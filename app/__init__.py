@@ -97,6 +97,7 @@ def show_like_profile(page_id):
 	return render_template('like_detail.html',
 							obj_id=page_id,
 							username=page.page_name,
+							base_url=app.config['BASE_URL'],
 							like_url=url,
 							friends_url=friends_url)
 
