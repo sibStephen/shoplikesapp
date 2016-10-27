@@ -38,11 +38,15 @@ def load_user(user_id):
 
 @app.route('/')
 def hello():
-	# return render_template('login.html',appId=app.config['APP_ID'], base_url=app.config['BASE_URL'])
 	if not current_user.is_authenticated:
-		return render_template('login.html',appId=app.config['APP_ID'], base_url=app.config['BASE_URL'])
+		return render_template('login.html')
 	else:
 		return redirect(url_for('show_timeline'))
+
+
+@app.route('/logout')
+def logout():
+    return render_template('login.html')
 
 
 @app.route('/push')
@@ -53,7 +57,9 @@ def push():
 @app.route('/timeline')
 @login_required
 def show_timeline():
-	return render_template('timeline.html',obj_id=current_user.user_id,
+	return render_template('timeline.html',nav_obj_id=current_user.user_id,
+											nav_username=current_user.first_name,
+											obj_id=current_user.user_id,
 											username=current_user.first_name,
 											 base_url=app.config['BASE_URL'])
 
@@ -63,7 +69,7 @@ def show_timeline():
 def show_likes():
 	user_id = current_user.user_id
 	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + current_user.access_token + "&fields=id,name,category,created_time"
-	return render_template('likes.html',likes_url=url, base_url=app.config['BASE_URL'])
+	return render_template('likes.html',obj_id=current_user.user_id,likes_url=url,username=current_user.first_name, base_url=app.config['BASE_URL'])
 
 
 
