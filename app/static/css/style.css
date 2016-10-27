@@ -304,7 +304,7 @@ a {
 #product_price {
 	position: absolute;
 	left: 10px;
-	top: 50%;
+	bottom: 80px;
 	background-color: #3F51B5;
 	text-align: center;
 	color: #fff;
