@@ -253,8 +253,10 @@ function myfunction(response) {
 		} 
 
 		var product_image = document.getElementsByClassName("modal-image")[0];
+		debugger;
 		var gallery_url = urls[0];
-		product_image.innerHTML = "<img src=" + gallery_url + "></img>";
+		product_image.style.backgroundImage = "url("+ gallery_url +")";
+		// product_image.innerHTML = "<img src=" + gallery_url + "></img>";
 		selProduct["image_url"] = gallery_url;
 
 		var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;

@@ -69,7 +69,12 @@ def show_timeline():
 def show_likes():
 	user_id = current_user.user_id
 	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + current_user.access_token + "&fields=id,name,category,created_time"
-	return render_template('likes.html',obj_id=current_user.user_id,likes_url=url,username=current_user.first_name, base_url=app.config['BASE_URL'])
+	return render_template('likes.html',obj_id=current_user.user_id,
+										likes_url=url,
+										username=current_user.first_name,
+										base_url=app.config['BASE_URL'],
+										nav_obj_id=current_user.user_id,
+										nav_username=current_user.first_name)
 
 
 
@@ -83,7 +88,9 @@ def show_profile():
 							username=user.name,
 							friends_url=url,
 							appId=app.config['APP_ID'],
-							base_url=app.config['BASE_URL'])
+							base_url=app.config['BASE_URL'],
+							nav_obj_id=current_user.user_id,
+							nav_username=current_user.first_name)
 
 
 @app.route('/<user_id>/profile')
@@ -109,7 +116,9 @@ def show_like_profile(page_id):
 							username=page.page_name,
 							base_url=app.config['BASE_URL'],
 							like_url=url,
-							friends_url=friends_url)
+							friends_url=friends_url,
+							nav_obj_id=current_user.user_id,
+							nav_username=current_user.first_name)
 
 							
 							
@@ -191,7 +200,10 @@ def get_recommendations_timeline(user_id):
 		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
 		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
 		page = Page.query.filter_by(page_id=recommendation.page_id).first()
-		final_recommendations.append({"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+		is_senders_liked = False
+		if page in from_user.pages:
+			is_senders_liked = True
+		final_recommendations.append({"is_senders_liked":is_senders_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
 	return jsonify({"result":final_recommendations})
 
 

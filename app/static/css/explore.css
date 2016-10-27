@@ -288,6 +288,9 @@
 	top: 0px;
 	width: 100%;
 	height:calc(100% - 100px);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 
 .modal-image-cell img,

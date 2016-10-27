@@ -29,7 +29,8 @@ function httpGetAsync(theUrl, callback)
 						var htmlNode = document.createElement("div");
 						htmlNode.className = "like_cell"
 						
-						var listInnerHTML = "<div class=\"like_pic\"><img src=\"https://graph.facebook.com/" + like.id + "/picture?width=110&height=110\"/></div>";
+
+						var listInnerHTML = "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.id+"/picture?width=180&height=180);\"></div>";
 						listInnerHTML += "<div class=\"like_name\"><a href=\"/"+ like.id +"/detail\">" + like.name + "</a></div>";
 						listInnerHTML += "<div class=\"product_cnt\" id=\""+like.id+"\"></div>";
 						
@@ -44,7 +45,7 @@ function httpGetAsync(theUrl, callback)
 						var innerHTML = "<div class=\"like_section_header\">" + key + "</div>";
 						innerHTML += "<div class=\"likes_grid\">";
 						innerHTML += "<div class=\"like_cell\">";
-						innerHTML += "<div class=\"like_pic\"><img src=\"https://graph.facebook.com/" + like.id + "/picture?width=110&height=110\"/></div>";
+						innerHTML += "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.id+"/picture?width=180&height=180);\"></div>";
 						innerHTML += "<div class=\"like_name\"><a href=\"/"+ like.id +"/detail\">" + like.name + "</a></div>";
 						innerHTML += "<div class=\"product_cnt\" id=\""+like.id+"\"></div>";
 						innerHTML += "</div>";
