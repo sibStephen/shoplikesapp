@@ -312,7 +312,7 @@ def create_product():
 
 
 @app.route('/api/v1/page', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def upsert_page():
 	data = json.loads(request.data)
 	page = Page.query.filter_by(page_id=data["page_id"]).first()
