@@ -17,7 +17,8 @@ import urllib
 
 
 app = Flask(__name__)
-CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources={r"/api/*": {"origins": "localhost"}})
 db = SQLAlchemy(app)
 
 from models import User, Page, Product, Recommendation
@@ -364,7 +365,7 @@ def create_liked():
 	
 
 @app.route('/api/v1/user', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def upsert_user():
 	data = json.loads(request.data)
 	user = User.query.filter_by(user_id=data['user_id']).first()
