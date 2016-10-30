@@ -14,7 +14,7 @@ function slider(seg) {
 		node.className = "segment";
 		node.style.width = (slider.clientWidth / segments.length) + "px"; 
 		node.style.left = i * node.style.width;
-		node.innerHTML = "<div onclick=\"segment_clicked("+i+")\">"+text+"</div>";
+		node.innerHTML = "<div id=\"segment_"+i+"\" onclick=\"segment_clicked("+i+")\">"+text+"</div>";
 		slider.appendChild(node);
 	}
 
@@ -30,8 +30,16 @@ function slider(seg) {
 function segment_clicked(index) {
 	debugger;
 	var slider = document.getElementsByClassName("slider")[0];
+	for (i in slider.children) {
+		var sliderChild = document.getElementById("segment_" + i);
+		if (sliderChild) {
+			sliderChild.style.color = "#a3a3a3";
+		}
+	}
 	var selected = document.getElementsByClassName("selected-segment")[0];
 	selected.style.left = index * (slider.clientWidth / segments.length) + "px";
+	var selectedSegment = document.getElementById("segment_" + index);
+	selectedSegment.style.color = "#3F51B5";
 
 		switch(index) {
 		case 0:

@@ -37,7 +37,8 @@
 	<script>
 		storeBaseURL("{{base_url}}");
 		storeUserId("{{obj_id}}");
+		storeAppId("{{appId}}")
 		setFriendsURL("{{friends_url}}");
-		slider(["Friends","Recommendations","Invite"]);
+		setIsCurrentUser("{{is_current_user}}");
 	</script>
 {% endblock %}

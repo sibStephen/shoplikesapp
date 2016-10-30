@@ -86,25 +86,30 @@
 
 .explore-category-name {
 	padding-left: 5px;
-	padding-top: 5px;
-	font-size: 14px;
-	color:gray
+	padding-top: 15px;
+	color: #4351AF;
+    font-family: Roboto-Medium;
+    font-size: 12px;
 }
 
 .explore-product-name {
-	padding-left: 5px;
-	font-size: 16px;
+	padding-top: 5px;
+    padding-left: 5px;
+	color: #212121;
+    font-family: Roboto-Bold;
+    font-size: 16px;
 }
 
 .explore-price {
-	font-size: 15px;
-	position: absolute;
-	left: 10px;
-	top: 50%;
-	width: 80px;
-	height: 30px;
-	background-color: #4144BC;
-	text-align: center;
+    position: absolute;
+    left: 10px;
+    bottom: 80px;
+    background-color: #4351AF;
+    text-align: center;
+    color: #fff;
+    font-family: Roboto-Bold;
+    font-size: 14px;
+    padding: 5px;
 }
 
 

@@ -31,6 +31,17 @@ class User(UserMixin, db.Model):
     pages = db.relationship('Page',secondary=liked_page)
     from_recommendations = db.relationship('Recommendation', backref='fbuser_from_recommendations',lazy='dynamic',foreign_keys='Recommendation.from_user_id')
     to_recommendations = db.relationship('Recommendation', backref='fbuser_to_recommendations',lazy='dynamic',foreign_keys='Recommendation.to_user_id')
+
+    def __init__(self, _id, fName, lName, name, email, access_token, device_type, device_token):
+		self.user_id = _id
+		self.first_name = fName
+		self.last_name = lName
+		self.name = name
+		self.email = email
+		self.access_token = access_token
+		self.device_type = device_type
+		self.device_token = device_token
+
     
     def to_json(self):
     	return jsonify({"user_id":self.user_id,"first_name":self.first_name,"last_name":self.last_name,"name":self.name,"email":self.email,"access_token":self.access_token,"created_on":self.created_on})

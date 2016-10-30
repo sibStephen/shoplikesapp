@@ -11,6 +11,7 @@
 	background-color:white;
 	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
 	border-radius:2px;
+	position: relative;
 }
 
 .likes_grid {
@@ -50,6 +51,16 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+
+.next_btn {
+    position: absolute;
+    width: 70px;
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    background-color: red;
 }
 
 .product_cnt {

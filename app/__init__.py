@@ -85,6 +85,7 @@ def show_profile():
 	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + current_user.access_token 
 	return render_template('profile.html',
 							obj_id=user.user_id,
+							is_current_user=True,
 							username=user.name,
 							friends_url=url,
 							appId=app.config['APP_ID'],
@@ -99,9 +100,13 @@ def show_user_profile(user_id):
 	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + current_user.access_token 
 	return render_template('profile.html',
 							obj_id=user_id,
+							is_current_user=False,
 							username=user.name,
 							friends_url=url,
-							base_url=app.config['BASE_URL'])
+							base_url=app.config['BASE_URL'],
+							nav_obj_id=current_user.user_id,
+							nav_username=current_user.first_name)
+
 
 
 

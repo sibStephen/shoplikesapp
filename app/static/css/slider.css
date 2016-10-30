@@ -15,7 +15,9 @@
 
 .segment div {
 	width: 100%;
-    font-size: 15px;
+    font-size: 14px;
+    color: #a3a3a3;
+    font-family: Roboto-Medium;
     height: 100%;
     text-align: center;
     margin-top: 15px;

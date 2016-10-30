@@ -45,11 +45,14 @@ function httpGetAsync(theUrl, callback)
 						var innerHTML = "<div class=\"like_section_header\">" + key + "</div>";
 						innerHTML += "<div class=\"likes_grid\">";
 						innerHTML += "<div class=\"like_cell\">";
-						innerHTML += "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.id+"/picture?width=180&height=180);\"></div>";
+						innerHTML += "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.id+"/picture?width=180&height=180);\">";
+						innerHTML += "</div>";
 						innerHTML += "<div class=\"like_name\"><a href=\"/"+ like.id +"/detail\">" + like.name + "</a></div>";
 						innerHTML += "<div class=\"product_cnt\" id=\""+like.id+"\"></div>";
 						innerHTML += "</div>";
 						innerHTML += "</div>";
+						// innerHTML += "<div class=\"next_btn\"><img src=\"/static/img/ic_arrow_right.png\"/>";
+						// innerHTML += "</div>";
 						
 						htmlNode.innerHTML = innerHTML;
 						container.appendChild(htmlNode);

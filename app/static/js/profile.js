@@ -1,13 +1,28 @@
 var friends_url;
+var likes_url;
 var appid;
 var base_url;
 var user_id;
+var is_current_user;
 
 //Friends Methods
+function setIsCurrentUser(aBool) {
+	is_current_user = aBool;
+	if (is_current_user == "True") {
+		slider(["Friends","Recommendations","Invite"]);
+	} else {
+		slider(["Likes","Recommendations","Friends"]);
+	}
+}
 
 function setFriendsURL(url) {
-	friends_url = url
+	friends_url = url;
 }
+
+function setLikesURL(url) {
+	likes_url = url;
+}
+
 
 function httpGetAsync(theUrl, callback)
 {
@@ -148,7 +163,7 @@ function slider(seg) {
 		node.className = "segment";
 		node.style.width = (slider.clientWidth / segments.length) + "px"; 
 		node.style.left = i * node.style.width;
-		node.innerHTML = "<div onclick=\"segment_clicked("+i+")\">"+text+"</div>";
+		node.innerHTML = "<div id=\"segment_"+i+"\" onclick=\"segment_clicked("+i+")\">"+text+"</div>";
 		slider.appendChild(node);
 	}
 
@@ -160,12 +175,11 @@ function slider(seg) {
 }
 
 function storeAppId(app_Id) {
-	debugger;
 	appid = app_Id;
 }
 
  function FBInvite(){
- 	console.log("appid : " + appid);
+  console.log("appid : " + appid);
   FB.ui({
    app_id: '' + appid,
    method: 'apprequests',
@@ -182,8 +196,16 @@ function storeAppId(app_Id) {
 
 function segment_clicked(index) {
 	var slider = document.getElementsByClassName("slider")[0];
+	for (i in slider.children) {
+		var sliderChild = document.getElementById("segment_" + i);
+		if (sliderChild) {
+			sliderChild.style.color = "#a3a3a3";
+		}
+	}
 	var selected = document.getElementsByClassName("selected-segment")[0];
 	selected.style.left = index * (slider.clientWidth / segments.length) + "px";
+	var selectedSegment = document.getElementById("segment_" + index);
+	selectedSegment.style.color = "#3F51B5";
 
 	switch(index) {
 		case 0:

@@ -118,6 +118,7 @@ a {
 	margin-top:20px;
 }
 
+
 .userinfo {
 	height:150px;
 	width:100%;
@@ -161,10 +162,16 @@ a {
 	margin-left: 170px;
 	bottom: 50px;
     position: relative;
-    font-size: 35px;
+    font-size: 20px;
+    font-family: Roboto-Regular;
     color: white;
 }
 
+.friend_name a {
+	font-size: 12px;
+    font-family: Roboto-Regular;
+    color: black;
+}
  
 .location {
 	margin-left: 170px;
