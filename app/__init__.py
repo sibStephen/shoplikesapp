@@ -17,7 +17,7 @@ import urllib
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app)
 db = SQLAlchemy(app)
 
 from models import User, Page, Product, Recommendation
