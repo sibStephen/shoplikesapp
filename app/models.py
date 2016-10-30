@@ -32,13 +32,14 @@ class User(UserMixin, db.Model):
     from_recommendations = db.relationship('Recommendation', backref='fbuser_from_recommendations',lazy='dynamic',foreign_keys='Recommendation.from_user_id')
     to_recommendations = db.relationship('Recommendation', backref='fbuser_to_recommendations',lazy='dynamic',foreign_keys='Recommendation.to_user_id')
 
-    def __init__(self, _id, fName, lName, name, email, access_token, device_type, device_token):
+    def __init__(self, _id, fName, lName, name, email, access_token, created_on,device_type, device_token):
 		self.user_id = _id
 		self.first_name = fName
 		self.last_name = lName
 		self.name = name
 		self.email = email
 		self.access_token = access_token
+		self.created_on = created_on
 		self.device_type = device_type
 		self.device_token = device_token
 
