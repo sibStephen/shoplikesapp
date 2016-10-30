@@ -18,7 +18,7 @@ import urllib
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app, resources={r"/api/*": {"origins": "localhost"}})
+cors = CORS(app, resources={r"/api/*": {"origins":"shoplikes-staging.herokuapp.com"}})
 db = SQLAlchemy(app)
 
 from models import User, Page, Product, Recommendation
