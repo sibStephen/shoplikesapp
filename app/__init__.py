@@ -171,6 +171,7 @@ def showProductsForLike(page_id):
 
 
 @app.route('/api/v1/people_page/<page_id>', methods=['GET'])
+@cross_origin()
 def people_for_page(page_id):
 	page = Page.query.filter_by(page_id=page_id).first()
 	final_users = []
@@ -181,6 +182,7 @@ def people_for_page(page_id):
 
 
 @app.route('/api/v1/recommendations/<recommendation_id>', methods=['GET'])
+@cross_origin()
 def get_recommendation(recommendation_id):
 	recommendations = Recommendation.query.filter_by(recommendation_id=recommendation_id)
 	final_recommendations = []
@@ -195,6 +197,7 @@ def get_recommendation(recommendation_id):
 
 
 @app.route('/api/v1/recommendations_timeline/<user_id>', methods=['GET'])
+@cross_origin()
 def get_recommendations_timeline(user_id):
 #	recommendations = db.session.query.filter(or_(Recommendation.from_user_id=user_id, Recommendation.to_user_id=user_id))
 	recommendations = Recommendation.query.filter_by(from_user_id=user_id).order_by(desc("created_on"))
@@ -214,6 +217,7 @@ def get_recommendations_timeline(user_id):
 
 
 @app.route('/api/v1/recommendations_from_user/<user_id>', methods=['GET'])
+@cross_origin()
 def get_recommendations_from_user(user_id):
 	recommendations = Recommendation.query.filter_by(from_user_id=user_id).order_by(desc("created_on"))
 	final_recommendations = []
@@ -228,6 +232,7 @@ def get_recommendations_from_user(user_id):
 
 
 @app.route('/api/v1/recommendations_to_user/<user_id>', methods=['GET'])
+@cross_origin()
 def get_recommendations_to_user(user_id):
 	recommendations = Recommendation.query.filter_by(to_user_id=user_id)
 	final_recommendations = []
@@ -242,6 +247,7 @@ def get_recommendations_to_user(user_id):
 
 
 @app.route('/api/v1/recommendations_for_page/<page_id>', methods=['GET'])
+@cross_origin()
 def get_recommendations_page(page_id):
 	recommendations = Recommendation.query.filter_by(page_id=page_id)
 	final_recommendations = []
@@ -257,6 +263,7 @@ def get_recommendations_page(page_id):
 	
 
 @app.route('/api/v1/recommendations_for_product/<product_id>', methods=['GET'])
+@cross_origin()
 def get_recommendations_product(product_id):
 	recommendations = Recommendation.query.filter_by(product_id=product_id)
 	final_recommendations = []
@@ -271,6 +278,7 @@ def get_recommendations_product(product_id):
 	
 
 @app.route('/api/v1/recommendation', methods=['POST'])
+@cross_origin()
 def create_recommendation():
 	data = json.loads(request.data)
 
@@ -303,6 +311,7 @@ def create_product():
 
 
 @app.route('/api/v1/page', methods=['POST'])
+@cross_origin()
 def upsert_page():
 	data = json.loads(request.data)
 	page = Page.query.filter_by(page_id=data["page_id"]).first()
@@ -355,6 +364,7 @@ def create_liked():
 	
 
 @app.route('/api/v1/user', methods=['POST'])
+@cross_origin()
 def upsert_user():
 	data = json.loads(request.data)
 	user = User.query.filter_by(user_id=data['user_id']).first()
