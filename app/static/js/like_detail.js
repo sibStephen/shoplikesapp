@@ -294,7 +294,7 @@ function myfunction(response) {
 }
 
 function product_detail(product_id) {
-	var ebay_url = "https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SapnaSol-b016-439b-ba9f-0a88df89de2e&siteid=0&version=967&ItemID=" + product_id + "&callbackname=myfunction&IncludeSelector=TextDescription,ItemSpecifics,Details";
+	var ebay_url = "http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SapnaSol-b016-439b-ba9f-0a88df89de2e&siteid=0&version=967&ItemID=" + product_id + "&callbackname=myfunction&IncludeSelector=TextDescription,ItemSpecifics,Details";
 	getProducts(ebay_url, null ,function(json) {
 	});
 }
@@ -387,7 +387,7 @@ function getFriends(friends_url, add_header) {
 
 
 function fetchProducts(keyword) {
-	var ebay_url = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=8&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge";
+	var ebay_url = "https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=8&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge";
 	getProducts(ebay_url, null ,function(json) {
 		var ebay_products = json['findItemsByKeywordsResponse'][0]["searchResult"][0];
 		var grid = document.getElementsByClassName('explore-grid-timeline')[0];
