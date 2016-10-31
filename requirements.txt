@@ -13,3 +13,4 @@ gunicorn
 ipdb
 flask-socketio
 flask-cors
+celery

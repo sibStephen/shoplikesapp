@@ -5,6 +5,7 @@ from flask_restful import reqparse
 from flask_login import LoginManager, UserMixin, login_user, logout_user,current_user, redirect, url_for, login_required
 from oauth import OAuthSignIn
 from flask_cors import CORS, cross_origin
+from celery import Celery
 
 import os
 import json
@@ -19,7 +20,13 @@ import urllib
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app, resources={r"/api/*": {"origins":"shoplikes-staging.herokuapp.com"}})
+
 db = SQLAlchemy(app)
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
 
 from models import User, Page, Product, Recommendation
 from config import DevelopmentConfig, StagingConfig
@@ -362,7 +369,19 @@ def upsert_page():
 def create_liked():
 	data = json.loads(request.data)
 	return jsonify({"result":"Liked Pages is in Progress"})
-	
+
+
+@app.route('/api/v1/products/<keyword>', methods=['GET'])
+@cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
+def getProducts(keyword):
+	result = getProductsForKeyword(keyword)
+	return jsonify(result)
+
+@app.route('/api/v1/product/detail/<product_id>', methods=['GET'])
+@cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
+def getProductDetail(product_id):
+	result = getProductDetailForProductId(product_id)
+	return jsonify(result)
 
 @app.route('/api/v1/user', methods=['POST'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
@@ -422,5 +441,27 @@ def oauth_callback(provider):
 		db.session.commit()
 	login_user(user, True)
 	return redirect(url_for('show_timeline', user_id=uid))
-	
-	
+
+
+
+
+@celery.task
+def getProductsForKeyword(keyword):
+	ebay_url = "https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=8&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge"
+	r = requests.get(ebay_url)
+	return r.json()
+
+
+@celery.task
+def getProductDetailForProductId(product_id):
+	ebay_detail_url = "http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SapnaSol-b016-439b-ba9f-0a88df89de2e&siteid=0&version=967&ItemID=" + product_id + "&IncludeSelector=TextDescription,ItemSpecifics,Details"
+	r = requests.get(ebay_detail_url)
+	return r.json()
+
+	# var flipkart_url = "https://affiliate-api.flipkart.net/affiliate/search/json?query=" + keyword + "&resultCount=4";
+	# getProducts(flipkart_url, {"Fk-Affiliate-Id":"paragdula","Fk-Affiliate-Token":"3f8a5b4876084bc5836265cdd26f0966"} ,function(json) {
+		
+	# });
+
+
+
