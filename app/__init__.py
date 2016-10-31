@@ -106,11 +106,13 @@ def show_profile():
 def show_user_profile(user_id):
 	user = User.query.filter_by(user_id=user_id).first()
 	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + current_user.access_token 
+	likes_url = "https://graph.facebook.com/"+ user.user_id + "/likes?access_token=" + current_user.access_token 
 	return render_template('profile.html',
 							obj_id=user_id,
 							is_current_user=False,
 							username=user.name,
 							friends_url=url,
+							likes_url=likes_url,
 							base_url=app.config['BASE_URL'],
 							nav_obj_id=current_user.user_id,
 							nav_username=current_user.first_name)
@@ -307,6 +309,7 @@ def create_recommendation():
 	recommendation.product_id = data["product"]["product_id"]
 	recommendation.page_id = data["page_id"]
 	recommendation.created_on = datetime.datetime.now()
+
 	db.session.add(recommendation)
 	db.session.commit()
 	return jsonify({"result":"Recommendation is saved"})

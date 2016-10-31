@@ -294,7 +294,6 @@ function myfunction(response) {
 }
 
 function product_detail(product_id) {
-	// var ebay_url = "http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SapnaSol-b016-439b-ba9f-0a88df89de2e&siteid=0&version=967&ItemID=" + product_id + "&callbackname=myfunction&IncludeSelector=TextDescription,ItemSpecifics,Details";
 	var ebay_url = base_url + "/api/v1/product/detail/" + product_id;
 	httpGetAsync(ebay_url ,function(response) {
 		if (showModal == true) {

@@ -9,9 +9,9 @@ var is_current_user;
 function setIsCurrentUser(aBool) {
 	is_current_user = aBool;
 	if (is_current_user == "True") {
-		slider(["Friends","Recommendations","Invite"]);
+		slider(["Recommendations","Friends","Invite"]);
 	} else {
-		slider(["Likes","Recommendations","Friends"]);
+		slider(["Recommendations","Likes","Friends"]);
 	}
 }
 
@@ -61,6 +61,8 @@ function loadFriendsGridView() {
  		}
 	}
 }
+
+
 
 
 // Recommendations
@@ -210,38 +212,6 @@ function segment_clicked(index) {
 	switch(index) {
 		case 0:
 		{
-			var gridview = document.getElementsByClassName("friends_gridview")[0];
-			gridview.style.display = "block";
-
-			var reco_grid = document.getElementsByClassName("grid-timeline")[0];
-			reco_grid.style.display = "none";
-			reco_grid.innerHTML = "";
-
-			httpGetAsync(friends_url,function(json) {
-				var respJson = JSON.parse(json);
-        		var friends = respJson.data;
-        	//manipulate HTML DOM here
-        	
-				var gridview = document.getElementsByClassName("friends_gridview")[0];
-				gridview.innerHTML = "";
-	        	for (i in friends) {
-	        		var friend = friends[i];
-	        		var node = document.createElement("div");
-	        		node.className = "friend_cell";
-	        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\"><a href=\""+friend.id+"/profile\">"+friend.name+"</a></div><div class=\"reco_cnt\">8 Products</div>";
-	        		gridview.appendChild(node);
-	        	}
-	        	loadFriendsGridView();
-	        	if ("paging" in respJson) {
-	        		if ("next" in respJson["paging"]) {
-        				httpGetAsync(respJson['paging']['next'],callback);
-	        		}
-        		}
-			});
-		}
-			break;
-		case 1:
-		{
 			var reco_grid = document.getElementsByClassName("grid-timeline")[0];
 			reco_grid.style.display = "block";
 
@@ -290,12 +260,51 @@ function segment_clicked(index) {
 					}
 		    	}
 			});
+		}
+			break;
+		case 1:
+		{
+			if (is_current_user == "True") {
+				var gridview = document.getElementsByClassName("friends_gridview")[0];
+				gridview.style.display = "block";
 
+				var reco_grid = document.getElementsByClassName("grid-timeline")[0];
+				reco_grid.style.display = "none";
+				reco_grid.innerHTML = "";
+
+				httpGetAsync(friends_url,function(json) {
+					var respJson = JSON.parse(json);
+	        		var friends = respJson.data;
+	        	//manipulate HTML DOM here
+	        	
+					var gridview = document.getElementsByClassName("friends_gridview")[0];
+					gridview.innerHTML = "";
+		        	for (i in friends) {
+		        		var friend = friends[i];
+		        		var node = document.createElement("div");
+		        		node.className = "friend_cell";
+		        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\"><a href=\""+friend.id+"/profile\">"+friend.name+"</a></div><div class=\"reco_cnt\">8 Products</div>";
+		        		gridview.appendChild(node);
+		        	}
+		        	loadFriendsGridView();
+		        	if ("paging" in respJson) {
+		        		if ("next" in respJson["paging"]) {
+	        				httpGetAsync(respJson['paging']['next'],callback);
+		        		}
+	        		}
+				});
+			} else {
+
+			}
 		}
 			break;
 		case 2: 
 		{
-			FBInvite();
+			if (is_current_user == "True") {
+				FBInvite();
+			} else {
+
+			}
 		}
 			break;
 	}
