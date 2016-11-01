@@ -310,10 +310,9 @@ function segment_clicked(index) {
 				httpGetAsync(likes_url, function(jsonText){
 					var respJson = JSON.parse(jsonText);
         			abc(respJson);
-					callback(xmlHttp.responseText);
 		        	if ("paging" in respJson) {
 		        		if ("next" in respJson["paging"]) {
-		        			httpGetAsync(respJson['paging']['next'],callback);
+		        			httpGetAsync(respJson['paging']['next'],likes_callback);
 		        		} else {
 		        		//reorder here
 		        		}
@@ -337,6 +336,11 @@ function segment_clicked(index) {
 
 
 // Likes 
+
+var likes_callback = function(jsonText) {
+	var respJson = JSON.parse(jsonText);
+    abc(respJson);
+}
 
 function abc(respJson) {
     var grouped_likes = {};
@@ -424,7 +428,7 @@ function abc(respJson) {
 		container.appendChild(sortedChild);
 	}
 
-}
+};
 
 function arrangeGridCells() {
 	var likes_list = document.getElementsByClassName("likes_listcell"); 
