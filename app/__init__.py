@@ -106,7 +106,7 @@ def show_profile():
 def show_user_profile(user_id):
 	user = User.query.filter_by(user_id=user_id).first()
 	url = "https://graph.facebook.com/"+ user.user_id + "/friends?access_token=" + current_user.access_token 
-	likes_url = "https://graph.facebook.com/"+ user.user_id + "/likes?access_token=" + current_user.access_token 
+	likes_url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + current_user.access_token + "&fields=id,name,category,created_time"
 	return render_template('profile.html',
 							obj_id=user_id,
 							is_current_user=False,

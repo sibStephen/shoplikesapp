@@ -307,7 +307,7 @@ function segment_clicked(index) {
 				likes_list.style.display = "block";
 				likes_list.innerHTML = "";
 
-				httpGetAsync(likes_url, function(jsonText){
+				httpGetAsync(likes_url.replace(/&amp;/g, '&'), function(jsonText){
 					var respJson = JSON.parse(jsonText);
         			abc(respJson);
 		        	if ("paging" in respJson) {
