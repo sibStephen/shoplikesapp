@@ -441,7 +441,12 @@ def oauth_callback(provider):
 	if not user:
 		user = User(uid,first_name,last_name,name,email,access_token,created_on,device_type,device_token)
 		db.session.add(user)
-		db.session.commit()
+	else:
+		user.first_name = first_name
+		user.last_name = last_name
+		user.name = name
+		user.access_token = access_token
+	db.session.commit()
 	login_user(user, True)
 	return redirect(url_for('show_timeline', user_id=uid))
 
