@@ -14,3 +14,4 @@ ipdb
 flask-socketio
 flask-cors
 celery
+redis

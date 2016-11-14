@@ -377,14 +377,15 @@ def create_liked():
 @app.route('/api/v1/products/<keyword>', methods=['GET'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
 def getProducts(keyword):
-	result = getProductsForKeyword(keyword)
-	return jsonify(result)
+	return getProductsForKeywordFromEbay(keyword)
+
 
 @app.route('/api/v1/product/detail/<product_id>', methods=['GET'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
 def getProductDetail(product_id):
-	result = getProductDetailForProductId(product_id)
-	return jsonify(result)
+	return getProductDetailForProductId(product_id)
+
+
 
 @app.route('/api/v1/user', methods=['POST'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
@@ -448,28 +449,128 @@ def oauth_callback(provider):
 		user.access_token = access_token
 	db.session.commit()
 	login_user(user, True)
+	saveUserInfo(uid, access_token)
+	# saveUserLikes(uid, access_token)
+	# saveUserFriends(uid, access_token)
 	return redirect(url_for('show_timeline', user_id=uid))
 
 
 
 
+def saveUser(result):
+	user = User.query.filter_by(user_id=result['id'])
+	user.first_name = result["first_name"]
+	user.last_name = result["last_name"]
+	db.session.commit()
+
+
+def saveFriends(friends_result):
+	friends = friends_result["data"]
+	for friend in friends:
+		stored_friend = User.query.filter_by(user_id=friend["id"]).first()
+		if not stored_friend:
+			stored_friend = User(friend["id"],None,None,friend['name'],None,None,None,None,None)
+			db.session.add(stored_friend)
+	db.session.commit()
+
+	if "paging" in friends_result:
+		if "next" in friends_result["paging"]:
+			saveObject(friends_result["paging"]["next"], 2)
+
+
+
+def savePages(pages_result):
+	pages = pages_result["data"]
+	for aPage in pages:
+		page = Page.query.filter_by(page_id=aPage["id"]).first()
+
+		if not page:
+			page = Page()
+			page.page_id = aPage["id"]
+			page.created_on = datetime.datetime.now()
+			page.created_by = current_user.user_id
+
+		page.page_name = aPage["name"]
+		page.category_name = aPage["category"]
+
+		page_likers = page.users
+		if not page_likers:
+			page.users = [current_user]
+		else:
+			exists = False
+
+			for user in page.users:
+				if user.user_id == current_user.user_id:
+					exists = True
+					break
+
+			if exists == False:
+				page_likers.append(current_user)
+				page.users = page_likers
+
+
+		db.session.add(page)
+		db.session.commit()
+
+	if "paging" in pages_result:
+		if "next" in pages_result["paging"]:
+			saveObject(pages_result["paging"]["next"], 1)
+
+
 @celery.task
-def getProductsForKeyword(keyword):
-	ebay_url = "https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=8&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge"
-	r = requests.get(ebay_url)
+def getJSONData(url, headers):
+	if headers == None:
+		r = requests.get(url)
+	else:
+		r = requests.get(url,headers=headers)
 	return r.json()
 
 
-@celery.task
+
+def saveUserInfo(user_id, access_token):
+	url = "https://graph.facebook.com/"+ user_id + "?access_token=" + access_token + "&fields=id,email,name,first_name,last_name";	
+	saveObject(url, 0)
+
+
+def saveUserLikes(user_id, access_token):
+	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + access_token + "&fields=id,name,category,created_time"
+	saveObject(url, 1)
+
+
+def saveUserFriends(user_id, access_token):
+	url = "https://graph.facebook.com/"+ user_id + "/friends?access_token=" + access_token
+	saveObject(url, 2)
+
+
+def saveObject(url ,option):
+	task = getJSONData.delay(url, None)
+	if option == 0:
+		saveUser(task.get())
+	elif option == 1:
+		savePages(task.get())
+	elif option == 2:
+		saveFriends(task.get()) 
+
+
+
+def getProductsForKeywordFromEbay(keyword):
+	ebay_url = "https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=8&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge"
+	task = getJSONData.delay(ebay_url, None)
+	return jsonify(task.get())
+
+
+def getProductsForKeywordFromFlipkart(keyword):
+	flipkart_url = "https://affiliate-api.flipkart.net/affiliate/search/json?query=" + keyword + "&resultCount=4"
+	headers = {"Fk-Affiliate-Id":"paragdula","Fk-Affiliate-Token":"3f8a5b4876084bc5836265cdd26f0966"}
+	task = getJSONData.delay(flipkart_url, headers)
+	return jsonify(task.get())
+
 def getProductDetailForProductId(product_id):
 	ebay_detail_url = "http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SapnaSol-b016-439b-ba9f-0a88df89de2e&siteid=0&version=967&ItemID=" + product_id + "&IncludeSelector=TextDescription,ItemSpecifics,Details"
-	r = requests.get(ebay_detail_url)
-	return r.json()
+	task = getJSONData.delay(ebay_detail_url, None)
+	return jsonify(task.get())
 
-	# var flipkart_url = "https://affiliate-api.flipkart.net/affiliate/search/json?query=" + keyword + "&resultCount=4";
-	# getProducts(flipkart_url, {"Fk-Affiliate-Id":"paragdula","Fk-Affiliate-Token":"3f8a5b4876084bc5836265cdd26f0966"} ,function(json) {
-		
-	# });
+
 
 
 
