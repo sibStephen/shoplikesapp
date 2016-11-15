@@ -168,6 +168,11 @@ def show_recommendations():
 							obj_id=user_id,
 							username=user.name)
 
+
+
+@app.route('/privacypolicy')
+def privacypolicy():
+	return render_template('privacypolicy.html')
 									
 							
 @app.route('/<page_id>/explore')
