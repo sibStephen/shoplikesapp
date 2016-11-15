@@ -22,8 +22,8 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app, resources={r"/api/*": {"origins":"shoplikes-staging.herokuapp.com"}})
 
 db = SQLAlchemy(app)
-app.config['CELERY_BROKER_URL'] = os.environ['REDIS_URL'] #'redis://localhost:6379/0'
-app.config['CELERY_RESULT_BACKEND'] = os.environ['REDIS_URL']# 'redis://localhost:6379/0'
+app.config['CELERY_BROKER_URL'] = os.environ['REDISCLOUD_URL'] #'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = os.environ['REDISCLOUD_URL']# 'redis://localhost:6379/0'
 
 celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
@@ -454,7 +454,7 @@ def oauth_callback(provider):
 		user.access_token = access_token
 	db.session.commit()
 	login_user(user, True)
-	#saveUserInfo(uid, access_token)
+	saveUserInfo(uid, access_token)
 	# saveUserLikes(uid, access_token)
 	# saveUserFriends(uid, access_token)
 	return redirect(url_for('show_timeline', user_id=uid))
