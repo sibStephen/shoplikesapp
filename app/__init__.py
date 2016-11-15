@@ -454,7 +454,7 @@ def oauth_callback(provider):
 		user.access_token = access_token
 	db.session.commit()
 	login_user(user, True)
-	saveUserInfo(uid, access_token)
+	#saveUserInfo(uid, access_token)
 	# saveUserLikes(uid, access_token)
 	# saveUserFriends(uid, access_token)
 	return redirect(url_for('show_timeline', user_id=uid))
