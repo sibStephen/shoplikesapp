@@ -22,8 +22,8 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app, resources={r"/api/*": {"origins":"shoplikes-staging.herokuapp.com"}})
 
 db = SQLAlchemy(app)
-app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
-app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+app.config['CELERY_BROKER_URL'] = os.environ['REDIS_URL'] #'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = os.environ['REDIS_URL']# 'redis://localhost:6379/0'
 
 celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)

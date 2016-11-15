@@ -24,6 +24,6 @@ class DevelopmentConfig(Config):
 	APP_SECRET = "ebf9436f2c97491f3f70a59a88d8f595"
 	DEBUG = True
 	BASE_URL = "http://localhost:8080"
-	
+
 class TestingConfig(Config):
 	TESTING = True
