@@ -534,6 +534,9 @@ def getJSONData(url, headers):
 
 @celery.task
 def saveUserInfo(user_id, access_token):
+	print "*" * 80
+	print "called " + user_id
+	print "*" * 80
 	url = "https://graph.facebook.com/"+ user_id + "?access_token=" + access_token + "&fields=id,email,name,first_name,last_name";	
 	r = requests.get(url)
 	result = r.json()
