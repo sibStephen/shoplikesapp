@@ -15,4 +15,3 @@ flask-socketio
 flask-cors
 celery
 redis
-celery_worker
