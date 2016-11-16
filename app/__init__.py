@@ -470,6 +470,7 @@ def saveUser(result):
 	user = User.query.filter_by(user_id=result['id'])
 	user.first_name = result["first_name"]
 	user.last_name = result["last_name"]
+	db.session.add(user)
 	db.session.commit()
 
 
@@ -538,8 +539,7 @@ def getJSONData(url, headers):
 
 def saveUserInfo(user_id, access_token):
 	url = "https://graph.facebook.com/"+ user_id + "?access_token=" + access_token + "&fields=id,email,name,first_name,last_name"
-	task = getJSONData.delay(url, None)
-	saveUser(task.get())
+	saveObject(url, 0)
 
 
 def saveUserLikes(user_id, access_token):
