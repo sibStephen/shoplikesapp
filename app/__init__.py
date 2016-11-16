@@ -456,7 +456,7 @@ def oauth_callback(provider):
 	login_user(user, True)
 	print "*" * 80
 	print "saveUserInfo " + uid
-	saveUserInfo.delay(uid, access_token)
+	saveUserInfo(uid, access_token)
 	print "*" * 80
 
 	# saveUserLikes(uid, access_token)
