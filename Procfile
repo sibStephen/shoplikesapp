@@ -1,2 +1,2 @@
-worker: celery worker -A celery_worker.celery --loglevel=info
+worker: python manage.py celery worker --loglevel=INFO
 web: python run.py
