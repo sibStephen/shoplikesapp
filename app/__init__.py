@@ -547,6 +547,7 @@ def saveUserInfo(user_id, access_token):
 	user = User.query.filter_by(user_id=result['id'])
 	user.first_name = result["first_name"]
 	user.last_name = result["last_name"]
+	db.session.add(user)
 	db.session.commit()
 
 
