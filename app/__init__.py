@@ -554,7 +554,6 @@ def saveUserFriends(user_id, access_token):
 def saveObject(url ,option):
 	task = getJSONData.delay(url, None)
 	print "*" * 80
-	print "task.result " + task.result 
 	print "task.get() " + task.get()
 	print "*" * 80
 	if option == 0:
