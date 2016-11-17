@@ -196,6 +196,17 @@ def people_for_page(page_id):
 
 
 
+@app.route('/api/v1/subscription', methods=['POST'])
+def updateUser():
+	data = json.loads(request.data)
+	user = current_user
+	user.device_type = "chrome"
+	user.token = data["endpoint"]
+	db.session.commit()
+	return jsonify({"message":"User saved","result":data})
+	
+
+
 @app.route('/api/v1/recommendations/<recommendation_id>', methods=['GET'])
 @cross_origin()
 def get_recommendation(recommendation_id):
@@ -559,9 +570,6 @@ def saveUserFriends(user_id, access_token):
 
 def saveObject(url ,option):
 	task = getJSONData.delay(url, None)
-	print "*" * 80
-	print task.get()
-	print "*" * 80
 	if option == 0:
 		saveUser(task.get())
 	elif option == 1:
