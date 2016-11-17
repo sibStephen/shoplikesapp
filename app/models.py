@@ -83,6 +83,10 @@ class Page(db.Model):
 	products = db.relationship('Product',secondary=page_product)
 	recommendations = db.relationship('Recommendation', backref='page',lazy='dynamic')
 
+	def to_dict(self):
+		return {"page_id":self.page_id,"page_name":self.page_name,"created_by":self.created_by,"category_name":self.category_name}
+
+
 	def to_json(self):
 		return jsonify({"page_id":self.page_id,"page_name":self.page_name,"created_by":self.created_by,"category_name":self.category_name})
 	

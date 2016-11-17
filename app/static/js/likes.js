@@ -23,15 +23,15 @@ function httpGetAsync(theUrl, callback)
 
 function abc(respJson) {
     var grouped_likes = {};
-	var likes = respJson.data;
+	var likes = respJson["result"];
 	likes.map( 
 		function (like) {
-			if (grouped_likes[like.category]) {
-				var existing_likes = grouped_likes[like.category];
+			if (grouped_likes[like.category_name]) {
+				var existing_likes = grouped_likes[like.category_name];
 				existing_likes.push(like);
-				grouped_likes[like.category] = existing_likes;
+				grouped_likes[like.category_name] = existing_likes;
 			} else {
-				grouped_likes[like.category] = [like];
+				grouped_likes[like.category_name] = [like];
 			}
 		}
 	);
@@ -41,15 +41,15 @@ function abc(respJson) {
 		var key_likes = grouped_likes[key];
 		for (var i = 0; i < key_likes.length; i++) {
 			var like = key_likes[i];
-			saveLike(like);
-			var likes_list = document.getElementById(like.category);
+			//saveLike(like);
+			var likes_list = document.getElementById(like.category_name);
 			if (likes_list) {
 				var htmlNode = document.createElement("div");
 				htmlNode.className = "like_cell"
 				
-				var listInnerHTML = "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.id+"/picture?width=180&height=180);\"></div>";
-				listInnerHTML += "<div class=\"like_name\"><a href=\"/"+ like.id +"/detail\">" + like.name + "</a></div>";
-				listInnerHTML += "<div class=\"product_cnt\" id=\""+like.id+"\"></div>";
+				var listInnerHTML = "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.page_id+"/picture?width=180&height=180);\"></div>";
+				listInnerHTML += "<div class=\"like_name\"><a href=\"/"+ like.page_id +"/detail\">" + like.page_name + "</a></div>";
+				listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\"></div>";
 				
 				htmlNode.innerHTML = listInnerHTML;						
 				likes_list.childNodes[1].appendChild(htmlNode);
@@ -62,10 +62,10 @@ function abc(respJson) {
 				var innerHTML = "<div class=\"like_section_header\">" + key + "</div>";
 				innerHTML += "<div class=\"likes_grid\">";
 				innerHTML += "<div class=\"like_cell\">";
-				innerHTML += "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.id+"/picture?width=180&height=180);\">";
+				innerHTML += "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.page_id+"/picture?width=180&height=180);\">";
 				innerHTML += "</div>";
-				innerHTML += "<div class=\"like_name\"><a href=\"/"+ like.id +"/detail\">" + like.name + "</a></div>";
-				innerHTML += "<div class=\"product_cnt\" id=\""+like.id+"\"></div>";
+				innerHTML += "<div class=\"like_name\"><a href=\"/"+ like.page_id +"/detail\">" + like.page_name + "</a></div>";
+				innerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\"></div>";
 				innerHTML += "</div>";
 				innerHTML += "</div>";
 				// innerHTML += "<div class=\"next_btn\"><img src=\"/static/img/ic_arrow_right.png\"/>";

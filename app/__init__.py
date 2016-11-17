@@ -76,7 +76,7 @@ def show_timeline():
 @login_required
 def show_likes():
 	user_id = current_user.user_id
-	url = "https://graph.facebook.com/"+ user_id + "/likes?access_token=" + current_user.access_token + "&fields=id,name,category,created_time"
+	url = app.config['BASE_URL'] + "/api/v1/" + user_id + "/pages"
 	return render_template('likes.html',obj_id=current_user.user_id,
 										likes_url=url,
 										username=current_user.first_name,
@@ -379,14 +379,13 @@ def create_liked():
 	return jsonify({"result":"Liked Pages is in Progress"})
 
 
-@app.route('/api/v1/<user_id>/likes', methods=['GET'])
+@app.route('/api/v1/<user_id>/pages', methods=['GET'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
 def getPagesForUserId(user_id):
 	user = User.query.filter_by(user_id=user_id).first()
 	final_pages = []
 	for page in user.pages:
-		final_pages.append(page.to_json())
-	ipdb.set_trace()
+		final_pages.append(page.to_dict())
 	return jsonify({"result":final_pages})
 
 
