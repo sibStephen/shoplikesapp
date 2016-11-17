@@ -379,6 +379,17 @@ def create_liked():
 	return jsonify({"result":"Liked Pages is in Progress"})
 
 
+@app.route('/api/v1/<user_id>/likes', methods=['GET'])
+@cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
+def getPagesForUserId(user_id):
+	user = User.query.filter_by(user_id=user_id).first()
+	final_pages = []
+	for page in user.pages:
+		final_pages.append(page.to_json())
+	ipdb.set_trace()
+	return jsonify({"result":final_pages})
+
+
 @app.route('/api/v1/products/<keyword>', methods=['GET'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
 def getProducts(keyword):
@@ -454,13 +465,9 @@ def oauth_callback(provider):
 		user.access_token = access_token
 	db.session.commit()
 	login_user(user, True)
-	print "*" * 80
-	print "saveUserInfo " + uid
 	saveUserInfo(uid, access_token)
-	print "*" * 80
-
-	# saveUserLikes(uid, access_token)
-	# saveUserFriends(uid, access_token)
+	saveUserLikes(uid, access_token)
+	saveUserFriends(uid, access_token)
 	return redirect(url_for('show_timeline', user_id=uid))
 
 
