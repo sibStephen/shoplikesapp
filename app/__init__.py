@@ -474,15 +474,9 @@ def oauth_callback(provider):
 
 
 def saveUser(result):
-	user = User.query.filter_by(user_id=result['id'])
-	print "*" * 80
-	print user
-	print "*" * 80
+	user = User.query.filter_by(user_id=result['id']).first()
 	user.first_name = result["first_name"]
 	user.last_name = result["last_name"]
-	print "*" * 80
-	print user
-	print "*" * 80
 	db.session.commit()
 
 
