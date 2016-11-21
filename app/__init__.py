@@ -19,7 +19,11 @@ import urllib
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app, resources={r"/api/*": {"origins":"shoplikes-staging.herokuapp.com"}})
+cors = CORS(
+	app, 
+	resources={r"/api/*": {"origins":"shoplikes-staging.herokuapp.com"}},
+	supports_credentials=True,
+)
 
 db = SQLAlchemy(app)
 app.config['CELERY_BROKER_URL'] = os.environ['REDISCLOUD_URL'] #'redis://localhost:6379/0'
