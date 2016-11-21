@@ -208,6 +208,7 @@ function friendClicked(friend_id) {
 	var url = base_url + "/api/v1/recommendation";
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.withCredentials = true;
 	xhr.onreadystatechange = function () { 
     	if (xhr.readyState == 4 && xhr.status == 200) {
     		debugger;
