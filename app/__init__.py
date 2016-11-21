@@ -475,13 +475,12 @@ def oauth_callback(provider):
 		user.access_token = access_token
 	db.session.commit()
 	login_user(user, True)
-	ipdb.set_trace()
 	saveUserInfo(uid, access_token)
 	saveUserLikes(uid, access_token)
 	saveUserFriends(uid, access_token)
-	# print "*" * 80
-	# print current_user.user_id
-	# print "*" * 80
+	print "*" * 80
+	print current_user.user_id
+	print "*" * 80
 	return redirect(url_for('show_timeline', user_id=uid))
 
 
