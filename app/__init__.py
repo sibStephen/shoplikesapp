@@ -308,7 +308,7 @@ def get_recommendations_product(product_id):
 	
 
 @app.route('/api/v1/recommendation', methods=['POST'])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def create_recommendation():
 	data = json.loads(request.data)
 
