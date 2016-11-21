@@ -320,6 +320,9 @@ def create_recommendation():
 	db.session.add(product)
 
 	recommendation = Recommendation(uuid.uuid4())
+	print "*" * 80
+	print current_user.user_id
+	print "*" * 80
 	recommendation.from_user_id = current_user.user_id
 	recommendation.to_user_id = data["to_user_id"]
 	recommendation.product_id = data["product"]["product_id"]
