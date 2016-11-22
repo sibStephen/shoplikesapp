@@ -1,19 +1,33 @@
 .app_info {
 	display: block;
-	margin: 0 auto; 
+	margin-left: 20%;
+	margin-top: 10%; 
 	position: relative;
-	background-color: brown;
 	width: 60%;
+	text-align: center;;
 }
 
 .app_name {
 	text-align: center;
+	font-family: Roboto-Black;
+    font-size: 50px;
+    color: #3F51B5;
+    margin-bottom: 50px;
 }
 
 .tag_line {
 	text-align: center;
+	position: relative;
+    margin-bottom: 20px;
 }
 
 .login_button {
-	
+    width: 350px;
+    padding: 12px;
+    background-color: #425893;
+    font-size: 20px;
+    border-radius: 5px;
+    font-family: Roboto-Regular;
+    color: white;
+    text-decoration: none;
 }
