@@ -27,9 +27,13 @@ function setLikesURL(url) {
 function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
+	var loading = document.getElementsByClassName("loading")[0];
+	loading.style.display = "block";
+	loading.innerHTML = "Loading...";
+
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        	debugger;
+    		loading.style.display = "none";
 			callback(xmlHttp.responseText);
         }
     }
@@ -221,7 +225,7 @@ function segment_clicked(index) {
 			gridview.style.display = "none";
 
 			var recommendations_url = base_url + "/api/v1/recommendations_timeline/" + user_id;
-			debugger;
+
 			httpGetAsync(recommendations_url,function(json) {
 				var respJson = JSON.parse(json);
 		    	var recommendations = respJson["result"];
@@ -259,6 +263,7 @@ function segment_clicked(index) {
 						};
 						arrangePins();
 					}
+		    	} else {
 		    	}
 			});
 		}
