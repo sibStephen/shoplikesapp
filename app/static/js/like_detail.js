@@ -4,11 +4,9 @@
 var segments = [];
 
 function slider(seg) {
-	debugger;
 	segments = seg;
 	var slider = document.getElementsByClassName("slider")[0];
 	for (i in segments) {
-		debugger;
 		var text = segments[i];
 		var node = document.createElement("div");
 		node.className = "segment";
@@ -28,7 +26,6 @@ function slider(seg) {
 
 
 function segment_clicked(index) {
-	debugger;
 	var slider = document.getElementsByClassName("slider")[0];
 	for (i in slider.children) {
 		var sliderChild = document.getElementById("segment_" + i);
@@ -211,7 +208,6 @@ function friendClicked(friend_id) {
 	xhr.withCredentials = true;
 	xhr.onreadystatechange = function () { 
     	if (xhr.readyState == 4 && xhr.status == 200) {
-    		debugger;
         	var json = JSON.parse(xhr.responseText);
         	console.log(json);
     	}
@@ -230,7 +226,6 @@ function storeBaseURL(baseurl){
 
 function myfunction(response) {
 	if (showModal == true) {
-		debugger;
 		var selProduct = {};
 		selProduct["product_id"] = response["Item"]["ItemID"];
 		var category_name = document.getElementsByClassName("modal-category")[0];
@@ -262,7 +257,6 @@ function myfunction(response) {
 		} 
 
 		var product_image = document.getElementsByClassName("modal-image")[0];
-		debugger;
 		var gallery_url = urls[0];
 		product_image.style.backgroundImage = "url("+ gallery_url +")";
 		// product_image.innerHTML = "<img src=" + gallery_url + "></img>";
@@ -298,7 +292,6 @@ function product_detail(product_id) {
 	var ebay_url = base_url + "/api/v1/product/detail/" + product_id;
 	httpGetAsync(ebay_url ,function(response) {
 		if (showModal == true) {
-			debugger;
 			var selProduct = {};
 			selProduct["product_id"] = response["Item"]["ItemID"];
 			var category_name = document.getElementsByClassName("modal-category")[0];
@@ -330,7 +323,6 @@ function product_detail(product_id) {
 			} 
 
 			var product_image = document.getElementsByClassName("modal-image")[0];
-			debugger;
 			var gallery_url = urls[0];
 			product_image.style.backgroundImage = "url("+ gallery_url +")";
 			// product_image.innerHTML = "<img src=" + gallery_url + "></img>";
@@ -406,16 +398,25 @@ window.onclick = function(event) {
 
 function getPeopleForPage() {
 	var url = base_url + "/api/v1/people_page/" + page_id;
+	var loading = document.getElementsByClassName("loading")[0];
+	loading.style.display = "block";
+	loading.innerHTML = "Loading...";
+
 	httpGetAsync(url, function(json){
 		var gridview = document.getElementsByClassName("friends_gridview")[0];
 		var people = json["result"];
 		gridview.innerHTML = "";
-		for (i in people) {
-			var user = people[i];
-			var node = document.createElement("div");
-			node.className = "friend_cell";
-			node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+user["user_id"]+"/picture></img></div><div class=\"friend_name\"><a href=\""+user["user_id"]+"/friends\">"+user["name"]+"</a></div><div class=\"reco_cnt\">8 Products</div>";
-        	gridview.appendChild(node);
+		if (people.length == 0) {
+			loading.style.display = "block";
+		} else {
+			loading.style.display = "none";
+			for (i in people) {
+				var user = people[i];
+				var node = document.createElement("div");
+				node.className = "friend_cell";
+				node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+user["user_id"]+"/picture></img></div><div class=\"friend_name\"><a href=\"/"+user["user_id"]+"/profile\">"+user["name"]+"</a></div><div class=\"reco_cnt\">8 Products</div>";
+	        	gridview.appendChild(node);
+			}
 		}
 	});
 }
@@ -424,7 +425,6 @@ function getPeopleForPage() {
 function getFriends(friends_url, add_header) {
 	getProducts(friends_url, null, function(json) {
 		var friends = json.data;
-		debugger;
 		var friends_table = document.getElementsByClassName('friends-table')[0];
 		var tableNode;
 
@@ -452,12 +452,18 @@ function getFriends(friends_url, add_header) {
 
 function fetchProducts(keyword) {
 	var url = base_url + "/api/v1/products/" + keyword;
+
+	var loading = document.getElementsByClassName("loading")[0];
+	loading.style.display = "block";
+	loading.innerHTML = "loading...";
+
 	httpGetAsync(url, function(json) {
 		var ebay_products = json['findItemsByKeywordsResponse'][0]["searchResult"][0];
 		var grid = document.getElementsByClassName('explore-grid-timeline')[0];
 		var products = ebay_products["item"];
 		grid.innerHTML = '';
 		if (products) {
+			loading.style.display = "none";
 			for (var i = 0; i < products.length; i++) {
 				var product = products[i];
 				var node = document.createElement("div");
@@ -475,13 +481,8 @@ function fetchProducts(keyword) {
 				product_detail(product_id);
 			}
 		} else {
-			var node = document.createElement("div");
-			node.className = "explore-grid-recommendation";
-			node.innerHTML = "No Products found!!!";
-			node.style.textAlign = "center";
-			node.style.fontSize = "40px";
-			node.style.width = "100%";
-			grid.appendChild(node);
+			loading.style.display = "block";
+			loading.innerHTML = "There are no products that we could find taking "+ page_name +" as reference.";
 		}	
 	});
 }
@@ -550,12 +551,15 @@ function arrangeTimelinePins() {
 
 function recommendationsForLike() {
 	var url = base_url + "/api/v1/recommendations_for_page/" + page_id;
-	debugger;
+	var loading = document.getElementsByClassName("loading")[0];
+	loading.style.display = "block";
+	loading.innerHTML = "Loading...";
+
 	getRecommendations(url,null, function(json) {
-		debugger;
     	var respJson = json;
     	var recommendations = respJson["result"];
-    	if (recommendations) {
+    	if (recommendations.length > 0) {
+    		loading.style.display = "none";
 			var grid = document.getElementsByClassName('grid-timeline')[0];
 			grid.innerHTML = "";
 			for (var i = 0; i < recommendations.length; i++) {
@@ -587,6 +591,9 @@ function recommendationsForLike() {
 
 				arrangeTimelinePins();
 			}
+		} else {
+			loading.style.display = "block";
+			loading.innerHTML = "There are no products recommended taking "+ page_name +" as reference. Click on Explore to find more interesting products to recommend.";
 		}
 	});
 }

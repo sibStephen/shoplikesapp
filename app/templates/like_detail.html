@@ -5,15 +5,17 @@
     <link href="/static/css/explore.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block grid_content %}
-	<div class="explore-grid-timeline">
-		<div class="spinner"></div>
-	</div>
-	<div class="grid-timeline">
-		<div class="spinner"></div>
-	</div>
-	<div class="friends_gridview">
-		<div class="spinner"></div>
-	</div>
+	<div class="loading" style="	
+	background-color: white;
+	width: 100%;
+	text-align: center;
+	display: none;
+	font-size: 25px;
+    font-family: Roboto-Italic;
+">Loading...</div>
+	<div class="explore-grid-timeline"></div>
+	<div class="grid-timeline"></div>
+	<div class="friends_gridview"></div>
 
 	<div id="myModal" class="modal">
 		<div class="modal-content">

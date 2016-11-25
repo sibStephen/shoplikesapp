@@ -118,10 +118,12 @@ function showTimeline(respJson) {
 
 function httpGetAsync(theUrl, callback)
 {
+	var loading = document.getElementsByClassName("loading")[0];
+    loading.style.display = "block";
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
     if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-    	var respJson = JSON.parse(xmlHttp.responseText);
+    		var respJson = JSON.parse(xmlHttp.responseText);
 			callback(respJson);
     	}
 	};
@@ -138,7 +140,16 @@ function storeBaseURL(url) {
 function getRecommendationsForUserId(user_id) {
 	var url = base_url + "/api/v1/recommendations_timeline/" + user_id;
 	httpGetAsync(url, function(json) {
-		showTimeline(json);
+		if (json["result"].length == 0) {
+			var loading = document.getElementsByClassName("loading")[0];
+		    loading.style.display = "block";
+		    loading.innerHTML = "You have no recommendations yet. Please visit the likes page to start recommending products to your friends."
+		} else {
+			var loading = document.getElementsByClassName("loading")[0];
+		    loading.style.display = "none";
+			showTimeline(json);	
+		}
+		
 	});
 }
 
