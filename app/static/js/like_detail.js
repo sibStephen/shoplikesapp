@@ -209,6 +209,17 @@ function friendClicked(friend_id) {
 	xhr.onreadystatechange = function () { 
     	if (xhr.readyState == 4 && xhr.status == 200) {
         	var json = JSON.parse(xhr.responseText);
+
+        	var modal = document.getElementById('myModal');
+	        modal.style.display = "none";
+			var body = document.getElementsByTagName("body")[0];
+			body.style.overflow = 'scroll';
+
+			$.getScript("/static/js/sweetalert.min.js", function(){
+				sweetAlert("Good job! Hope your friend likes the product you recommended.");
+			});
+
+
         	console.log(json);
     	}
 	}

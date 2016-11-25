@@ -3,6 +3,7 @@
     <link href="/static/css/friends.css" rel="stylesheet" type="text/css"/>
     <link href="/static/css/slider.css" rel="stylesheet" type="text/css"/>
     <link href="/static/css/explore.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/sweetalert.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block grid_content %}
 	<div class="loading" style="	
@@ -46,6 +47,7 @@
 {% endblock%}
 {% block scripts %}
 	<script src="/static/js/like_detail.js"></script>
+	<script src="/static/js/sweetalert.min.js"></script>
 	<script>
 		storePageId("{{obj_id}}");
 		storeBaseURL("{{base_url}}");
