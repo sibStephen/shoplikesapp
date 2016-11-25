@@ -326,6 +326,9 @@ def create_recommendation():
 
 	recommendation = Recommendation(uuid.uuid4())
 	recommendation.from_user_id = current_user.user_id
+	print "*" * 80
+	print data["to_user_id"]
+	print "*" * 80
 	recommendation.to_user_id = data["to_user_id"]
 	recommendation.product_id = data["product"]["product_id"]
 	recommendation.page_id = data["page_id"]

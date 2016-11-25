@@ -449,7 +449,7 @@ function getFriends(friends_url, add_header) {
 
 		for (i in friends) {
 			var friend = friends[i];
-			innerHTML += "<tr onclick=\"friendClicked(" + friend.id + ")\"><td>"+friend.name+"</td></tr>"
+			innerHTML += "<tr onclick=\"friendClicked('"+friend.id+"')\"><td>"+friend.name+"</td></tr>"
 		}
 
 		tableNode.innerHTML = innerHTML;
