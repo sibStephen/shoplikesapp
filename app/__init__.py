@@ -229,10 +229,10 @@ def get_recommendation(recommendation_id):
 @app.route('/api/v1/recommendations_timeline/<user_id>', methods=['GET'])
 @cross_origin()
 def get_recommendations_timeline(user_id):
-#	recommendations = db.session.query.filter(or_(Recommendation.from_user_id=user_id, Recommendation.to_user_id=user_id))
-	recommendations = Recommendation.query.filter_by(from_user_id=user_id).order_by(desc("created_on"))
+	# to_recommendations = Recommendation.query.filter_by(to_user_id=user_id).order_by(desc("created_on"))
+	from_recommendations = db.session.query(Recommendation).filter((Recommendation.from_user_id == user_id) | (Recommendation.to_user_id == user_id)).order_by(desc("created_on"))
 	final_recommendations = []
-	for recommendation in recommendations:	
+	for recommendation in from_recommendations:	
 		recommendation_id = recommendation.recommendation_id
 		product = Product.query.filter_by(product_id=recommendation.product_id).first()
 		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
@@ -242,6 +242,7 @@ def get_recommendations_timeline(user_id):
 		if page in from_user.pages:
 			is_senders_liked = True
 		final_recommendations.append({"is_senders_liked":is_senders_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+
 	return jsonify({"result":final_recommendations})
 
 
