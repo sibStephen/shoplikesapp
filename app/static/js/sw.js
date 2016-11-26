@@ -19,29 +19,49 @@
 
 /* eslint-env browser, serviceworker, es6 */
 
-'use strict';
+if ('serviceWorker' in navigator) { 
+  navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+  // Registration was successful 
+  console.log('ServiceWorker registration successful with scope: ',    registration.scope);
+  registration.pushManager.subscribe({userVisibleOnly: true}).then(function(subscription){
+  isPushEnabled = true;  
+  console.log("subscription.subscriptionId: ", subscription.subscriptionId);
+  console.log("subscription.endpoint: ", subscription.endpoint);
+  
+  // TODO: Send the subscription subscription.endpoint
+  // to your server and save it to send a push message
+  // at a later date
+  return sendSubscriptionToServer(subscription);
+  });
+  }).catch(function(err) {
+    // registration failed :(
+    console.log('ServiceWorker registration failed: ', err);
+  });
+}
 
-self.addEventListener('push', function(event) {
-  console.log('[Service Worker] Push Received.');
-  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+// 'use strict';
 
-  const title = 'Push Codelab';
-  const options = {
-    body: 'Yay it works.',
-    icon: 'images/icon.png',
-    badge: 'images/badge.png'
-  };
+// self.addEventListener('push', function(event) {
+//   console.log('[Service Worker] Push Received.');
+//   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
 
-  event.waitUntil(self.registration.showNotification(title, options));
-});
+//   const title = 'Push Codelab';
+//   const options = {
+//     body: 'Yay it works.',
+//     icon: 'images/icon.png',
+//     badge: 'images/badge.png'
+//   };
+
+//   event.waitUntil(self.registration.showNotification(title, options));
+// });
 
 
-self.addEventListener('notificationclick', function(event) {
-  console.log('[Service Worker] Notification click Received.');
+// self.addEventListener('notificationclick', function(event) {
+//   console.log('[Service Worker] Notification click Received.');
 
-  event.notification.close();
+//   event.notification.close();
 
-  event.waitUntil(
-    clients.openWindow('https://developers.google.com/web/')
-  );
-});
+//   event.waitUntil(
+//     clients.openWindow('https://developers.google.com/web/')
+//   );
+// });

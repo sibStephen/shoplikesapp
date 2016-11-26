@@ -18,23 +18,44 @@ function urlB64ToUint8Array(base64String) {
 }
 
 
-if ('serviceWorker' in navigator && 'PushManager' in window) {
-  console.log('Service Worker and Push is supported');
+// if ('serviceWorker' in navigator && 'PushManager' in window) {
+//   console.log('Service Worker and Push is supported');
 
-  navigator.serviceWorker.register('/static/js/sw.js')
-  .then(function(swReg) {
-    console.log('Service Worker is registered', swReg);
+//   navigator.serviceWorker.register('/static/js/sw.js')
+//   .then(function(swReg) {
+//     console.log('Service Worker is registered', swReg);
 
-    swRegistration = swReg;
-    initialiseUI();
-  })
-  .catch(function(error) {
-    console.error('Service Worker Error', error);
+//     swRegistration = swReg;
+//     initialiseUI();
+//   })
+//   .catch(function(error) {
+//     console.error('Service Worker Error', error);
+//   });
+// } else {
+//   console.warn('Push messaging is not supported');
+// }
+
+if ('serviceWorker' in navigator) { 
+  navigator.serviceWorker.register('/static/js/sw.js').then(function(registration) {
+  // Registration was successful 
+  console.log('ServiceWorker registration successful with scope: ',    registration.scope);
+  registration.pushManager.subscribe({userVisibleOnly: true}).then(function(subscription){
+  isPushEnabled = true;  
+  console.log("subscription.subscriptionId: ", subscription.subscriptionId);
+  console.log("subscription.endpoint: ", subscription.endpoint);
+  
+  // TODO: Send the subscription subscription.endpoint
+  // to your server and save it to send a push message
+  // at a later date
+  return updateSubscriptionOnServer(subscription);
   });
-} else {
-  console.warn('Push messaging is not supported');
+  }).catch(function(err) {
+    // registration failed :(
+    console.log('ServiceWorker registration failed: ', err);
+  });
 }
 
+//"https://android.googleapis.com/gcm/send/c7DeW38qvJ8:APA91bFugIb_qdlQYk441AXC-CU-dly95h09chrknNZPbWdUNKV6vgHv-i-YGr6FpeQLkIDFf6ebZqSc7HcbmzdCFdspf_gPFEDO6nVfJvWPSZKfGD5d6-f43ZWWD4bGeuBJ1Mgnaaxg"
 
 function updateBtn() {
 }
@@ -44,6 +65,19 @@ function updateBtn() {
 function updateSubscriptionOnServer(subscription) {
   // TODO: Send subscription to application serviceWorker
   console.log(subscription);
+  var xhr = new XMLHttpRequest();
+  var url = "/api/v1/subscription";
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-type", "application/json");
+  xhr.withCredentials = true;
+  xhr.onreadystatechange = function () { 
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          var json = JSON.parse(xhr.responseText);
+          console.log(json);
+      }
+  }
+  var data = JSON.stringify({"endpoint":subscription["endpoint"]});
+  xhr.send(data);
 }
 
 function subscribeUser() {

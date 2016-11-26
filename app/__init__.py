@@ -201,6 +201,7 @@ def people_for_page(page_id):
 
 
 @app.route('/api/v1/subscription', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def updateUser():
 	data = json.loads(request.data)
 	user = current_user
@@ -326,9 +327,6 @@ def create_recommendation():
 
 	recommendation = Recommendation(uuid.uuid4())
 	recommendation.from_user_id = current_user.user_id
-	print "*" * 80
-	print data["to_user_id"]
-	print "*" * 80
 	recommendation.to_user_id = data["to_user_id"]
 	recommendation.product_id = data["product"]["product_id"]
 	recommendation.page_id = data["page_id"]
@@ -336,6 +334,16 @@ def create_recommendation():
 
 	db.session.add(recommendation)
 	db.session.commit()
+
+	toUser = User.query.filter_by(user_id=data["to_user_id"]).first()
+	if toUser.token is not None:
+		endpoint = toUser.token
+		registrationId = endpoint.replace("https://android.googleapis.com/gcm/send/","")
+		url = 'https://android.googleapis.com/gcm/send'
+		data = "{\"to\":\""+registrationId+"\",\"notification\":{\"title\":\"Title Text for Notification\"}}"
+		headers = {"Authorization":"key=AIzaSyCvw1QGF_hYtG1Mx_31xcJm8uvfsaD-lH8","Content-Type":"application/json"}
+		r = requests.post(url, data=data, headers=headers)
+		print r
 	return jsonify({"result":"Recommendation is saved"})
 	
 
