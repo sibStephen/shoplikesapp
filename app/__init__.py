@@ -343,7 +343,7 @@ def create_recommendation():
 		data = "{\"to\":\""+registrationId+"\",\"notification\":{\"title\":\"Title Text for Notification\"}}"
 		headers = {"Authorization":"key=AIzaSyCvw1QGF_hYtG1Mx_31xcJm8uvfsaD-lH8","Content-Type":"application/json"}
 		r = requests.post(url, data=data, headers=headers)
-		print r
+		print r.text
 	return jsonify({"result":"Recommendation is saved"})
 	
 
