@@ -2,6 +2,10 @@ body {
 	background-color:#F2F2F2;
 }
 
+.body_container {
+	width: 100%;
+}
+
 a {
 	color:#4351AF
 }
