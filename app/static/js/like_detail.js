@@ -216,7 +216,11 @@ function friendClicked(friend_id) {
 			body.style.overflow = 'scroll';
 
 			$.getScript("/static/js/sweetalert.min.js", function(){
-				sweetAlert("Good job! You just recommended a product to your friend.");
+				swal({   title: "Good job!", 
+						 text: "You recommended a product to your friend."
+						 }, function() {
+						 	window.location = base_url + "/timeline";
+						 });			
 			});
 
 

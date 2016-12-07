@@ -2,6 +2,7 @@
 {% block stylesheets %}
     <link href="/static/css/timeline.css" rel="stylesheet" type="text/css"/>
     <link href="/static/css/explore.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/sweetalert.css" rel="stylesheet" type="text/css"/>
     <link rel="manifest" href="/static/js/manifest.json">
 {% endblock %}
 {% block content %}
@@ -37,11 +38,13 @@
 {% block scripts %}
 	<script src="/static/js/notifications.js"></script>
 	<script src="/static/js/timeline.js"></script>
+	<script src="/static/js/sweetalert.min.js"></script>
 	<script>
 
 	window.onload = function() {
 		storeBaseURL("{{base_url}}");
 		getRecommendationsForUserId("{{obj_id}}");
+		getFriends('{{friends_url}}',true);
 	};
 
 	</script>

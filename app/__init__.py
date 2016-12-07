@@ -69,10 +69,12 @@ def push():
 @app.route('/timeline')
 @login_required
 def show_timeline():
+	friends_url = "https://graph.facebook.com/"+ current_user.user_id + "/friends?access_token=" + current_user.access_token 
 	return render_template('timeline.html',nav_obj_id=current_user.user_id,
 											nav_username=current_user.first_name,
 											obj_id=current_user.user_id,
 											username=current_user.first_name,
+											friends_url=friends_url,
 											 base_url=app.config['BASE_URL'])
 
 							

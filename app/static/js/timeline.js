@@ -153,6 +153,92 @@ function getRecommendationsForUserId(user_id) {
 	});
 }
 
+
+function recommendBtnClicked() {
+	var recommend_link = document.getElementsByClassName("recommend-link")[0];
+	var button = recommend_link.children[0];
+	if (button.innerHTML == "RECOMMEND") {
+		var modal_detail = document.getElementsByClassName("modal-detail")[0];
+		modal_detail.style.height = '0px';
+
+		var friends_table = document.getElementsByClassName("friends-table")[0];
+		friends_table.style.height = "calc(100% - 60px)";
+
+		button.innerHTML = 'CANCEL';
+	} else if (button.innerHTML == "CANCEL") {
+		var modal_detail = document.getElementsByClassName("modal-detail")[0];
+		modal_detail.style.height = "calc(100% - 60px)";
+
+		var friends_table = document.getElementsByClassName("friends-table")[0];
+		friends_table.style.height = "0px";
+
+		button.innerHTML = 'RECOMMEND';
+	}
+}
+
+function friendClicked(friend_id) {
+	var xhr = new XMLHttpRequest();
+	var url = base_url + "/api/v1/recommendation";
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.withCredentials = true;
+	xhr.onreadystatechange = function () { 
+    	if (xhr.readyState == 4 && xhr.status == 200) {
+        	var json = JSON.parse(xhr.responseText);
+
+        	var modal = document.getElementById('myModal');
+	        modal.style.display = "none";
+			var body = document.getElementsByTagName("body")[0];
+			body.style.overflow = 'scroll';
+
+			$.getScript("/static/js/sweetalert.min.js", function(){
+				swal({   title: "Good job!", 
+						 text: "You recommended a product to your friend."
+						 }, function() {
+						 	window.location = base_url + "/timeline";
+						 });			
+			});
+        	console.log(json);
+    	}
+	}
+	var data = JSON.stringify({"to_user_id":friend_id,"product":selected_product,"page_id":selected_page["page_id"]});
+	xhr.send(data);
+}
+
+
+
+function getFriends(friends_url, add_header) {
+	httpGetAsync(friends_url,function(json){
+		var friends = json.data;
+		var friends_table = document.getElementsByClassName('friends-table')[0];
+		var tableNode;
+
+		var innerHTML = "";
+		if (add_header == true) {
+			tableNode = document.createElement("table");
+			innerHTML += "<th>Friends</th>";
+		} else {
+			tableNode = friends_table.children[0];
+		}
+
+		for (i in friends) {
+			var friend = friends[i];
+			innerHTML += "<tr onclick=\"friendClicked('"+friend.id+"')\"><td>"+friend.name+"</td></tr>"
+		}
+
+		tableNode.innerHTML = innerHTML;
+		friends_table.appendChild(tableNode);
+	    if (json.paging.next) {
+			getFriends(json['paging']['next'],false);
+		}
+
+	});
+}
+
+
+var selected_product = null;
+var selected_page = null;
+
 function showModal(response) {
 	var modal = document.getElementById('myModal');
 	modal.style.display = "block";
@@ -193,6 +279,8 @@ function showModal(response) {
 	
 	var product_details = document.getElementsByClassName("modal-detail")[0];
 	product_details.innerHTML = "<p>" + response["product"]["description"] + "</p>";
+	selected_product = response["product"];
+	selected_page = response["page"]
 }
 
 window.onclick = function(event) {
