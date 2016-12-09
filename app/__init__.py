@@ -241,10 +241,10 @@ def get_recommendations_timeline(user_id):
 		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
 		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
 		page = Page.query.filter_by(page_id=recommendation.page_id).first()
-		is_senders_liked = False
-		if page in from_user.pages:
-			is_senders_liked = True
-		final_recommendations.append({"is_senders_liked":is_senders_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+		is_curr_user_liked = False
+		if page in current_user.pages:
+			is_curr_user_liked = True
+		final_recommendations.append({"is_curr_user_liked":is_curr_user_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
 
 	return jsonify({"result":final_recommendations})
 
@@ -315,7 +315,7 @@ def get_recommendations_product(product_id):
 @cross_origin(supports_credentials=True)
 def create_recommendation():
 	data = json.loads(request.data)
-
+	page = Page.query.filter_by(page_id=data["page_id"]).first()
 	product = Product.query.filter_by(product_id=data["product"]["product_id"]).first()
 	if product == None:
 		product = Product(data["product"]["product_id"])
@@ -325,6 +325,7 @@ def create_recommendation():
 	product.description = data["product"]["description"]
 	product.product_url = data["product"]["product_url"]
 	product.image_url = data["product"]["image_url"]
+
 	db.session.add(product)
 
 	recommendation = Recommendation(uuid.uuid4())
@@ -335,9 +336,77 @@ def create_recommendation():
 	recommendation.created_on = datetime.datetime.now()
 
 	db.session.add(recommendation)
-	db.session.commit()
+
+	product_pages = product.pages
+
+	if not product.pages:
+		product_pages = [page]
+	else:
+		exists = False
+		for page in product_pages:
+			if page.page_id == data["page_id"]:
+				exists = True
+				break
+
+		if exists == False:
+			product_pages.append(page)
+
+	product.pages = product_pages
+
+	product_recommendations = product.recommendations
+
+	if not product_recommendations:
+		product_recommendations = [recommendation]
+	else:
+		exists = False
+		for rcmnd in product_recommendations:
+			if rcmnd.recommendation_id == recommendation.recommendation_id:
+				exists = True
+				break
+
+		if exists == False:
+			product_recommendations.append(recommendation)
+
+	product.recommendations = product_recommendations
+
+	db.session.add(product)
 
 	toUser = User.query.filter_by(user_id=data["to_user_id"]).first()
+
+	toUser_toRecommendations = toUser.to_recommendations
+	if not toUser_toRecommendations:
+		toUser_toRecommendations = [recommendation]
+	else:
+		exists = False
+		for rcmnd in toUser_toRecommendations:
+			if rcmnd.recommendation_id == recommendation.recommendation_id:
+				exists = True
+				break
+
+		if exists == False:
+			toUser_toRecommendations.append(recommendation)
+
+	toUser.to_recommendations = toUser_toRecommendations
+	db.session.add(toUser)
+
+	fromUser_fromRecommendations = current_user.from_recommendations
+	if not fromUser_fromRecommendations:
+		fromUser_fromRecommendations = [recommendation]
+	else:
+		exists = False
+		for rcmnd in fromUser_fromRecommendations:
+			if rcmnd.recommendation_id == recommendation.recommendation_id:
+				exists = True
+				break
+
+		if exists == False:
+			fromUser_fromRecommendations.append(recommendation)
+
+	current_user.from_recommendations = fromUser_fromRecommendations
+	db.session.add(current_user)
+	db.session.commit()
+
+
 	if toUser.token is not None:
 		endpoint = toUser.token
 		registrationId = endpoint.replace("https://android.googleapis.com/gcm/send/","")
@@ -496,9 +565,6 @@ def oauth_callback(provider):
 	saveUserInfo(uid, access_token)
 	saveUserLikes(uid, access_token)
 	saveUserFriends(uid, access_token)
-	print "*" * 80
-	print current_user.user_id
-	print "*" * 80
 	return redirect(url_for('show_timeline', user_id=uid))
 
 

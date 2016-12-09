@@ -367,7 +367,6 @@ function abc(respJson) {
 		var key_likes = grouped_likes[key];
 		for (var i = 0; i < key_likes.length; i++) {
 			var like = key_likes[i];
-			saveLike(like);
 			var likes_list = document.getElementById(like.category);
 			if (likes_list) {
 				var htmlNode = document.createElement("div");
