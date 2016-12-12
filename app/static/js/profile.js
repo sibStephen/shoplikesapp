@@ -293,7 +293,7 @@ function segment_clicked(index) {
 		        		var friend = friends[i];
 		        		var node = document.createElement("div");
 		        		node.className = "friend_cell";
-		        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\"><a href=\""+friend.id+"/profile\">"+friend.name+"</a></div><div class=\"reco_cnt\">8 Products</div>";
+		        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\"><a href=\""+friend.id+"/profile\">"+friend.name+"</a></div>";
 		        		gridview.appendChild(node);
 		        	}
 		        	loadFriendsGridView();

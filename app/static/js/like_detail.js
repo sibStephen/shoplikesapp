@@ -427,7 +427,7 @@ function getPeopleForPage() {
 				var user = people[i];
 				var node = document.createElement("div");
 				node.className = "friend_cell";
-				node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+user["user_id"]+"/picture></img></div><div class=\"friend_name\"><a href=\"/"+user["user_id"]+"/profile\">"+user["name"]+"</a></div><div class=\"reco_cnt\">8 Products</div>";
+				node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+user["user_id"]+"/picture></img></div><div class=\"friend_name\"><a href=\"/"+user["user_id"]+"/profile\">"+user["name"]+"</a></div>";
 	        	gridview.appendChild(node);
 			}
 		}
