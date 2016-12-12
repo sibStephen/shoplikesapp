@@ -289,12 +289,17 @@ window.onclick = function(event) {
         modal.style.display = "none";
 		var body = document.getElementsByTagName("body")[0];
 		body.style.overflow = 'scroll';
+
+		var loading = document.getElementsByClassName("loading")[0];
+    	loading.style.display = "none";
+
     }
 }
 
 
 function pinClicked(rec_id) {
 	// var recommendation_id = event.currentTarget.id;
+
 	var recommendation_id = rec_id;
 	var url = base_url + "/api/v1/recommendations/" + recommendation_id;
 	httpGetAsync(url, function(json) {
