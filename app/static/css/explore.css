@@ -390,15 +390,35 @@ td:hover {
 .recommend-link {
 	float: right;
 	height: 100%;
+	width: 35%;
 }
 
 .recommend-link button {
 	height: 100%;
+    background-color: #4351AF;
+    border-radius: 2px;
+    text-decoration: none;
+    color: white;
+    border: none;	
+    width: 100%;
 }
 
 .buy-on-ebay-link {
 	float: left;
 	position: relative;
-	top: 11px;
+	top: 0px;
+	width: 35%;
+	height: 40px;
 }
 
+.buy-on-ebay-link a {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #4351AF;
+	text-align: center;
+    padding-top: 10px;
+    color: white;
+    border-radius: 2px;
+    text-decoration: none;
+}
