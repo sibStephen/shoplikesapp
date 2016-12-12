@@ -223,7 +223,7 @@ function getFriends(friends_url, add_header) {
 
 		for (i in friends) {
 			var friend = friends[i];
-			innerHTML += "<tr onclick=\"friendClicked('"+friend.id+"')\"><td>"+friend.name+"</td></tr>"
+			innerHTML += "<tr onclick=\"friendClicked('"+friend.id+"')\"><td><img src=\"https://graph.facebook.com/"+friend.id+"/picture\" style=\"width:40px;border-radius:20px;height:40px\"></img> "+friend.name+"</td></tr>";
 		}
 
 		tableNode.innerHTML = innerHTML;
