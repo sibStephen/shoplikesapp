@@ -9,9 +9,9 @@ var is_current_user;
 function setIsCurrentUser(aBool) {
 	is_current_user = aBool;
 	if (is_current_user == "True") {
-		slider(["Recommendations","Friends","Invite"]);
+		slider(["Recommendations","Friends"]);
 	} else {
-		slider(["Recommendations","Likes","Friends"]);
+		slider(["Recommendations","Likes"]);
 	}
 }
 
@@ -223,6 +223,10 @@ function segment_clicked(index) {
 			var gridview = document.getElementsByClassName("friends_gridview")[0];
 			gridview.innerHTML = '';
 			gridview.style.display = "none";
+
+			var likes_list = document.getElementsByClassName("likes_list")[0];
+			likes_list.innerHTML = '';
+			likes_list.style.display = "none";
 
 			var recommendations_url = base_url + "/api/v1/recommendations_timeline/" + user_id;
 
