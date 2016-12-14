@@ -135,6 +135,8 @@ function httpGetAsync(theUrl, callback)
 var base_url;
 function storeBaseURL(url) {
 	base_url = url;
+	// var model = new RecommendationModel();
+	// model.setRecommendationId("abc");
 }
 
 function getRecommendationsForUserId(user_id) {
@@ -306,5 +308,103 @@ function pinClicked(rec_id) {
 		showModal(json["result"][0]);
 	});
 }
+
+
+/*
+var RecommendationView = function() {
+
+}
+
+
+var RecommendationController = function() {
+	function init(){
+
+	}
+
+	return {
+		init: init
+	}
+}
+
+var RecommendationModel = function() {
+ 	var recommendation_id = null;
+ 	var from_user_id = null;
+ 	var to_user_id = null;
+ 	var product_id = null;
+ 	var created_on = null;
+ 	var page_id = null;
+
+    function getRecommendationId(){
+       return recommendation_id;
+    }
+ 
+    function setRecommendationId(value){
+       recommendation_id = value;
+    }
+
+    function getFromUserId(){
+       return from_user_id;
+    }
+ 
+    function setFromUserId(value){
+       from_user_id = value;
+    }
+
+    function getToUserId(){
+       return to_user_id;
+    }
+ 
+    function setToUserId(value){
+       to_user_id = value;
+    }
+
+    function getToUserId(){
+       return to_user_id;
+    }
+ 
+    function setToUserId(value){
+       to_user_id = value;
+    }
+
+    function getProductId(){
+       return product_id;
+    }
+ 
+    function setProductId(value){
+       product_id = value;
+    }
+
+    function getCreatedOn(){
+       return created_on;
+    }
+ 
+    function setCreatedOn(value){
+       created_on = value;
+    }
+
+    function getPageId(){
+       return page_id;
+    }
+ 
+    function setPageId(value){
+       page_id = value;
+    }
+
+ 
+    return {
+        getRecommendationId : getRecommendationId,
+        setRecommendationId : setRecommendationId,
+        getFromUserId: getFromUserId,
+        setFromUserId: setFromUserId,
+        getToUserId: getToUserId,
+        setToUserId: setToUserId,
+        getProductId: getProductId,
+        setProductId: setProductId,
+        getCreatedOn: getCreatedOn,
+        setCreatedOn: setCreatedOn,
+        getPageId: getPageId,
+        setPageId: setPageId
+    }
+};*/
 
 
