@@ -6,6 +6,8 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user,current
 from oauth import OAuthSignIn
 from flask_cors import CORS, cross_origin
 from celery import Celery
+from signal import signal, SIGPIPE, SIG_DFL
+
 
 import os
 import json
@@ -18,6 +20,7 @@ import urllib
 
 
 app = Flask(__name__)
+signal(SIGPIPE,SIG_DFL) 
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(
 	app, 
