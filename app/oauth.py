@@ -47,7 +47,7 @@ class FacebookSignIn(OAuthSignIn):
 		
 	def authorize(self):
 		return redirect(self.service.get_authorize_url(
-			scope='email,user_likes',
+			scope='email,user_likes,user_friends,public_profile',
 			response_type='code',
 			redirect_uri=self.get_callback_url())
 		)
@@ -61,10 +61,6 @@ class FacebookSignIn(OAuthSignIn):
 					'redirect_uri': self.get_callback_url()}
 		)
 		me = oauth_session.get('me').json()
-# 		import ipdb; ipdb.set_trace();
-		print "*" * 80
-		print oauth_session
-		print "*" * 80
 		return (
 			me['id'],
 			me.get('first_name'),

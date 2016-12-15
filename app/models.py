@@ -4,6 +4,8 @@ from sqlalchemy.dialects.postgresql import JSON
 from flask_login import UserMixin
 
 
+
+
 liked_page = db.Table('liked_page',db.Model.metadata,
     db.Column('user_id', db.String, db.ForeignKey('fbuser.user_id')),
     db.Column('page_id', db.String, db.ForeignKey('page.page_id'))
@@ -67,6 +69,9 @@ class Product(db.Model):
 	def __init__(self, _id):
 		self.product_id = _id
 
+	def to_dict(self):
+		return {"product_id":self.product_id, "product_name":self.product_name}		
+
 	def to_json(self):
 		return jsonify({})
 	
@@ -83,8 +88,15 @@ class Page(db.Model):
 	products = db.relationship('Product',secondary=page_product)
 	recommendations = db.relationship('Recommendation', backref='page',lazy='dynamic')
 
+	def products_arr(self):
+		products = []
+		for product in self.products:
+			products.append(product.to_dict())
+		return products
+
+
 	def to_dict(self):
-		return {"page_id":self.page_id,"page_name":self.page_name,"created_by":self.created_by,"category_name":self.category_name}
+		return {"page_id":self.page_id,"page_name":self.page_name,"created_by":self.created_by,"category_name":self.category_name,"products":self.products_arr()}
 
 
 	def to_json(self):

@@ -41,7 +41,6 @@ function abc(respJson) {
 		var key_likes = grouped_likes[key];
 		for (var i = 0; i < key_likes.length; i++) {
 			var like = key_likes[i];
-			//saveLike(like);
 			var likes_list = document.getElementById(like.category_name);
 			if (likes_list) {
 				var htmlNode = document.createElement("div");
@@ -49,8 +48,15 @@ function abc(respJson) {
 				
 				var listInnerHTML = "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.page_id+"/picture?width=180&height=180);\"></div>";
 				listInnerHTML += "<div class=\"like_name\"><a href=\"/"+ like.page_id +"/detail\">" + like.page_name + "</a></div>";
-				listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\"></div>";
-				
+
+				if (like.products.length == 0) {
+					listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\"></div>";
+				} else if (like.products.length == 1) {
+					listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\">"+ like.products.length +" Product</div>";
+				} else {
+					listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\">"+ like.products.length +" Products</div>";
+				}
+
 				htmlNode.innerHTML = listInnerHTML;						
 				likes_list.childNodes[1].appendChild(htmlNode);
 			} else {
@@ -65,7 +71,15 @@ function abc(respJson) {
 				innerHTML += "<div class=\"like_pic\" style=\"background-image:url(https://graph.facebook.com/"+like.page_id+"/picture?width=180&height=180);\">";
 				innerHTML += "</div>";
 				innerHTML += "<div class=\"like_name\"><a href=\"/"+ like.page_id +"/detail\">" + like.page_name + "</a></div>";
-				innerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\"></div>";
+
+				if (like.products.length == 0) {
+					listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\"></div>";
+				} else if (like.products.length == 1) {
+					listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\">"+ like.products.length +" Product</div>";
+				} else {
+					listInnerHTML += "<div class=\"product_cnt\" id=\""+like.page_id+"\">"+ like.products.length +" Products</div>";
+				}
+
 				innerHTML += "</div>";
 				innerHTML += "</div>";
 				// innerHTML += "<div class=\"next_btn\"><img src=\"/static/img/ic_arrow_right.png\"/>";
@@ -106,7 +120,7 @@ function abc(respJson) {
 		container.removeChild(sortedChild);
 		container.appendChild(sortedChild);
 	}
-
+	arrangeGridCells()
 }
 
 function arrangeGridCells() {

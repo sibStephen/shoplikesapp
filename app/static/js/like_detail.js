@@ -216,10 +216,12 @@ function friendClicked(friend_id) {
 			body.style.overflow = 'scroll';
 
 			$.getScript("/static/js/sweetalert.min.js", function(){
-				sweetAlert("Good job! You just recommended a product to your friend.");
+				swal({   title: "Good job!", 
+						 text: "You recommended a product to your friend."
+						 }, function() {
+						 	window.location = base_url + "/timeline";
+						 });			
 			});
-
-
         	console.log(json);
     	}
 	}
@@ -425,7 +427,7 @@ function getPeopleForPage() {
 				var user = people[i];
 				var node = document.createElement("div");
 				node.className = "friend_cell";
-				node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+user["user_id"]+"/picture></img></div><div class=\"friend_name\"><a href=\"/"+user["user_id"]+"/profile\">"+user["name"]+"</a></div><div class=\"reco_cnt\">8 Products</div>";
+				node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+user["user_id"]+"/picture></img></div><div class=\"friend_name\"><a href=\"/"+user["user_id"]+"/profile\">"+user["name"]+"</a></div>";
 	        	gridview.appendChild(node);
 			}
 		}
@@ -449,7 +451,7 @@ function getFriends(friends_url, add_header) {
 
 		for (i in friends) {
 			var friend = friends[i];
-			innerHTML += "<tr onclick=\"friendClicked('"+friend.id+"')\"><td>"+friend.name+"</td></tr>"
+			innerHTML += "<tr onclick=\"friendClicked('"+friend.id+"')\"><td><img src=\"https://graph.facebook.com/"+friend.id+"/picture\" style=\"width:40px;border-radius:20px;height:40px\"></img> "+friend.name+"</td></tr>"
 		}
 
 		tableNode.innerHTML = innerHTML;

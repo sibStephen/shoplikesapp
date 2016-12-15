@@ -9,9 +9,9 @@ var is_current_user;
 function setIsCurrentUser(aBool) {
 	is_current_user = aBool;
 	if (is_current_user == "True") {
-		slider(["Recommendations","Friends","Invite"]);
+		slider(["Recommendations","Friends"]);
 	} else {
-		slider(["Recommendations","Likes","Friends"]);
+		slider(["Recommendations","Likes"]);
 	}
 }
 
@@ -224,6 +224,10 @@ function segment_clicked(index) {
 			gridview.innerHTML = '';
 			gridview.style.display = "none";
 
+			var likes_list = document.getElementsByClassName("likes_list")[0];
+			likes_list.innerHTML = '';
+			likes_list.style.display = "none";
+
 			var recommendations_url = base_url + "/api/v1/recommendations_timeline/" + user_id;
 
 			httpGetAsync(recommendations_url,function(json) {
@@ -289,7 +293,7 @@ function segment_clicked(index) {
 		        		var friend = friends[i];
 		        		var node = document.createElement("div");
 		        		node.className = "friend_cell";
-		        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\"><a href=\""+friend.id+"/profile\">"+friend.name+"</a></div><div class=\"reco_cnt\">8 Products</div>";
+		        		node.innerHTML = "<div class=\"friend_pic\"><img src=https://graph.facebook.com/"+friend.id+"/picture></img></div><div class=\"friend_name\"><a href=\""+friend.id+"/profile\">"+friend.name+"</a></div>";
 		        		gridview.appendChild(node);
 		        	}
 		        	loadFriendsGridView();
@@ -367,7 +371,6 @@ function abc(respJson) {
 		var key_likes = grouped_likes[key];
 		for (var i = 0; i < key_likes.length; i++) {
 			var like = key_likes[i];
-			saveLike(like);
 			var likes_list = document.getElementById(like.category);
 			if (likes_list) {
 				var htmlNode = document.createElement("div");
