@@ -322,7 +322,7 @@ function product_detail(product_id) {
 	var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
 	link.href = product["product_url"];
 
-	var detail_url = base_url + "/api/v1/product/detail/" + product["store"] + "/" + product_id;
+	var detail_url = "/api/v1/product/detail/" + product["store"] + "/" + product_id;
 	httpGetAsync(detail_url, function(response){
 		var product_details = document.getElementsByClassName("modal-detail")[0];
 		product_details.innerHTML = "<p>" + response["description"] + "</p>";
