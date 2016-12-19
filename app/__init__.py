@@ -7,6 +7,7 @@ from oauth import OAuthSignIn
 from flask_cors import CORS, cross_origin
 from celery import Celery
 from signal import signal, SIGPIPE, SIG_DFL
+from random import shuffle
 
 
 import os
@@ -17,6 +18,7 @@ import requests
 import ipdb
 import uuid
 import urllib
+
 
 
 app = Flask(__name__)
@@ -228,7 +230,7 @@ def get_recommendation(recommendation_id):
 		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
 		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
 		page = Page.query.filter_by(page_id=recommendation.page_id).first()
-		final_recommendations.append({"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+		final_recommendations.append({"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"product_category":product.category,"store":product.store,"description":product.description,"product_price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
 	return jsonify({"result":final_recommendations})
 
 
@@ -247,7 +249,7 @@ def get_recommendations_timeline(user_id):
 		is_curr_user_liked = False
 		if page in current_user.pages:
 			is_curr_user_liked = True
-		final_recommendations.append({"is_curr_user_liked":is_curr_user_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+		final_recommendations.append({"is_curr_user_liked":is_curr_user_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"store":product.store,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
 
 	return jsonify({"result":final_recommendations})
 
@@ -323,11 +325,12 @@ def create_recommendation():
 	if product == None:
 		product = Product(data["product"]["product_id"])
 	product.product_name = data["product"]["product_name"]
-	product.price = data["product"]["price"]
-	product.category = data["product"]["category"]
+	product.price = data["product"]["product_price"]
+	product.category = data["product"]["product_category"]
 	product.description = data["product"]["description"]
 	product.product_url = data["product"]["product_url"]
 	product.image_url = data["product"]["image_url"]
+	product.store = data["product"]["store"]
 
 	db.session.add(product)
 
@@ -493,13 +496,49 @@ def getPagesForUserId(user_id):
 @app.route('/api/v1/products/<keyword>', methods=['GET'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
 def getProducts(keyword):
-	return getProductsForKeywordFromEbay(keyword)
+	flip_response = getProductsForKeywordFromFlipkart(keyword)
+	flip_products = flip_response["productInfoList"]
+
+	ebay_response = getProductsForKeywordFromEbay(keyword)
+	ebay_products = ebay_response['findItemsByKeywordsResponse'][0]["searchResult"][0]["item"]
+
+	final_products = []
+	for product in flip_products:
+		final_product = {}
+		final_product["product_id"] = product['productBaseInfo']['productIdentifier']['productId']
+		final_product["product_price"] = product['productBaseInfo']['productAttributes']['sellingPrice']['amount']
+		final_product["product_category"] = product['productBaseInfo']['productAttributes']['productBrand']
+		final_product["product_name"] = product['productBaseInfo']['productAttributes']['title']
+		final_product["image_url"] = product['productBaseInfo']['productAttributes']['imageUrls']['400x400']
+		final_product["product_url"] = product['productBaseInfo']['productAttributes']['productUrl']
+		final_product["currency"] = product['productBaseInfo']['productAttributes']['sellingPrice']['currency']
+		final_product["store"] = "flipkart"
+		final_products.append(final_product)
+
+	for product in ebay_products:
+		final_product = {}
+		final_product["product_id"] = product['itemId'][0]
+		final_product["product_price"] = product['sellingStatus'][0]['currentPrice'][0]['__value__']
+		final_product["product_category"] = product['primaryCategory'][0]['categoryName'][0]
+		final_product["product_name"] = product['title'][0]
+		final_product["image_url"] = product['galleryURL'][0]
+		final_product["product_url"] = product['viewItemURL'][0]
+		final_product["currency"] = product['sellingStatus'][0]['currentPrice'][0]['@currencyId']
+		final_product["store"] = "ebay"
+		final_products.append(final_product)
+
+	return jsonify({"result":final_products})
 
 
-@app.route('/api/v1/product/detail/<product_id>', methods=['GET'])
+@app.route('/api/v1/product/detail/<store_name>/<product_id>/', methods=['GET'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
-def getProductDetail(product_id):
-	return getProductDetailForProductId(product_id)
+def getProductDetail(product_id, store_name):
+	if store_name == "ebay":
+		ebay_response = getEbayProductDetailForProductId(product_id)
+		return jsonify({"description":ebay_response["Item"]["Description"],"image_url":ebay_response["Item"]["PictureURL"][0]})
+	else:
+		flip_response = getFlipkartProductDetailForProductId(product_id)
+		return jsonify({"description":flip_response["productBaseInfo"]["productAttributes"]["productDescription"],"image_url":flip_response["productBaseInfo"]["productAttributes"]["imageUrls"]["400x400"]})
 
 
 
@@ -670,21 +709,30 @@ def saveObject(url ,option):
 
 
 def getProductsForKeywordFromEbay(keyword):
-	ebay_url = "https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-US&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=8&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge"
+	ebay_url = "https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SapnaSol-b016-439b-ba9f-0a88df89de2e&RESPONSE-DATA-FORMAT=JSON&GLOBAL-ID=EBAY-IN&keywords=" + keyword + "&itemFilter(0).name=ListingType&itemFilter(0).value=FixedPrice&paginationInput.entriesPerPage=4&sortOrder=StartTimeNewest&outputSelector(0)=GalleryInfo&outputSelector(1)=PictureURLLarge&outputSelector(2)=TextDescription"
 	task = getJSONData.delay(ebay_url, None)
-	return jsonify(task.get())
+	return task.get()
+
 
 
 def getProductsForKeywordFromFlipkart(keyword):
 	flipkart_url = "https://affiliate-api.flipkart.net/affiliate/search/json?query=" + keyword + "&resultCount=4"
 	headers = {"Fk-Affiliate-Id":"paragdula","Fk-Affiliate-Token":"3f8a5b4876084bc5836265cdd26f0966"}
 	task = getJSONData.delay(flipkart_url, headers)
-	return jsonify(task.get())
+	return task.get()
 
-def getProductDetailForProductId(product_id):
+
+def getFlipkartProductDetailForProductId(product_id):
+	flipkart_detail_url = "https://affiliate-api.flipkart.net/affiliate/product/json?id=" + product_id
+	headers = {"Fk-Affiliate-Id":"paragdula","Fk-Affiliate-Token":"3f8a5b4876084bc5836265cdd26f0966"}
+	task = getJSONData.delay(flipkart_detail_url, headers)
+	return task.get()
+
+
+def getEbayProductDetailForProductId(product_id):
 	ebay_detail_url = "http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SapnaSol-b016-439b-ba9f-0a88df89de2e&siteid=0&version=967&ItemID=" + product_id + "&IncludeSelector=TextDescription,ItemSpecifics,Details"
 	task = getJSONData.delay(ebay_detail_url, None)
-	return jsonify(task.get())
+	return task.get()
 
 
 

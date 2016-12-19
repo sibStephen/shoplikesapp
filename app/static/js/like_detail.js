@@ -301,70 +301,38 @@ function myfunction(response) {
 	}	
 }
 
+
 function product_detail(product_id) {
-	var ebay_url = base_url + "/api/v1/product/detail/" + product_id;
-	httpGetAsync(ebay_url ,function(response) {
-		if (showModal == true) {
-			var selProduct = {};
-			selProduct["product_id"] = response["Item"]["ItemID"];
-			var category_name = document.getElementsByClassName("modal-category")[0];
-			category_name.innerHTML = response["Item"]["PrimaryCategoryName"];
-			selProduct["category"] = response["Item"]["PrimaryCategoryName"];
+	var product = final_products.filter(function (el) {
+    	return (el.product_id === product_id);
+	})[0];
 
-			var product_name = document.getElementsByClassName("modal-name")[0];
-			product_name.innerHTML = "<font size=5>"+response["Item"]["Title"]+"</font>";
-			selProduct["product_name"] = response["Item"]["Title"];
-			
-			var product_price = document.getElementsByClassName("modal-price")[0];
-			var currId = response["Item"]["CurrentPrice"]["CurrencyID"];
-			product_price.innerHTML = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
-			selProduct["price"] = currency_symbols[currId] + response["Item"]["CurrentPrice"]["Value"];
+	var category_name = document.getElementsByClassName("modal-category")[0];
+	category_name.innerHTML = product["product_category"];
 
+	var product_name = document.getElementsByClassName("modal-name")[0];
+	product_name.innerHTML = "<font size=5>"+product["product_name"]+"</font>";
 
-			var urls = response["Item"]["PictureURL"];
-			var product_image_carousel = document.getElementsByClassName("modal-image-carousel")[0];
-			product_image_carousel.innerHTML = "";
-			for (i in urls) {
-				if (i >= 4) {
-					break;
-				}
-				var url = urls[i];
-				var node = document.createElement("div");
-				node.className = "modal-image-cell";
-				node.innerHTML = "<img src=" + url + "></img>";
-				product_image_carousel.appendChild(node);
-			} 
+	var product_price = document.getElementsByClassName("modal-price")[0];
+	product_price.innerHTML = currency_symbols[product["currency"]] + product["product_price"];
 
-			var product_image = document.getElementsByClassName("modal-image")[0];
-			var gallery_url = urls[0];
-			product_image.style.backgroundImage = "url("+ gallery_url +")";
-			// product_image.innerHTML = "<img src=" + gallery_url + "></img>";
-			selProduct["image_url"] = gallery_url;
+	var product_image = document.getElementsByClassName("modal-image")[0];
+	product_image.style.backgroundImage = "url("+ product["image_url"] +")";
 
-			var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
-			link.href = response["Item"]["ViewItemURLForNaturalSearch"];
-			selProduct["product_url"] = response["Item"]["ViewItemURLForNaturalSearch"];
-			
-			var product_details = document.getElementsByClassName("modal-detail")[0];
-			product_details.innerHTML = "<p>" + response["Item"]["Description"] + "</p>";
-			selProduct["description"] = response["Item"]["Description"];
-			selected_product = selProduct;
-		} else {
-			var pin = document.getElementById(response["Item"]["ItemID"]);
-			var image_node = null;
-			for (i in pin.children) {
-				var child = pin.children[i];
-				if (child.id == "pin_image") {
-					image_node = child;
-					break;
-				}
-			}
-			var urls = response["Item"]["PictureURL"];
-			image_node.src = urls[0];
-			image_node.onload = function() {
-				arrangePins();
-			}
-		}	
+	var link = document.getElementsByClassName("buy-on-ebay-link")[0].firstChild;
+	link.href = product["product_url"];
+
+	var detail_url = base_url + "/api/v1/product/detail/" + product["store"] + "/" + product_id;
+	httpGetAsync(detail_url, function(response){
+		var product_details = document.getElementsByClassName("modal-detail")[0];
+		product_details.innerHTML = "<p>" + response["description"] + "</p>";
+		product["description"] = response["description"]
+
+		product["image_url"] = response["image_url"]
+		var product_image = document.getElementsByClassName("modal-image")[0];
+		product_image.style.backgroundImage = "url("+ product["image_url"] +")";
+
+		selected_product = product;
 	});
 }
 
@@ -462,6 +430,7 @@ function getFriends(friends_url, add_header) {
 	});
 }
 
+var final_products = null;
 
 function fetchProducts(keyword) {
 	var url = base_url + "/api/v1/products/" + keyword;
@@ -470,10 +439,12 @@ function fetchProducts(keyword) {
 	loading.style.display = "block";
 	loading.innerHTML = "loading...";
 
-	httpGetAsync(url, function(json) {
-		var ebay_products = json['findItemsByKeywordsResponse'][0]["searchResult"][0];
+
+	httpGetAsync(url, function(json){
+		console.log(json);
+		var products = json['result'];
+		final_products = products;
 		var grid = document.getElementsByClassName('explore-grid-timeline')[0];
-		var products = ebay_products["item"];
 		grid.innerHTML = '';
 		if (products) {
 			loading.style.display = "none";
@@ -481,22 +452,26 @@ function fetchProducts(keyword) {
 				var product = products[i];
 				var node = document.createElement("div");
 				node.className = "explore-grid-recommendation";
-				var category = product['primaryCategory'][0]['categoryName'][0];
-				var name = product['title'][0];
-				var image_url = product['galleryURL'][0];
-				var price = product['sellingStatus'][0]['currentPrice'][0]['__value__'];
-				var product_id = product['itemId'][0];
+				var category = product['product_category'];
+				var name = product['product_name'];
+				var image_url = product['image_url'];
+				var price = product['product_price'];
+				var product_id = product['product_id'];
+				var currency = product['currency'];
 				
-				node.innerHTML = "<div class=\"explore-pin\" onclick=\"pin_clicked()\" id=" + product_id +"><div id=\"product_info\"><div class=\"explore-category-name\">" + category + "</div><div class=\"explore-product-name\">" + name + "</div></div><img src=\"" + image_url + "\" id=\"pin_image\"/><div class=\"explore-price\"><font color=\"white\">" + "$" + price + "</font></div></div>";
+				node.innerHTML = "<div class=\"explore-pin\" onclick=\"pin_clicked()\" id=" + product_id +"><div id=\"product_info\"><div class=\"explore-category-name\">" + category + "</div><div class=\"explore-product-name\">" + name + "</div></div><img src=\"" + image_url + "\" id=\"img_"+ product_id +"\"/><div class=\"explore-price\"><font color=\"white\">" + currency_symbols[currency] + price + "</font></div></div>";
 				grid.appendChild(node);
 				arrangePins();
-				
-				product_detail(product_id);
+
+				var pin_image = document.getElementById("img_" + product_id);
+				pin_image.onload = function() {
+					arrangePins();
+				};
 			}
 		} else {
 			loading.style.display = "block";
 			loading.innerHTML = "There are no products that we could find taking "+ page_name +" as reference.";
-		}	
+		}
 	});
 }
 

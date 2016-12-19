@@ -1,3 +1,4 @@
+
 var friends_url;
 var likes_url;
 var appid;

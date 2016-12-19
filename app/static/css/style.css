@@ -242,6 +242,16 @@ a {
 	margin-right: 5px;
 }
 
+
+#from_store_pic {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    border-radius: 2px;
+    float: right;
+    margin-right: 5px;
+}
+
 #from_user_info {
     margin: 5px;
     height: 30px;
