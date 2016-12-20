@@ -188,7 +188,7 @@ function storeAppId(app_Id) {
 
  function FBInvite(){
   console.log("appid : " + appid);
-  window.location = "http://www.facebook.com/dialog/send?app_id="+appid+"&display=popup&link=http://www.nytimes.com/interactive/2015/04/15/travel/europe-favorite-streets.html&redirect_uri="+ base_url + "/profile";
+  window.location = "http://www.facebook.com/dialog/send?app_id="+appid+"&display=popup&link="+base_url+"&redirect_uri="+ base_url + "/profile";
  }
 
 
