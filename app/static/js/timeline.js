@@ -123,7 +123,9 @@ function showTimeline(respJson) {
 			}
 
 			var created_on = recommendation["created_on"];
-			var d = new Date(created_on);
+			var s = created_on;
+			var a = s.split(/[^0-9]/);
+			var d= new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
 			var num_milliseconds = Date.parse(d);
 			var like_image_name = recommendation["is_curr_user_liked"] == true ? "ic_like_rcmnd_feed_on.png" : "ic_like_rcmnd_feed_off.png";
 			var currency = currency_symbols[product["currency"]] ? currency_symbols[product["currency"]] : "";
