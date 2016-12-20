@@ -10,7 +10,7 @@ var is_current_user;
 function setIsCurrentUser(aBool) {
 	is_current_user = aBool;
 	if (is_current_user == "True") {
-		slider(["Recommendations","Friends"]);
+		slider(["Recommendations","Friends","Invite"]);
 	} else {
 		slider(["Recommendations","Likes"]);
 	}

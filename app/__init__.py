@@ -249,7 +249,7 @@ def get_recommendations_timeline(user_id):
 		is_curr_user_liked = False
 		if page in current_user.pages:
 			is_curr_user_liked = True
-		final_recommendations.append({"is_curr_user_liked":is_curr_user_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"store":product.store,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+		final_recommendations.append({"is_curr_user_liked":is_curr_user_liked,"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"currency":product.currency,"store":product.store,"product_url":product.product_url,"image_url":product.image_url,"category":product.category,"description":product.description,"price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
 
 	return jsonify({"result":final_recommendations})
 
@@ -331,6 +331,7 @@ def create_recommendation():
 	product.product_url = data["product"]["product_url"]
 	product.image_url = data["product"]["image_url"]
 	product.store = data["product"]["store"]
+	product.currency = data["product"]["currency"]
 
 	db.session.add(product)
 

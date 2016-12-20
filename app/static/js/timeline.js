@@ -74,6 +74,25 @@ function timeSince(date) {
 }
 
 
+var currency_symbols = {
+    'USD': '$', // US Dollar
+    'EUR': '€', // Euro
+    'CRC': '₡', // Costa Rican Colón
+    'GBP': '£', // British Pound Sterling
+    'ILS': '₪', // Israeli New Sheqel
+    'INR': '₹', // Indian Rupee
+    'JPY': '¥', // Japanese Yen
+    'KRW': '₩', // South Korean Won
+    'NGN': '₦', // Nigerian Naira
+    'PHP': '₱', // Philippine Peso
+    'PLN': 'zł', // Polish Zloty
+    'PYG': '₲', // Paraguayan Guarani
+    'THB': '฿', // Thai Baht
+    'UAH': '₴', // Ukrainian Hryvnia
+    'VND': '₫', // Vietnamese Dong
+};
+
+
 function showTimeline(respJson) {
 	var recommendations = respJson["result"];
 	if (recommendations) {
@@ -107,7 +126,8 @@ function showTimeline(respJson) {
 			var d = new Date(created_on);
 			var num_milliseconds = Date.parse(d);
 			var like_image_name = recommendation["is_curr_user_liked"] == true ? "ic_like_rcmnd_feed_on.png" : "ic_like_rcmnd_feed_off.png";
-			node.innerHTML = "<div class=\"pin\"><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+from_user_pic+"\"/><div id=\"from_user_name\">"+ from_user["user_name"] +"</div><a href=\""+ product['product_url'] +"\"><img id=\"from_store_pic\" src=\"/static/img/"+store_image+"\"/></a></div> <div id=\"reco_info\"><div id=\"reco_text\">Recommends <a href=\"/"+to_user["user_id"]+"/profile\">"+ to_user["user_name"] +"</a></div><div id=\"reco_timestamp\"><img src=\"static/img/ic_clock.png\"/> " + timeSince(num_milliseconds) + " ago</div></div><div id=\"product_info\"><div id=\"product_category\">"+ category + "</div><div id=\"product_name\">"+ name +"</div></div><img style=\"cursor:pointer\" onclick=\"pinClicked('"+recommendation["recommendation_id"]+"');\" id=\""+product_id+"\" src=\""+image_url+"\" /><div id=\"product_price\">"+price+"</div><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+page_pic+"\"/><div id=\"from_user_name\"><a href=" + "/" + page["page_id"] + "/detail" + ">"+page["page_name"]+"</a></div><img style=\"float:right;width:20px;height:20px;margin-top:4px\" id=\"from_user_pic\" src=\"/static/img/"+like_image_name+"\"/></div></div>";
+			var currency = currency_symbols[product["currency"]] ? currency_symbols[product["currency"]] : "";
+			node.innerHTML = "<div class=\"pin\"><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+from_user_pic+"\"/><div id=\"from_user_name\">"+ from_user["user_name"] +"</div><a href=\""+ product['product_url'] +"\"><img id=\"from_store_pic\" src=\"/static/img/"+store_image+"\"/></a></div> <div id=\"reco_info\"><div id=\"reco_text\">Recommends <a href=\"/"+to_user["user_id"]+"/profile\">"+ to_user["user_name"] +"</a></div><div id=\"reco_timestamp\"><img src=\"static/img/ic_clock.png\"/> " + timeSince(num_milliseconds) + " ago</div></div><div id=\"product_info\"><div id=\"product_category\">"+ category + "</div><div id=\"product_name\">"+ name +"</div></div><img style=\"cursor:pointer\" onclick=\"pinClicked('"+recommendation["recommendation_id"]+"');\" id=\""+product_id+"\" src=\""+image_url+"\" /><div id=\"product_price\">"+currency+price+"</div><div id=\"from_user_info\"><img id=\"from_user_pic\" src=\""+page_pic+"\"/><div id=\"from_user_name\"><a href=" + "/" + page["page_id"] + "/detail" + ">"+page["page_name"]+"</a></div><img style=\"float:right;width:20px;height:20px;margin-top:4px\" id=\"from_user_pic\" src=\"/static/img/"+like_image_name+"\"/></div></div>";
 			grid.appendChild(node);
 
 			var image_node = document.getElementById(product_id);

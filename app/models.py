@@ -62,6 +62,7 @@ class Product(db.Model):
 	image_url = db.Column(db.String())
 	category = db.Column(db.String())
 	store = db.Column(db.String())
+	currency = db.Column(db.String())
 	description = db.Column(db.String())
 	price = db.Column(db.String())
 	recommendations = db.relationship('Recommendation', backref='product',lazy='dynamic')
