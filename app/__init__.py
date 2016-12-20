@@ -530,7 +530,7 @@ def getProducts(keyword):
 	return jsonify({"result":final_products})
 
 
-@app.route('/api/v1/product/detail/<store_name>/<product_id>/', methods=['GET'])
+@app.route('/api/v1/product/detail/<store_name>/<product_id>', methods=['GET'])
 @cross_origin(origin=app.config['BASE_URL'],headers=['Content- Type','Authorization'])
 def getProductDetail(product_id, store_name):
 	if store_name == "ebay":
