@@ -347,7 +347,7 @@ function httpGetAsync(theUrl, callback)
         }
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-    xmlHttp.send(null);
+    xmlHttp.send();
 }
 
 
