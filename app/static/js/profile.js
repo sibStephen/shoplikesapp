@@ -188,17 +188,7 @@ function storeAppId(app_Id) {
 
  function FBInvite(){
   console.log("appid : " + appid);
-  FB.ui({
-   app_id: '' + appid,
-   method: 'apprequests',
-   message: 'Invite your Facebook Friends'
-  },function(response) {
-   if (response) {
-    alert('Successfully Invited');
-   } else {
-    alert('Failed To Invite');
-   }
-  });
+  window.location = "http://www.facebook.com/dialog/send?app_id="+appid+"&display=popup&link=http://www.nytimes.com/interactive/2015/04/15/travel/europe-favorite-streets.html&redirect_uri="+ base_url + "/profile";
  }
 
 
