@@ -230,7 +230,7 @@ def get_recommendation(recommendation_id):
 		from_user = User.query.filter_by(user_id=recommendation.from_user_id).first()
 		to_user = User.query.filter_by(user_id=recommendation.to_user_id).first()
 		page = Page.query.filter_by(page_id=recommendation.page_id).first()
-		final_recommendations.append({"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"product_category":product.category,"store":product.store,"description":product.description,"product_price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
+		final_recommendations.append({"recommendation_id":recommendation_id, "created_on":recommendation.created_on, "from_user":{"user_id":from_user.user_id,"user_name":from_user.name},"to_user":{"user_id":to_user.user_id,"user_name":to_user.name},"product":{"product_id":product.product_id,"product_name":product.product_name,"product_url":product.product_url,"image_url":product.image_url,"product_category":product.category,"store":product.store,"currency":product.currency,"description":product.description,"product_price":product.price},"page":{"page_id":page.page_id,"page_name":page.page_name,"created_by":page.created_by,"category_name":page.category_name}})
 	return jsonify({"result":final_recommendations})
 
 
