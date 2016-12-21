@@ -587,12 +587,12 @@ def oauth_authorize(provider):
 @app.route('/callback/<provider>')
 def oauth_callback(provider):
 	if not current_user.is_anonymous:
-		return redirect(url_for('hello', _external=True, _scheme=current_app.config['PREFERRED_URL_SCHEME']))
+		return redirect(url_for('hello', _external=True, _scheme=app.config['PREFERRED_URL_SCHEME']))
 	oauth = OAuthSignIn.get_provider(provider)
 	(uid, first_name, last_name, name, email, access_token,created_on,device_type,device_token)=oauth.callback()
 	if uid is None:
 		flash('Authentication Failed')
-		return redirect(url_for('hello', _external=True, _scheme=current_app.config['PREFERRED_URL_SCHEME']))
+		return redirect(url_for('hello', _external=True, _scheme=app.config['PREFERRED_URL_SCHEME']))
 	user = User.query.filter_by(user_id=uid).first()
 	if not user:
 		user = User(uid,first_name,last_name,name,email,access_token,created_on,device_type,device_token)
@@ -607,7 +607,7 @@ def oauth_callback(provider):
 	saveUserInfo(uid, access_token)
 	saveUserLikes(uid, access_token)
 	saveUserFriends(uid, access_token)
-	return redirect(url_for('show_timeline', user_id=uid, _external=True, _scheme=current_app.config['PREFERRED_URL_SCHEME']))
+	return redirect(url_for('show_timeline', user_id=uid, _external=True, _scheme=app.config['PREFERRED_URL_SCHEME']))
 
 
 
