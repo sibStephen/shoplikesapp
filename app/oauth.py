@@ -19,7 +19,8 @@ class OAuthSignIn(object):
 		pass
 		
 	def get_callback_url(self):
-		return url_for('oauth_callback', provider=self.provider_name, _external=True, _scheme=current_app.config['PREFERRED_URL_SCHEME'])
+		return url_for('oauth_callback', provider=self.provider_name, _external=True, _scheme='https')
+		# return url_for('oauth_callback', provider=self.provider_name, _external=True, _scheme=current_app.config['PREFERRED_URL_SCHEME'])
 		
 	
 	@classmethod
