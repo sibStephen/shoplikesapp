@@ -42,10 +42,11 @@ from config import DevelopmentConfig, StagingConfig
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'index'
+login_manager.login_view = 'hello'
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHECMY_TRACK_MODIFICATIONS'] = True
 app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': app.config['APP_ID'],'secret': app.config['APP_SECRET']}}
+
 
 @login_manager.user_loader
 def load_user(user_id):
