@@ -4,6 +4,7 @@ from sqlalchemy import func, desc, or_
 from flask_restful import reqparse
 from flask_login import LoginManager, UserMixin, login_user, logout_user,current_user, redirect, url_for, login_required
 from oauth import OAuthSignIn
+from middleware import *
 from flask_cors import CORS, cross_origin
 from celery import Celery
 from signal import signal, SIGPIPE, SIG_DFL
@@ -46,6 +47,8 @@ login_manager.login_view = 'hello'
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHECMY_TRACK_MODIFICATIONS'] = True
 app.config['OAUTH_CREDENTIALS'] = {'facebook': {'id': app.config['APP_ID'],'secret': app.config['APP_SECRET']}}
+
+app.wsgi_app = middleware.SimpleMiddleWare(app.wsgi_app)
 
 
 @login_manager.user_loader
