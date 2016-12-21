@@ -418,7 +418,7 @@ def create_recommendation():
 		endpoint = toUser.token
 		registrationId = endpoint.replace("https://android.googleapis.com/gcm/send/","")
 		url = 'https://android.googleapis.com/gcm/send'
-		data = "{\"to\":\""+registrationId+"\",\"notification\":{\"title\":\"Title Text for Notification\"}}"
+		data = "{\"to\":\""+registrationId+"\",\"data\":{\"body\":\"Title Text for Notification\"},\"notification\":{\"title\":\"Title Text for body\"}}"
 		headers = {"Authorization":"key=AIzaSyCvw1QGF_hYtG1Mx_31xcJm8uvfsaD-lH8","Content-Type":"application/json"}
 		r = requests.post(url, data=data, headers=headers)
 		print r.text

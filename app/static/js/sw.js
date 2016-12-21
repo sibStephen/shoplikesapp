@@ -22,16 +22,12 @@
 'use strict';
 
 self.addEventListener('push', function(event) {
-  console.log('[Service Worker] Push Received.');
-  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-
-  const title = 'Push Codelab';
+  const title = 'Shoplikes';
   const options = {
-    body: 'Yay it works.',
-    icon: 'images/icon.png',
-    badge: 'images/badge.png'
+    body: 'Your friend recommended a product to you.',
+    icon: '/static/img/notification_icon.png',
+    badge: '/static/img/notification_icon.png'
   };
-
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
@@ -42,6 +38,6 @@ self.addEventListener('notificationclick', function(event) {
   event.notification.close();
 
   event.waitUntil(
-    clients.openWindow('https://developers.google.com/web/')
+    clients.openWindow('/')
   );
 });
